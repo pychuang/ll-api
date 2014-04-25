@@ -15,10 +15,10 @@ Contents:
    api-site
    installation
 
-#Indices and tables
-#==================
-#
-#* :ref:`genindex`
-#* :ref:`modindex`
-#* :ref:`search`
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
