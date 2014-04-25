@@ -1,0 +1,27 @@
+Installation
+============
+
+First, install prerequisites::
+
+    $ pip install flask
+
+Building Documentation
+----------------------
+
+In case you also want to rebuild the documentation, you will need the following::
+
+    $ pip install sphinx, sphinx_bootstrap_theme
+
+Additionally, Flask Sphinx support is needed::
+
+    $ hg clone ssh://hg@bitbucket.org/birkenfeld/sphinx-contrib
+    $ cd sphinx-contrib
+    $ python setup.py build
+    $ sudo python setup.py install
+
+To build the docs::
+    
+    $ cd docs
+    $ make html
+
+The documentation will appear in docs/build/html.
