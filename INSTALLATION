@@ -5,6 +5,10 @@ First, install prerequisites::
 
     $ pip install flask
 
+Then, you can clone the repo as follows::
+
+    $ git clone git@bitbucket.org:aschuth/ll-challenge.git
+
 Building Documentation
 ----------------------
 

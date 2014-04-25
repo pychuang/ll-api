@@ -114,6 +114,13 @@ html_theme = 'bootstrap'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
+html_theme_options = {
+    'bootswatch_theme': 'yeti',
+    'navbar_pagenav': False,
+    'navbar_site_name': 'Documentation',
+    'source_link_position': 'footer'
+}
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
