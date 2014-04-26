@@ -3,7 +3,7 @@ Installation
 
 First, install prerequisites::
 
-    $ pip install flask
+    $ pip install flask, pymongo, Flask-RESTful
 
 Flask==0.10.1
 Flask-RESTful==0.2.12
