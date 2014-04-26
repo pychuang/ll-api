@@ -3,14 +3,14 @@ Installation
 
 First, install prerequisites::
 
-    $ pip install flask, pymongo, Flask-RESTful
-
-Flask==0.10.1
-Flask-RESTful==0.2.12
+    $ pip install < requirements.txt
 
 Then, you can clone the repo as follows::
 
     $ git clone git@bitbucket.org:aschuth/ll-challenge.git
+
+You'll also need to install Mongdb.
+
 
 Building Documentation
 ----------------------
