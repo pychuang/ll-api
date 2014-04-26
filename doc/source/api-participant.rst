@@ -1,6 +1,6 @@
 API Reference for Participants
 ==============================
 
-.. autoflask:: api.participant:app
+.. autoflask:: ll.api.participant:app
    :undoc-static:
    :include-empty-docstring:
