@@ -9,6 +9,7 @@ def add_query(site_id, site_qid, qstr):
     query = collection.find_one({"site_id": site_id, "site_qid": site_qid})
     if query:
         query["qstr"] = qstr
+        query["creation_time"] = datetime.datetime.now()
         collection.save(query)
         return query
     query = {

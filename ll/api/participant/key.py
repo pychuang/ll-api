@@ -5,6 +5,9 @@ from .. import core
 
 user_fields = {
     "key" : fields.String(attribute="_id"),
+    "creation_time" : fields.DateTime(),
+    "teamname" : fields.String(),
+    "is_verified" : fields.Boolean(),
 }
 
 class Key(Resource):

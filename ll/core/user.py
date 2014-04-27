@@ -1,23 +1,31 @@
 import random
 import string
+import hashlib
 import datetime
 from db import db
 user_collection = db.user
 
+KEY_LENGTH = 32
+
+def new_key(teamname, email):
+    rstr = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(KEY_LENGTH/2))
+    hstr = str(hashlib.sha1(teamname + email).hexdigest())[:KEY_LENGTH/2]
+    return "-".join([hstr, rstr]).upper()
+
 def new_user(teamname, email):
     if user_collection.find({"teamname": teamname}).count():
-        return False
+        raise Exception("Teamname exists: teamname = '%s'" % teamname)
     if user_collection.find({"email": email}).count():
-        return False
-    key = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
-    while user_collection.find_one({"_id":key}):
-        key = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
+        raise Exception("Email exists: email = '%s'" % email)
+    #TODO: check valid email
+    #TODO: send email with validation
     user = {
-        "_id" : key,
+        "_id" : new_key(teamname, email),
         "teamname" : teamname,
         "email" : email,
         "is_participant": True,
         "is_site": False,
+        "is_verified" : False,
         "creation_time": datetime.datetime.now(), 
     }
     user_collection.insert(user)
