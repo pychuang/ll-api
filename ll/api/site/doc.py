@@ -27,7 +27,8 @@ class Doc(SiteResource):
             .. sourcecode:: javascript
 
         """
-        doc = self.trycall(core.doc.get_doc, site_id, site_docid)
+        site_id = self.get_site_id(key)
+        doc = self.trycall(core.doc.get_doc, site_id=site_id, site_docid=site_docid)
         return marshal(doc, doc_fields)
 
     def delete(self, key, site_docid):
@@ -47,7 +48,7 @@ class DocList(SiteResource):
         doclist = self.trycall(core.doc.get_doclist, site_id=site_id, site_qid=site_qid)
         return {
             "site_qid" : site_qid,
-            "documents": [marshal(d, doclist_fields) for d in doclist]
+            "doclist": [marshal(d, doclist_fields) for d in doclist]
             }
 
     def put(self, key, site_qid):
@@ -57,7 +58,7 @@ class DocList(SiteResource):
             .. sourcecode:: javascript
 
                 {
-                    "documents": [
+                    "doclist": [
                             "d171717d75",
                             "d171717d75",
                             ]
@@ -65,11 +66,11 @@ class DocList(SiteResource):
         """
         site_id = self.get_site_id(key)
         documents = request.get_json(force=True)
-        self.check_fields(documents, ["documents"])
-        doclist = self.trycall(core.doc.add_doclist, site_id, site_qid, documents["documents"])
+        self.check_fields(documents, ["doclist"])
+        doclist = self.trycall(core.doc.add_doclist, site_id, site_qid, documents["doclist"])
         return {
             "site_qid" : site_qid,
-            "documents": [marshal(d, doclist_fields) for d in doclist]
+            "doclist": [marshal(d, doclist_fields) for d in doclist]
             }
 
 api.add_resource(Doc, '/api/site/doc/<key>/<site_docid>', endpoint="site/doc")

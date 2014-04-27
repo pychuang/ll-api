@@ -50,16 +50,16 @@ def store_doclist(key, run_file):
         url = "/".join([HOST, DOCLISTENDPOINT, key, site_qid])
         return put(url, json.dumps(doclist))
 
-    doclist = {"documents": []}
+    doclist = {"doclist": []}
     current_qid = None
     for line in open(run_file, "r"):
         qid, _, docid, _, _, _ = line.split()
         if current_qid != None and current_qid != qid: 
             print put_doclist(doclist, current_qid)
-            doclist = {"documents": []}
+            doclist = {"doclist": []}
         site_docid = hashlib.sha1(docid).hexdigest()
         store_doc(key, docid, site_docid)
-        doclist["documents"].append({"site_docid": site_docid})
+        doclist["doclist"].append({"site_docid": site_docid})
         current_qid = qid
     print put_doclist(doclist, current_qid)
 
