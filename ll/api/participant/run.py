@@ -8,4 +8,4 @@ class Run(Resource):
     def put(self, runid):
         return {'hello': 'world'}
 
-api.add_resource(Run, '/run/<runid>')
+api.add_resource(Run, '/api/participant/run/<runid>', endpoint="participant/run")

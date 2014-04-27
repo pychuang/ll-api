@@ -1,17 +1,24 @@
 import json
 from flask import jsonify, request
-from flask.ext.restful import Resource, reqparse, abort
+from flask.ext.restful import Resource, reqparse, abort, fields, marshal
 from .. import api
 from .. import core
-from .. import util
+
+query_fields = {
+    "site_qid" : fields.String,
+    "qstr" : fields.String,
+    "creation_time" : fields.DateTime(),
+}
+
 
 class Query(Resource):
-    #def __init__(self):
-        #self.reqparse = reqparse.RequestParser()
-        #self.reqparse.add_argument('title', type = str, required = True,
-        #    help = 'No task title provided', location = 'json')
-        #self.reqparse.add_argument('description', type = str, default = "", location = 'json')
-        #super(Query, self).__init__()
+    def get_site_id(self, key):
+        user = core.user.get_user(key)
+        if not user:
+            abort(403, message="No such key.")
+        if not user["is_site"]:
+            abort(403, message="Not a site.")
+        return user["site_id"]
 
     def get(self, key):
         """
@@ -22,43 +29,52 @@ class Query(Resource):
         :status 403: invalid key
         :return: 
             .. sourcecode:: javascript
-            
-                {   "S-q2" : "jaguar",
-                    "S-q2" : "apple",
-                    ... }
+           
+                {
+                    "queries": [
+                        {
+                            "creation_time": "Sun, 27 Apr 2014 11:08:15 -0000", 
+                            "qid": "q1011", 
+                            "qstr": "jaguar"
+                        }, 
+                        {
+                            "creation_time": "Sun, 27 Apr 2014 11:08:15 -0000", 
+                            "qid": "q1112", 
+                            "qstr": "apple"
+                        }
+                    ]
+                } 
 
         """
-        user = core.user.get_user(key)
-        queries = core.query.get_query(user)
-        return jsonify(util.wrap_queries(user, queries))
+        site_id = self.get_site_id(key)
+        queries = core.query.get_query(site_id=site_id)
+        return {"queries": [marshal(q, query_fields) for q in queries]}
 
     def put(self, key):
         """
         :reqheader Content-Type: application/json
-        :resheader Content-Type: application/json
+        :body: 
+            .. sourcecode:: javascript
 
-        .. sourcecode:: javascript
-
-            [
-                {
-                    "qid": "q0",
-                    "qstr": "jaguar"
-                }, 
-                {
-                    "qid": "q1",
-                    "qstr": "apple"
-                }
-            ]
+                [
+                    {
+                        "site-qid": "48474c1ab6d3541d2f881a9d4b3bed75", 
+                        "qstr": "jaguar"
+                    }, 
+                    {
+                        "site_qid": "30c6677b833454ad2df762d3c98d2409", 
+                        "qstr": "apple"
+                    }
+                ]
+        :return: see GET
 
         """
+        site_id = self.get_site_id(key)
         queries = request.get_json(force=True)
-        user = core.user.get_user(key)
         for q in queries:
-            core.query.add_query(user, q["qid"], q["qstr"])
-            #abort(409, message="Duplicate qid %s." % q["qid"])
-
-        queries = core.query.get_query(user)
-        return jsonify(util.wrap_queries(user, queries))
+            core.query.add_query(site_id, q["site_qid"], q["qstr"])
+        queries = core.query.get_query(site_id=site_id)
+        return {"queries": [marshal(q, query_fields) for q in queries]}
 
     def delete(self, key):
         pass

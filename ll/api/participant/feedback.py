@@ -6,4 +6,4 @@ class Feedback(Resource):
     def get(self, runid):
         return {'hello': 'world'}
 
-api.add_resource(Feedback, '/feedback/<runid>')
+api.add_resource(Feedback, '/api/participant/feedback/<runid>', endpoint="participant/feedback")

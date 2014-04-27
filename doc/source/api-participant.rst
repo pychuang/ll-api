@@ -6,5 +6,6 @@ We provide a basic API for participants of the Living Labs Challenge to perform 
 .. note:: Please be nice to our API and don’t flood it with multiple cores constantly sending multiple requests. We will place a decent machine behind the API, but we might not be able to match yours.
 
 .. autoflask:: ll.api.participant:app
+   :endpoints: participant/query, participant/doc, participant/run, participant/feedback
    :undoc-static:
    :include-empty-docstring:

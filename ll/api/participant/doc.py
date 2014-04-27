@@ -6,4 +6,4 @@ class Doc(Resource):
     def get(self, docid):
         return {'hello': 'world'}
 
-api.add_resource(Doc, '/doc/<docid>')
+api.add_resource(Doc, '/api/participant/doc/<docid>', endpoint="participant/doc")

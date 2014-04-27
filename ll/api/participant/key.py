@@ -1,7 +1,11 @@
 from flask import jsonify
-from flask.ext.restful import Resource, abort
+from flask.ext.restful import Resource, abort, fields, marshal
 from .. import api
 from .. import core
+
+user_fields = {
+    "key" : fields.String(attribute="_id"),
+}
 
 class Key(Resource):
     def get(self, teamname, email):
@@ -28,6 +32,6 @@ class Key(Resource):
         user = core.user.new_user(teamname, email)
         if not user:
             abort(409, message="The teamname or the email address already exists in our database. If you requested it before, then check your email.")
-        return jsonify({"key": user.get("key")})
+        return marshal(user, user_fields)
 
 api.add_resource(Key, '/key/<teamname>/<email>')

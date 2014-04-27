@@ -1,7 +1,7 @@
 import argparse
-import ll.api.participant
-import ll.api.site
 from ll.api import app
+import ll.api.site
+import ll.api.participant
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Living Labs Challenge's API Server")
