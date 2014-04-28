@@ -20,11 +20,22 @@ doc_fields = {
 class Doc(SiteResource):
     def get(self, key, site_docid):
         """
+        Retreive a single document.
+
         :param key: your API key
-        :status 200: valid key
+        :param site_docid: 
         :status 403: invalid key
+        :status 404: document does not exist
         :return: 
             .. sourcecode:: javascript
+
+                {
+                     "content": "RHVtbXkgQ29udGVudA==", 
+                     "content_encoding": "base64", 
+                     "creation_time": "Sun, 27 Apr 2014 23:40:29 -0000", 
+                     "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737", 
+                     "title": "Document Title"
+                } 
 
         """
         site_id = self.get_site_id(key)
@@ -35,6 +46,28 @@ class Doc(SiteResource):
         pass
 
     def put(self, key, site_docid):
+        """
+        Store a single document.
+        
+        :param key: your API key
+        :param site_docid: the site's document identifier
+
+        :reqheader Content-Type: application/json
+        :content: 
+            .. sourcecode:: javascript
+
+                {
+                     "content": "RHVtbXkgQ29udGVudA==", 
+                     "content_encoding": "base64", 
+                     "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737", 
+                     "title": "Document Title"
+                } 
+
+        :status 200: stored the document
+        :status 403: invalid key
+        :status 400: bad request
+        :return: see :http:get:`/api/site/doc/(key)/(site_docid)`
+        """
         site_id = self.get_site_id(key)
         doc = request.get_json(force=True)
         self.check_fields(doc, ["title", "content", "content_encoding"])
@@ -44,6 +77,28 @@ class Doc(SiteResource):
 
 class DocList(SiteResource):
     def get(self, key, site_qid):
+        """
+        Update the document list for a query. 
+        
+        The doclist defines the set documents that are returnable for a query.
+
+        :param key: your API key
+        :param site_qid: the site's query identifier
+        :status 403: invalid key
+        :status 404: query does not exist
+        :status 400: bad request
+        :return: 
+            .. sourcecode:: javascript
+
+                {
+                    "doclist": [
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
+                            ]
+                }
+
+        """
         site_id = self.get_site_id(key)
         doclist = self.trycall(core.doc.get_doclist, site_id=site_id, site_qid=site_qid)
         return {
@@ -53,16 +108,28 @@ class DocList(SiteResource):
 
     def put(self, key, site_qid):
         """
+        Update the document list for a query. 
+        
+        The doclist defines the set documents that are returnable for a query.
+
+        :param key: your API key
+        :param site_qid: the site's query identifier
         :reqheader Content-Type: application/json
         :content: 
             .. sourcecode:: javascript
 
                 {
                     "doclist": [
-                            "d171717d75",
-                            "d171717d75",
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
+                        {"site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"}, 
                             ]
                 }
+        
+        :status 403: invalid key
+        :status 404: query does not exist
+        :status 400: bad request
+        :return: see :http:get:`/api/site/doclist/(key)/(site_qid)`
         """
         site_id = self.get_site_id(key)
         documents = request.get_json(force=True)

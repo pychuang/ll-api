@@ -45,6 +45,10 @@ class Query(SiteResource):
 
     def put(self, key):
         """
+        Update the query set.
+
+        :param key: your API key
+        
         :reqheader Content-Type: application/json
         :content: 
             .. sourcecode:: javascript
@@ -62,9 +66,11 @@ class Query(SiteResource):
                     ]
                 }
 
+        :status 403: invalid key
+        :status 400: bad request
         :return: see :http:get:`/api/site/query/(key)`
-
         """
+
         site_id = self.get_site_id(key)
         queries = request.get_json(force=True)
         self.check_fields(queries, ["queries"])
