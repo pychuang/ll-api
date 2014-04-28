@@ -1,11 +1,15 @@
 Installation
 ============
 
-You can clone the repo with all Living Labs Challenge's code as follows::
+You can clone the repo with all Living Labs Challenge's code as follows:
+
+.. sourcecode:: bash
 
     $ git clone git@bitbucket.org:living-labs/ll-challenge.git
 
-Then, installing the python prerequisites is easy::
+Then, installing the python prerequisites is easy:
+
+.. sourcecode:: bash
 
     $ pip install -r requirements.txt
 
@@ -17,9 +21,29 @@ In case you want to run your own version of the API (for testing purposes), you'
 Building Documentation
 ----------------------
 
-To build the docs::
+To build the docs, run these commands in a shell:
+
+.. sourcecode:: bash
     
     $ cd doc
-    $ rm -r build && make html
+    $ make html
 
-The documentation will appear in docs/build/html.
+The documentation will appear in doc/build/html.
+
+Troubleshooting
+^^^^^^^^^^^^^^^
+
+
+If you receive the following error when building the documentation:
+
+.. sourcecode:: bash
+
+    ValueError: unknown locale: UTF-8
+    make: *** [html] Error 1
+
+The, add these lines to your ~/.bash_profile:
+
+.. sourcecode:: bash
+    
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
