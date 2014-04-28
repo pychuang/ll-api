@@ -1,34 +1,26 @@
 Installation
 ============
 
-First, install prerequisites::
+Prerequisites
+-------------
+
+First, install the python prerequisites::
 
     $ pip install < requirements.txt
 
-Then, you can clone the repo as follows::
+If you want to run your own version of the API (for testing purposes), you'll need MongoDb
+
+You can clone the repo with all Living Labs Challenge's code as follows::
 
     $ git clone git@bitbucket.org:aschuth/ll-challenge.git
-
-You'll also need to install Mongdb.
 
 
 Building Documentation
 ----------------------
 
-In case you also want to rebuild the documentation, you will need the following::
-
-    $ pip install sphinx, sphinx_bootstrap_theme
-
-Additionally, Flask Sphinx support is needed::
-
-    $ hg clone ssh://hg@bitbucket.org/birkenfeld/sphinx-contrib
-    $ cd sphinx-contrib
-    $ python setup.py build
-    $ sudo python setup.py install
-
 To build the docs::
     
     $ cd docs
-    $ make html
+    $ rm -r build && make html
 
 The documentation will appear in docs/build/html.
