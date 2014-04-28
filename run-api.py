@@ -1,4 +1,5 @@
 import argparse
+from ll.core.db import db
 from ll.api import app
 import ll.api.site
 import ll.api.participant
@@ -14,4 +15,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     app.debug = args.debug
     print(" * Living Labs Challenge API")
+    db.init_db("ll")
     app.run(host=args.host, port=args.port)

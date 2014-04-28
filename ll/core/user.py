@@ -3,7 +3,6 @@ import string
 import hashlib
 import datetime
 from db import db
-user_collection = db.user
 
 KEY_LENGTH = 32
 
@@ -13,9 +12,9 @@ def new_key(teamname, email):
     return "-".join([hstr, rstr]).upper()
 
 def new_user(teamname, email):
-    if user_collection.find({"teamname": teamname}).count():
+    if db.user.find({"teamname": teamname}).count():
         raise Exception("Teamname exists: teamname = '%s'" % teamname)
-    if user_collection.find({"email": email}).count():
+    if db.user.find({"email": email}).count():
         raise Exception("Email exists: email = '%s'" % email)
     #TODO: check valid email
     #TODO: send email with validation
@@ -28,15 +27,15 @@ def new_user(teamname, email):
         "is_verified" : False,
         "creation_time": datetime.datetime.now(), 
     }
-    user_collection.insert(user)
+    db.user.insert(user)
     return user
 
 def get_user(key):
-     user = user_collection.find_one({"_id": key})
+     user = db.user.find_one({"_id": key})
      if not user:
          return False
      return user
 
 if __name__ == '__main__':
-    for user in user_collection.find():
+    for user in db.user.find():
         print user

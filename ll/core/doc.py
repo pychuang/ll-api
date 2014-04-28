@@ -1,11 +1,9 @@
 from db import db
 import datetime
 import site
-doc_collection = db.doc
-query_collection = db.query
 
 def add_doclist(site_id, site_qid, doclist):
-    query = query_collection.find_one({"site_id": site_id, "site_qid": site_qid})
+    query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query == None:
         raise Exception("Query not found: site_qid = '%s'. Add queries before adding a doclist" % site_qid)
     store_doclist = []
@@ -16,7 +14,7 @@ def add_doclist(site_id, site_qid, doclist):
         store_doclist.append(doc_found["_id"])
 
     query["doclist"] = store_doclist
-    query_collection.save(query)
+    db.query.save(query)
     return get_doclist(site_id=site_id, site_qid=site_qid)
 
 def get_doclist(site_id=None, site_qid=None, qid=None):
@@ -27,27 +25,27 @@ def get_doclist(site_id=None, site_qid=None, qid=None):
         q["site_qid"] = site_qid
     if qid:
         q["qid"] = qid
-    query = query_collection.find_one(q)
+    query = db.query.find_one(q)
     if not query:
         if site_qid:
             raise Exception("Query not found:  site_qid = '%s'" % site_qid)
         else:
             raise Exception("Query not found:  qid = '%s'" % qid)
-    return [doc_collection.find_one({"_id": d}) for d in query["doclist"]]
+    return [db.doc.find_one({"_id": d}) for d in query["doclist"]]
 
 def add_doc(site_id, site_docid, doc):
-    existing_doc = doc_collection.find_one({"site_id": site_id, "site_docid": site_docid})
+    existing_doc = db.doc.find_one({"site_id": site_id, "site_docid": site_docid})
     if existing_doc:
         for k in doc:
             existing_doc[k] = doc[k]
         existing_doc["creation_time"] = datetime.datetime.now()
-        doc_collection.save(existing_doc)
+        db.doc.save(existing_doc)
         return existing_doc
     doc["_id"] = site.next_docid(site_id)
     doc["site_id"] =  site_id
     doc["site_docid"] = site_docid
     doc["creation_time"] = datetime.datetime.now()
-    doc_collection.insert(doc)
+    db.doc.insert(doc)
     return doc
 
 def get_doc(site_id=None, site_docid=None, docid=None):
@@ -58,4 +56,4 @@ def get_doc(site_id=None, site_docid=None, docid=None):
         q["site_docid"] = site_docid
     if docid:
         q["docid"] = docid
-    return doc_collection.find_one(q)
+    return db.doc.find_one(q)
