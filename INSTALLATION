@@ -3,7 +3,7 @@ Installation
 
 You can clone the repo with all Living Labs Challenge's code as follows::
 
-    $ git clone git@bitbucket.org:aschuth/ll-challenge.git
+    $ git clone git@bitbucket.org:living-labs/ll-challenge.git
 
 Then, installing the python prerequisites is easy::
 
