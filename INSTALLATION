@@ -6,7 +6,7 @@ Prerequisites
 
 First, install the python prerequisites::
 
-    $ pip install < requirements.txt
+    $ pip install -r requirements.txt
 
 If you want to run your own version of the API (for testing purposes), you'll need MongoDb
 
