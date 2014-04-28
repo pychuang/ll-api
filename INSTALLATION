@@ -19,7 +19,7 @@ Building Documentation
 
 To build the docs::
     
-    $ cd docs
+    $ cd doc
     $ rm -r build && make html
 
 The documentation will appear in docs/build/html.
