@@ -7,13 +7,16 @@ class Ranking(Resource):
         """
         Obtain a ranking for a query. 
         
-        The site is expected to expose this ranking to a user and return feedback :http:put:`/api/site/feedback/(key)/(sid)` as soon as it is available.
+        Everytime this endpoint is called, a ranking produced by participants of the Challenge is selected based on a least-served basis. Do to this behaviour, the ranking may change for each call. Therefor, the site perform caching on their own in order to show users stable rankings for repeated queries.
+        The API will ensure that only documents that are presented in the most recent doclist for the requested query are returned. 
+        Sites are not expected to filter the ranking. If filtering is required for this query, please do so by updating the doclist.
+
+        The site is expected to expose the retrieved ranking to a user and return feedback :http:put:`/api/site/feedback/(key)/(sid)` as soon as it is available.
 
         :param key: your API key
         :param site_qid: the site's query identifier
-        :status 200: valid key
-        :status 404: query does not exist
         :status 403: invalid key
+        :status 404: query does not exist
         :return: 
             .. sourcecode:: javascript
             

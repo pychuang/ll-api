@@ -8,8 +8,8 @@ class Feedback(Resource):
         Return feedback for a session.
 
         Store user feedback for a session obtained through :http:get:`/api/site/ranking/(key)/(site_qid)`. 
-        This can be store multiple times if more feedback comes availaible. 
-        In that case, the old feedback would be overwritten.
+        The feedback can be stored multiple times for the same session if more feedback comes availaible. 
+        In that case, the old feedback will be overwritten.
 
         :param key: your API key
         :param sid: the session's identifier
