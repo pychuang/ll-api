@@ -6,7 +6,38 @@ This API can be used by sites to update the query set, the documents and to retr
 Everything is implemented as HTTP request, and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX errors where possible.
 
 
+Query
+-----
 .. autoflask:: ll.api.site:app
-   :endpoints: site/query, site/doc, site/ranking, site/feedback, site/doclist
+   :endpoints: site/query
+   :undoc-static:
+   :include-empty-docstring:
+
+Doc
+---
+.. autoflask:: ll.api.site:app
+   :endpoints: site/doclist
+   :undoc-static:
+   :include-empty-docstring:
+
+Doclist
+-------
+.. autoflask:: ll.api.site:app
+   :endpoints: site/doclist
+   :undoc-static:
+   :include-empty-docstring:
+
+
+Feedback
+--------
+.. autoflask:: ll.api.site:app
+   :endpoints: site/feedback
+   :undoc-static:
+   :include-empty-docstring:
+
+Ranking
+-------
+.. autoflask:: ll.api.site:app
+   :endpoints: site/ranking
    :undoc-static:
    :include-empty-docstring:
