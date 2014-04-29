@@ -5,7 +5,34 @@ We provide a basic API for participants of the Living Labs Challenge to perform 
 
 .. note:: Please be nice to our API and don’t flood it with multiple cores constantly sending multiple requests. We will place a decent machine behind the API, but we might not be able to match yours.
 
+Query
+-----
 .. autoflask:: ll.api.participant:app
-   :endpoints: participant/query, participant/doc, participant/run, participant/feedback
+   :endpoints: participant/query
    :undoc-static:
    :include-empty-docstring:
+
+
+Doc
+___
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/doc
+   :undoc-static:
+   :include-empty-docstring:
+
+
+Feedback
+--------
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/feedback
+   :undoc-static:
+   :include-empty-docstring:
+
+
+Run
+---
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/run
+   :undoc-static:
+   :include-empty-docstring:
+

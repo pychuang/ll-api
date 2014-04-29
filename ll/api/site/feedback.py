@@ -19,6 +19,7 @@ class Feedback(Resource):
             
                 {
                     "sid": "s1",
+                    "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75",
                     "type": "clicks",
                     "doclist": [
                         {
@@ -37,6 +38,7 @@ class Feedback(Resource):
             
                 {
                     "sid": "s1",
+                    "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75",
                     "type": "tid",
                     "doclist": [
                         {
@@ -51,6 +53,30 @@ class Feedback(Resource):
                         }, 
                         ]
                 }
+        
+        Historical feedback can be added as follows.
+
+        .. warning:: #TODO: need another endpoint, no sid available here.
+
+        :content: 
+            .. sourcecode:: javascript
+            
+                {
+                    "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75",
+                    "type": "ctr",
+                    "doclist": [
+                        {
+                            "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"
+                            "clicked": 0.7,
+                        }, 
+                        {
+                            "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"
+                            "clicked": 0.4,
+                        }, 
+                        ]
+                }
+
+
 
         :status 200: stored the feedback
         :status 403: invalid key

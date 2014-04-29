@@ -115,8 +115,8 @@ html_theme = 'bootstrap'
 # documentation.
 #html_theme_options = {}
 html_theme_options = {
-    #'bootswatch_theme': 'yeti',
-    'bootswatch_theme': 'spacelab',
+    'bootswatch_theme': 'yeti',
+    #'bootswatch_theme': 'spacelab',
     'navbar_pagenav': False,
     'navbar_site_name': 'Documentation',
     'source_link_position': 'footer'
