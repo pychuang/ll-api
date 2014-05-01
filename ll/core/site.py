@@ -13,7 +13,8 @@ def set_site(key, short, name, url):
         "name": name,
         "url": url,
         "qid_counter": 0,
-        "docid_counter": 0})
+        "docid_counter": 0,
+        "sid_counter": 0})
     u["site_id"] = site
     db.user.save(u)
 
@@ -33,6 +34,14 @@ def next_docid(site_id):
     site["docid_counter"] += 1
     db.site.save(site)
     return "%s-d%d" % (site["_id"], docid)
+
+def next_sid(site_id):
+    site = get_site(site_id)
+    sid = site["sid_counter"]
+    site["sid_counter"] += 1
+    db.site.save(site)
+    return "%s-s%d" % (site["_id"], sid)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Living Labs Challenge's API Server")

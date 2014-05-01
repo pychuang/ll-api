@@ -1,8 +1,10 @@
 from flask import jsonify
 from flask.ext.restful import Resource
 from .. import api
+from .. import core
+from site import SiteResource
 
-class Ranking(Resource):
+class Ranking(SiteResource):
     def get(self, key, site_qid):
         """
         Obtain a ranking for a query. 
@@ -30,8 +32,9 @@ class Ranking(Resource):
                 }
 
         """
-
-        return queries
+        site_id = self.get_site_id(key)
+        ranking = self.trycall(core.run.get_ranking, site_id, site_qid)
+        return marshal(ranking, doc_fields)
 
 
 api.add_resource(Ranking, '/api/site/ranking/<key>/<site_qid>', endpoint="site/ranking")

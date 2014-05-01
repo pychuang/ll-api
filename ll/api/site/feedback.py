@@ -1,8 +1,15 @@
 from flask import jsonify
-from flask.ext.restful import Resource
+from flask.ext.restful import Resource, abort, fields, marshal
 from .. import api
+from site import SiteResource
 
-class Feedback(Resource):
+doclist_fields = {
+    "site_docid" :  fields.String,
+    "title" : fields.String(),
+}
+
+
+class Feedback(SiteResource):
     def put(self, key, sid):
         """
         Return feedback for a session.
@@ -76,11 +83,19 @@ class Feedback(Resource):
                         ]
                 }
 
-
-
         :status 200: stored the feedback
         :status 403: invalid key
         """
+        site_id = self.get_site_id(key)
+        json = request.get_json(force=True)
+        self.check_fields(json, ["doclist", "sid", "type"])
+        feedback = self.trycall(core.feedback.add_feedback, site_id, sid, json)
+        return {
+            "sid" : site_qid,
+            "site_qid" : sid,
+            "type" : feedback["type"],
+            "doclist": [marshal(d, doclist_fields) for d in doclist]
+            }
 
         return queries
 
