@@ -51,7 +51,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'll-challenge'
+project = u'Living Labs'
 copyright = u'2014, Krisztian Balog, Liadh Kelly, Anne Schuth'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -116,10 +116,13 @@ html_theme = 'bootstrap'
 #html_theme_options = {}
 html_theme_options = {
     'bootswatch_theme': 'yeti',
-    #'bootswatch_theme': 'spacelab',
+    'navbar_sidebarrel': False,
     'navbar_pagenav': False,
     'navbar_site_name': 'Documentation',
-    'source_link_position': 'footer'
+    'source_link_position': 'footer',
+    'navbar_links': [
+            ("About", "http://living-labs.net/about/", True),
+    ]
 }
 
 
