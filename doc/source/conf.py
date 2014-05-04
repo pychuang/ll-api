@@ -124,6 +124,7 @@ html_theme_options = {
             ("LL'13", "http://living-labs.net/ll13/", True),
             ("LL'14", "http://living-labs.net/ll14/", True),
             ("LLC", "http://living-labs.net/LLC/", True),
+            ("Challenge", "http://living-labs.net/challenge/", True),
     ]
 }
 
