@@ -3,8 +3,10 @@ from db import db
 import user
 
 def set_site(key, short, name, url):
+    if not key or not short or not name or not url:
+        raise Exception("Specify key, short, name, url")
     if db.site.find_one({"_id": short}):
-        raise Exception
+        raise Exception("Site with short name exists: shortname = '%s'" % short)
     u = user.get_user(key)
     u["is_participant"] = False
     u["is_site"] = True
