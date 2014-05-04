@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+import confargparse
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__), "../..")))
+
+from ll.core.db import db
+from ll.api import app
+import ll.api.site
+import ll.api.participant
+
+if __name__ == '__main__':
+    description="Living Labs Challenge's API Server"
+    parser = confargparse.ConfArgParser(description=description, section="main")
+    parser.add_argument('--debug', dest='debug', action='store_true',
+                        help='Enable debugging mode.')
+    group_flask = parser.add_argument_group("flask", section="flask")
+    group_flask.add_argument('--host', dest='host', default='127.0.0.1',
+                        help='Host to listen on.')
+    group_flask.add_argument('--port', dest='port', default=5000, type=int,
+                        help='Port to listen on.')
+    group_mongodb =  parser.add_argument_group("mongodb", section="mongodb")
+    group_mongodb.add_argument('--mongodb_db', default="ll", type=str,
+                        help='')
+    group_mongodb.add_argument('--mongodb_user', default=None, type=str,
+                        help='')
+    group_mongodb.add_argument('--mongodb_pw', default=None, type=str,
+                        help='')
+    args = parser.parse_args()
+    print(" * %s" % description)
+    app.debug = args.debug
+    db.init_db(args.mongodb_db, user=args.mongodb_user, password=args.mongodb_pw)
+    app.run(host=args.host, port=args.port)

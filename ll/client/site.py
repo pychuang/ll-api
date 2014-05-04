@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import base64
 import hashlib
 import xml.etree.ElementTree as et
