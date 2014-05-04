@@ -1,0 +1,23 @@
+{# Import the theme's layout. #}
+{% extends "!layout.html" %}
+
+{# Add some extra stuff before and use existing with 'super()' call. #}
+{% block content %}
+{{ navBar() }}
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+        {%- block sidebar1 %}{{ bsidebar() }}{% endblock %}
+        <div class="{{ bs_span_prefix }}{{ bs_content_width }}">
+            {% block body %}{% endblock %}
+        </div>
+        {% block sidebar2 %} {# possible location for sidebar #} {% endblock %}
+    </div>
+    <div class="col-md-3 well">
+        <center>
+            <a href="http://living-labs.net/"><img src="http://living-labs.net/wp-content/uploads/2014/05/livinglab.logo_.textunder.square200.png" alt="Living Labs for IR evaluation" title="Living Labs for IR evaluation" class="aligncenter" /></a>
+        </center><br />
+    </div>
+  </div>
+</div>
+{% endblock %}
