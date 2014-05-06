@@ -45,7 +45,7 @@ class Query(SiteResource):
 
     def put(self, key):
         """
-        Update the query set.
+        Update the query set. This can only be done before the challenge started.
 
         :param key: your API key
         
@@ -68,6 +68,7 @@ class Query(SiteResource):
 
         :status 403: invalid key
         :status 400: bad request
+        :status 409: the query set is not updatable, the challenge is running.
         :return: see :http:get:`/api/site/query/(key)`
         """
 
@@ -81,6 +82,15 @@ class Query(SiteResource):
         return {"queries": [marshal(q, query_fields) for q in queries]}
 
     def delete(self, key):
+        """
+        Delete the query set. This can only be done before the challenge started.
+        
+        :param key: your API key
+
+        :status 403: invalid key
+        :status 400: bad request
+        :status 409: the query set is not deletable, the challenge is running.
+        """
         pass
 
 api.add_resource(Query, '/api/site/query/<key>', endpoint="site/query")

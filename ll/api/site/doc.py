@@ -20,7 +20,7 @@ doc_fields = {
 class Doc(SiteResource):
     def get(self, key, site_docid):
         """
-        Retreive a single document.
+        Retreive a single document that was uploaded before. Identify it with your own identifier.
 
         :param key: your API key
         :param site_docid: 
@@ -43,11 +43,24 @@ class Doc(SiteResource):
         return marshal(doc, doc_fields)
 
     def delete(self, key, site_docid):
+        """
+        Delete a single document. 
+
+        Make sure to first update the doclist. In fact, deleting a documents is not required after updating the doclist.
+
+        :param key: your API key
+        :param site_docid: the sites document identifier
+        :status 200: the document is deleted
+        :status 403: invalid key
+        :status 404: document does not exist
+        :status 409: document can not be deleted, it still appears in a doclist for a query (the queryid will be returned).
+        """
         pass
 
     def put(self, key, site_docid):
         """
-        Store a single document.
+        Store a single document. Unless you store plain ASCII documents, you should encode the document using base64 encoding. Don't forget to specify doing so in the content_encoding field.
+        You are free to use any document identifier you wish (be it a url, a hash of the url, or anything else you use internally).
         
         :param key: your API key
         :param site_docid: the site's document identifier
@@ -78,9 +91,9 @@ class Doc(SiteResource):
 class DocList(SiteResource):
     def get(self, key, site_qid):
         """
-        Update the document list for a query. 
-        
-        The doclist defines the set documents that are returnable for a query.
+        Retrieve the document list for a query. 
+
+        This doclist defines the set documents that are returnable for a query. You are free to update this list when the set of documents changes over time.
 
         :param key: your API key
         :param site_qid: the site's query identifier
@@ -111,6 +124,8 @@ class DocList(SiteResource):
         Update the document list for a query. 
         
         The doclist defines the set documents that are returnable for a query.
+        The documents in the list are expected to be uploaded before you update this list.
+        Deleting individual documents is possible but not neccesary. It is the doclist that matters.
 
         :param key: your API key
         :param site_qid: the site's query identifier
@@ -129,6 +144,7 @@ class DocList(SiteResource):
         :status 403: invalid key
         :status 404: query does not exist
         :status 400: bad request
+        :status 409: a document in the new doclist does not exist
         :return: see :http:get:`/api/site/doclist/(key)/(site_qid)`
         """
         site_id = self.get_site_id(key)

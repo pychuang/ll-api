@@ -9,11 +9,17 @@ class Ranking(SiteResource):
         """
         Obtain a ranking for a query. 
         
-        Everytime this endpoint is called, a ranking produced by participants of the Challenge is selected based on a least-served basis. Do to this behaviour, the ranking may change for each call. Therefor, the site perform caching on their own in order to show users stable rankings for repeated queries.
+        Everytime this endpoint is called, a ranking produced by participants of the Challenge is selected based on a least-served basis.
+        Due to this behavior, the ranking is likely to change for each call. 
+        Therefor, the site should perform caching on their own in order to show users stable rankings for repeated queries.
+        
         The API will ensure that only documents that are presented in the most recent doclist for the requested query are returned. 
-        Sites are not expected to filter the ranking. If filtering is required for this query, please do so by updating the doclist.
+        Sites are not expected to filter the ranking. 
+        If filtering is required for this query, please do so by updating the doclist.
+        While we should aim to prevent this, it may happen that the site needs to make a last minute decision not to include a certain document. 
+        Make sure to incorporate this decision in the feedback.
 
-        The site is expected to expose the retrieved ranking to a user and return feedback :http:put:`/api/site/feedback/(key)/(sid)` as soon as it is available.
+        The site is expected to expose the retrieved ranking to a user and return user feedback :http:put:`/api/site/feedback/(key)/(sid)` as soon as it is available.
 
         :param key: your API key
         :param site_qid: the site's query identifier

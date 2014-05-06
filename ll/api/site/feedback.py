@@ -16,7 +16,14 @@ class Feedback(SiteResource):
 
         Store user feedback for a session obtained through :http:get:`/api/site/ranking/(key)/(site_qid)`. 
         The feedback can be stored multiple times for the same session if more feedback comes availaible. 
-        In that case, the old feedback will be overwritten.
+        In that case, the old feedback will be overwritten, it is not additive. 
+        So if multiple clicks come in one by one, make sure to include all of them each time you update the feedback.
+        
+        .. note::
+
+            It is expected that the doclist is the actual doclist that was shown to the user. 
+            This is important because the site may have had to make a last minute decisions not to include a certain document. 
+            It not obtaining a click is valuable information for a participant.
 
         :param key: your API key
         :param sid: the session's identifier
@@ -46,7 +53,7 @@ class Feedback(SiteResource):
                 {
                     "sid": "s1",
                     "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75",
-                    "type": "tid",
+                    "type": "tdi",
                     "doclist": [
                         {
                             "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737"
