@@ -33,10 +33,13 @@ The endpoint at :http:get:`/api/site/doc` can be used to update content of indiv
 
 Doclist
 -------
-Per query, the challenge will provide a preselected doclist of (M=100) documents to the participants.
+Per query, the challenge will provide a preselected doclist of (M=100) documents 
+to the participants.
 The selection criteria are up to the site.
 
-As documents to be considered for a query may change over the course of the challenge, the challenge provide an endpoint at :http:get:`/api/site/doclist` to keep the doclist up to date.
+As documents to be considered for a query may change over the course of the 
+challenge, the challenge provide an endpoint at :http:get:`/api/site/doclist`
+to keep the doclist up to date.
 
 .. autoflask:: ll.api.site:app
    :endpoints: site/doclist
@@ -56,4 +59,3 @@ Feedback
    :endpoints: site/feedback
    :undoc-static:
    :include-empty-docstring:
-

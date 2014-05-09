@@ -58,7 +58,7 @@ class Doc(SiteResource):
         :status 403: invalid key
         :status 404: document does not exist
         :status 409: document can not be deleted, it still appears in a doclist
-        for a query (the queryid will be returned).
+            for a query (the queryid will be returned).
         """
         pass
 
