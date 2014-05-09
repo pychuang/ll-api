@@ -1,5 +1,5 @@
 from flask import request
-from flask.ext.restful import Resource, abort, fields, marshal
+from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
 from site import SiteResource

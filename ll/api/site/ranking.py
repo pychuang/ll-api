@@ -1,4 +1,4 @@
-from flask.ext.restful import Resource, abort, fields, marshal
+from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
 from site import SiteResource
@@ -17,7 +17,7 @@ class Ranking(SiteResource):
         """
         Obtain a ranking for a query.
 
-        Everytime this endpoint is called, a ranking produced by participants
+        Every time this endpoint is called, a ranking produced by participants
         of the Challenge is selected based on a least-served basis.
         Due to this behavior, the ranking is likely to change for each call.
         Therefor, the site should perform caching on their own in order to show
