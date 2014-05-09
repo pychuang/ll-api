@@ -1,6 +1,6 @@
 from db import db
-import datetime
 import doc
+
 
 def add_feedback(site_id, sid, feedback):
     existing_feedback = db.feedback.find_one({"site_id": site_id, "sid": sid})
@@ -9,12 +9,15 @@ def add_feedback(site_id, sid, feedback):
     for doc in feedback["doclist"]:
         doc_found = doc.get_doc(site_id=site_id, site_docid=doc["site_docid"])
         if not doc_found:
-            raise Exception("Document not found: site_docid = '%s'. Please only provide feedback for documents that are allowed for a query." % doc["site_docid"])
+            raise Exception("Document not found: site_docid = '%s'. Please"
+                            "only provide feedback for documents that are"
+                            "allowed for a query." % doc["site_docid"])
         doc["docid"] = doc_found["_id"]
     for k in feedback:
         existing_feedback[k] = feedback[k]
     db.feedback.save(existing_feedback)
     return feedback
+
 
 def get_feedback(participant_id=None, site_id=None, sid=None):
     q = {}
@@ -28,4 +31,3 @@ def get_feedback(participant_id=None, site_id=None, sid=None):
     if not feedback:
         raise Exception("Feedback not found:  sid = '%s'" % site_qid)
     return feedback
-

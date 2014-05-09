@@ -1,6 +1,7 @@
 from flask.ext.restful import Resource, abort
 from .. import core
 
+
 class SiteResource(Resource):
     def check_fields(self, o, fields):
         for f in fields:
@@ -18,7 +19,6 @@ class SiteResource(Resource):
         if not user:
             abort(403, message="No such key.")
         if not user["is_site"]:
-            abort(403, message="Not a site. Please use the participant api instead.")
+            abort(403, message="Not a site. Please use the participant"
+                  "api instead.")
         return user["site_id"]
-
-

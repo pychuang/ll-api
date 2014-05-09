@@ -4,6 +4,7 @@ import datetime
 import site
 from db import db
 
+
 def add_query(site_id, site_qid, qstr):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query:
@@ -12,14 +13,15 @@ def add_query(site_id, site_qid, qstr):
         db.query.save(query)
         return query
     query = {
-        "_id" : site.next_qid(site_id),
-        "site_id" : site_id,
-        "site_qid" : site_qid,
-        "qstr" : qstr,
-        "creation_time": datetime.datetime.now(), 
+        "_id": site.next_qid(site_id),
+        "site_id": site_id,
+        "site_qid": site_qid,
+        "qstr": qstr,
+        "creation_time": datetime.datetime.now(),
     }
     db.query.insert(query)
     return query
+
 
 def get_query(site_id=None, qid=None):
     q = {}

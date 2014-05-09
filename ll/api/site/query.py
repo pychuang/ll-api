@@ -1,14 +1,13 @@
-import json
-from flask import jsonify, request
+from flask import request
 from flask.ext.restful import Resource, reqparse, abort, fields, marshal
 from .. import api
 from .. import core
 from site import SiteResource
 
 query_fields = {
-    "site_qid" : fields.String,
-    "qstr" : fields.String,
-    "creation_time" : fields.DateTime(),
+    "site_qid": fields.String,
+    "qstr": fields.String,
+    "creation_time": fields.DateTime(),
 }
 
 
@@ -20,19 +19,19 @@ class Query(SiteResource):
         :param key: your API key
         :status 200: valid key
         :status 403: invalid key
-        :return: 
+        :return:
             .. sourcecode:: javascript
 
                 {
                     "queries": [
                         {
-                            "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000", 
-                            "qstr": "jaguar", 
+                            "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
+                            "qstr": "jaguar",
                             "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75"
-                        }, 
+                        },
                         {
-                            "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000", 
-                            "qstr": "apple", 
+                            "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
+                            "qstr": "apple",
                             "site_qid": "30c6677b833454ad2df762d3c98d2409"
                         }
                     ]
@@ -45,22 +44,23 @@ class Query(SiteResource):
 
     def put(self, key):
         """
-        Update the query set. This can only be done before the challenge started.
+        Update the query set. This can only be done before the challenge
+        started.
 
         :param key: your API key
-        
+
         :reqheader Content-Type: application/json
-        :content: 
+        :content:
             .. sourcecode:: javascript
 
                 {
                     "queries": [
                         {
-                            "qstr": "jaguar", 
+                            "qstr": "jaguar",
                             "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75"
-                        }, 
+                        },
                         {
-                            "qstr": "apple", 
+                            "qstr": "apple",
                             "site_qid": "30c6677b833454ad2df762d3c98d2409"
                         }
                     ]
@@ -77,14 +77,16 @@ class Query(SiteResource):
         self.check_fields(queries, ["queries"])
         for q in queries["queries"]:
             self.check_fields(q, ["site_qid", "qstr"])
-            self.trycall(core.query.add_query, site_id, q["site_qid"], q["qstr"])
+            self.trycall(core.query.add_query, site_id, q["site_qid"],
+                         q["qstr"])
         queries = self.trycall(core.query.get_query, site_id=site_id)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 
     def delete(self, key):
         """
-        Delete the query set. This can only be done before the challenge started.
-        
+        Delete the query set. This can only be done before the challenge
+        started.
+
         :param key: your API key
 
         :status 403: invalid key
