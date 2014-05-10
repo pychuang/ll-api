@@ -13,16 +13,30 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.restful import Resource
+from flask.ext.restful import Resource, fields, marshal
 from .. import api
 from .. import core
 from .. import ApiResource
 
+doc_fields = {
+    "docid": fields.String(),
+    "clicked": fields.Boolean(default=False),
+}
+
+feedback_fields = {
+    "qid": fields.String(),
+    "modified_time": fields.DateTime(),
+    "doclist": fields.Nested(doc_fields)
+}
+
 
 class Feedback(ApiResource):
-    def get(self, runid):
+    def get(self, key, qid):
         self.validate_participant(key)
-        return {'hello': 'world'}
+        feedbacks = self.trycall(core.feedback.get_feedback, userid=key,
+                                qid=qid)
+        return {"feedback": [marshal(feedback, feedback_fields)
+                             for feedback in feedbacks]}
 
-api.add_resource(Feedback, '/api/participant/feedback/<key>/<runid>',
+api.add_resource(Feedback, '/api/participant/feedback/<key>/<qid>',
                  endpoint="participant/feedback")

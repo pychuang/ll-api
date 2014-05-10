@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 from db import db
 import doc
 
@@ -22,27 +23,35 @@ def add_feedback(site_id, sid, feedback):
     if existing_feedback == None:
         raise LookupError("Session not found: sid = '%s'." % sid)
     for doc in feedback["doclist"]:
-        doc_found = db.doc.find_one(site_id=site_id, site_docid=doc["site_docid"])
+        doc_found = db.doc.find_one({"site_id": site_id,
+                                     "site_docid": doc["site_docid"]
+                                     })
         if not doc_found:
             raise LookupError("Document not found: site_docid = '%s'. Please"
                             "only provide feedback for documents that are"
                             "allowed for a query." % doc["site_docid"])
         doc["docid"] = doc_found["_id"]
+
     for k in feedback:
         existing_feedback[k] = feedback[k]
+    existing_feedback["modified_time"] = datetime.datetime.now()
     db.feedback.save(existing_feedback)
     return feedback
 
 
-def get_feedback(participant_id=None, site_id=None, sid=None):
+def get_feedback(userid=None, site_id=None, sid=None, qid=None):
     q = {}
-    if participant_id:
-        q["participant_id"] = site_id
+    if userid:
+        q["userid"] = userid
     if site_id:
         q["site_id"] = site_id
     if sid:
-        q["sid"] = qid
-    feedback = db.feedback.find_one(q)
-    if not feedback:
-        raise LookupError("Feedback not found:  sid = '%s'" % site_qid)
-    return feedback
+        q["sid"] = sid
+    if qid:
+        q["qid"] = qid
+    readyfeedback = []
+    for feedback in db.feedback.find(q):
+        if feedback.get("doclist") != None:
+            readyfeedback.append(feedback)
+    return readyfeedback
+

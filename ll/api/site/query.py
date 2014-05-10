@@ -20,8 +20,8 @@ from .. import core
 from .. import ApiResource
 
 query_fields = {
-    "site_qid": fields.String,
-    "qstr": fields.String,
+    "site_qid": fields.String(),
+    "qstr": fields.String(),
     "creation_time": fields.DateTime(),
 }
 

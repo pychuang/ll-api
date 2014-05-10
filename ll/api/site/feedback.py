@@ -20,7 +20,7 @@ from .. import core
 from .. import ApiResource
 
 doclist_fields = {
-    "site_docid": fields.String,
+    "site_docid": fields.String(),
     "title": fields.String(),
 }
 

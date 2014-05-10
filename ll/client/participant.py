@@ -20,6 +20,8 @@ import argparse
 import requests
 import json
 import time
+import datetime
+import random
 
 HOST = "http://127.0.0.1:5000/api"
 
@@ -51,21 +53,18 @@ class Participant():
     def get_queries(self, key):
         url = "/".join([HOST, QUERYENDPOINT, key])
         r = requests.get(url, headers=HEADERS)
-        print r.json()
         r.raise_for_status()
         return r.json()
 
     def get_doclist(self, key, qid):
         url = "/".join([HOST, DOCLISTENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
-        print r.json()
         r.raise_for_status()
         return r.json()
 
-    def get_feedback(self, key):
-        url = "/".join([HOST, FEEDBACKENDPOINT, key])
+    def get_feedback(self, key, qid):
+        url = "/".join([HOST, FEEDBACKENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
-        print r.json()
         r.raise_for_status()
         return r.json()
 
@@ -75,14 +74,25 @@ class Participant():
             run["runid"] = str(self.runid)
             url = "/".join([HOST, RUNENDPOINT, key, qid])
             r = requests.put(url, data=json.dumps(run), headers=HEADERS)
-            print r.json()
             r.raise_for_status()
 
-    def update_runs(self, key, runs, feedback):
-        #TODO: Implement baseline
-        if True:
-            self.runid += 1
-            self.store_runs(key, runs)
+    def update_runs(self, key, runs, feedbacks):
+        for qid in runs:
+            if qid in feedbacks and feedbacks[qid]['feedback']:
+                clicks = dict([(doc['docid'], 0)
+                               for doc in runs[qid]['doclist']])
+                for feedback in feedbacks[qid]['feedback']:
+                    for doc in feedback["doclist"]:
+                        if doc["clicked"]:
+                            clicks[doc["docid"]] += 1
+                runs[qid]['doclist'] = [{'docid': docid}
+                                        for docid, _ in
+                                        sorted(clicks.items(),
+                                               key=lambda x: x[1],
+                                               reverse=True)]
+                print clicks
+        self.runid += 1
+        self.store_runs(key, runs)
         return runs
 
     def simulate_runs(self, key):
@@ -92,9 +102,12 @@ class Participant():
             qid = query["qid"]
             runs[qid] = self.get_doclist(key, qid)
         while True:
-            feedback = self.get_feedback(key)
-            runs = self.update_runs(key, runs, feedback)
-            time.sleep(5)
+            feedbacks = {}
+            for query in queries["queries"]:
+                qid = query["qid"]
+                feedbacks[qid] = self.get_feedback(key, qid)
+            runs = self.update_runs(key, runs, feedbacks)
+            time.sleep(random.random())
 
 if __name__ == '__main__':
     participant = Participant()

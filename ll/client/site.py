@@ -23,6 +23,8 @@ import requests
 import json
 import random
 import time
+import datetime
+from numpy import log2, mean
 
 HOST = "http://127.0.0.1:5000/api"
 PCLICK = {0: 0.05,
@@ -31,6 +33,7 @@ PCLICK = {0: 0.05,
 PSTOP = {0: 0.2,
          1: 0.5,
          2: 0.9}
+
 
 QUERYENDPOINT = "site/query"
 DOCENDPOINT = "site/doc"
@@ -95,7 +98,6 @@ def get_ranking(key, qid):
     site_qid = hashlib.sha1(qid).hexdigest()
     url = "/".join([HOST, RANKIGNENDPOINT, key, site_qid])
     r = requests.get(url, headers=HEADERS)
-    print r.json()
     r.raise_for_status()
     json = r.json()
     return json["sid"], json["doclist"]
@@ -109,13 +111,11 @@ def store_feedback(key, qid, sid, ranking, clicks):
                "doclist": []}
     for doc, click in zip(ranking, clicks):
         site_docid = doc["site_docid"]
-        doclist["doclist"].append({"site_docid": site_docid})
-        if click:
-            doclist["doclist"][-1]["clicked"] = True
+        doclist["doclist"].append({"site_docid": site_docid,
+                                   "clicked": click == 1})
 
     url = "/".join([HOST, FEEDBACKENDPOINT, key, sid])
     r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-    print r.json()
     r.raise_for_status()
 
 
@@ -144,12 +144,35 @@ def get_clicks(ranking, labels):
     return clicks
 
 
+def evaluate_ranking(ranking, labels):
+    def get_dcg(orderedlabels):
+        dcg = 0.0
+        for pos, label in enumerate(orderedlabels):
+            dcg += (2. ** label - 1.) / log2(2. + pos)
+        return dcg
+    orderedlabels = [labels[doc["site_docid"]] for doc in ranking]
+    idcg = get_dcg(sorted(orderedlabels, reverse=True))
+    if idcg == 0.0:
+        return 0.0
+    return get_dcg(orderedlabels) / idcg
+
+
+def evaluate(rankings, labels):
+    ndcgs = []
+    for qid in rankings:
+        ndcgs.append(evaluate_ranking(rankings[qid], labels[qid]))
+    return mean(ndcgs)
+
+
 def simulate_clicks(key, qrel_file):
     labels = get_labels(qrel_file)
+    rankings = {}
     while True:
         qid = random.choice(labels.keys())
         sid, ranking = get_ranking(key, qid)
-        #TODO: once in a while, drop a document before showing it to the user.
+        rankings[qid] = ranking
+        print "NDCG: %.3f" % evaluate(rankings, labels)
+        #TODO: once in a while, drop a document before return.
         clicks = get_clicks(ranking, labels[qid])
         store_feedback(key, qid, sid, ranking, clicks)
         time.sleep(random.random())
