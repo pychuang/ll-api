@@ -54,15 +54,20 @@ def user(args, parser):
 def status(args, parser):
     print "STATUS", args
 
+
+def db(args, parser):
+    if args.clear:
+        ll.core.db.clear()
+
 if __name__ == '__main__':
     def add_mongodb(parser):
         group_mongodb = parser.add_argument_group("mongodb", section="mongodb")
         group_mongodb.add_argument('--mongodb_db', default="ll", type=str,
-                            help='Mongodb database.')
+                                   help='Mongodb database.')
         group_mongodb.add_argument('--mongodb_user', default=None, type=str,
-                            help='Mongodb user.')
+                                   help='Mongodb user.')
         group_mongodb.add_argument('--mongodb_pw', default=None, type=str,
-                            help='Mongodb password')
+                                   help='Mongodb password')
 
     description = "Living Labs Challenge's Management"
     parser = confargparse.ConfArgParser(description=description,
@@ -80,29 +85,37 @@ if __name__ == '__main__':
                                 help='Emailaddress (for --create and/or '
                                 '--site).')
     subparser_user.add_argument('--delete', action="store_true", default=False,
-                        help='Delete user (key required).')
+                                help='Delete user (key required).')
     subparser_user.add_argument('--create', action="store_true", default=False,
-                        help='Create user (teamname and email address '
-                        'required).')
+                                help='Create user (teamname and email address '
+                                'required).')
     subparser_user.add_argument('--site', action="store_true", default=False,
-                        help='Make a site out of this user (key or --create '
-                        'and teamname and email required).')
+                                help='Make a site out of this user (key or '
+                                '--create and teamname and email required).')
     subparser_user.add_argument('--short', type=str,
-                        help="Short name for a site (only used if --site).")
+                                help='Short name for a site (only used if '
+                                '--site).')
     subparser_user.add_argument('--name', type=str,
-                        help="Name for a site (only used if --site).")
+                                help="Name for a site (only used if --site).")
     subparser_user.add_argument('--url', type=str,
-                        help="Url for a site (only used if --site).")
+                                help="Url for a site (only used if --site).")
     add_mongodb(subparser_user)
     subparser_user.set_defaults(func=user, funcarg=subparser_user)
 
     subparser_status = subparsers.add_parser('status', section='status')
     subparser_status.add_argument("--open", action="store_true", default=False,
-                        help="")
+                                  help="")
     add_mongodb(subparser_status)
     subparser_status.set_defaults(func=status, funcarg=subparser_status)
+
+    subparser_db = subparsers.add_parser('db', section='status')
+    subparser_db.add_argument("--clear", action="store_true", default=False,
+                              help="")
+    add_mongodb(subparser_db)
+    subparser_db.set_defaults(func=db, funcarg=subparser_db)
 
     args = parser.parse_args()
     ll.core.db.db.init_db(args.mongodb_db, user=args.mongodb_user,
                           password=args.mongodb_pw)
+
     trycall(args.func, args, args.funcarg)

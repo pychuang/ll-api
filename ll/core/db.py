@@ -31,3 +31,11 @@ class CoreDatabase(object):
                 self.db.authenticate(user, password)
 
 db = CoreDatabase()
+
+
+def clear():
+    db.user.remove({})
+    db.site.remove({})
+    db.doc.remove({})
+    db.feedback.remove({})
+    db.run.remove({})
