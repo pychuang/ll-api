@@ -32,62 +32,69 @@ FEEDBACKENDPOINT = "participant/feedback"
 HEADERS = {'content-type': 'application/json'}
 
 
-def get_queries(key):
-    url = "/".join([HOST, QUERYENDPOINT, key])
-    r = requests.get(url, headers=HEADERS)
-    print r.json()
-    r.raise_for_status()
-    return r.json()
+class Participant():
+    def __init__(self):
+        description = "Living Labs Challenge's Participant Client"
+        parser = argparse.ArgumentParser(description=description)
+        parser.add_argument('-k', '--key', type=str, required=True,
+                            help='Provide a user key.')
+        parser.add_argument('-s', '--simulate_runs', action="store_true",
+                            default=False,
+                            help='Simulate runs.')
+        args = parser.parse_args()
 
+        self.runid = 0
 
-def get_doclist(key, qid):
-    url = "/".join([HOST, DOCLISTENDPOINT, key])
-    r = requests.get(url, headers=HEADERS)
-    print r.json()
-    r.raise_for_status()
-    return r.json()
+        if args.simulate_runs:
+            self.simulate_runs(args.key)
 
+    def get_queries(self, key):
+        url = "/".join([HOST, QUERYENDPOINT, key])
+        r = requests.get(url, headers=HEADERS)
+        print r.json()
+        r.raise_for_status()
+        return r.json()
 
-def get_feedback(key):
-    url = "/".join([HOST, FEEDBACKENDPOINT, key])
-    r = requests.get(url, headers=HEADERS)
-    print r.json()
-    r.raise_for_status()
-    return r.json()
+    def get_doclist(self, key, qid):
+        url = "/".join([HOST, DOCLISTENDPOINT, key, qid])
+        r = requests.get(url, headers=HEADERS)
+        print r.json()
+        r.raise_for_status()
+        return r.json()
 
+    def get_feedback(self, key):
+        url = "/".join([HOST, FEEDBACKENDPOINT, key])
+        r = requests.get(url, headers=HEADERS)
+        print r.json()
+        r.raise_for_status()
+        return r.json()
 
-def update_runs(runs, feedback):
-    #TODO: Implement baseline
-    return runs
+    def store_runs(self, key, runs):
+        for qid in runs:
+            run = runs[qid]
+            run["runid"] = str(self.runid)
+            url = "/".join([HOST, RUNENDPOINT, key, qid])
+            r = requests.put(url, data=json.dumps(run), headers=HEADERS)
+            print r.json()
+            r.raise_for_status()
 
+    def update_runs(self, key, runs, feedback):
+        #TODO: Implement baseline
+        if True:
+            self.runid += 1
+            self.store_runs(key, runs)
+        return runs
 
-def store_runs(key, doclist):
-    url = "/".join([HOST, RUNENDPOINT, key])
-    r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-    print r.json()
-    r.raise_for_status()
-
-
-def simulate_runs(key):
-    queries = get_queries(key)
-    runs = {}
-    for qid in queries:
-        runs[qid] = get_doclist(key, qid)
-
-    while True:
-        feedback = get_feedback(key)
-        runs = update_runs(runs, feedback)
-        store_runs(key, runs)
-        time.sleep(5)
+    def simulate_runs(self, key):
+        queries = self.get_queries(key)
+        runs = {}
+        for query in queries["queries"]:
+            qid = query["qid"]
+            runs[qid] = self.get_doclist(key, qid)
+        while True:
+            feedback = self.get_feedback(key)
+            runs = self.update_runs(key, runs, feedback)
+            time.sleep(5)
 
 if __name__ == '__main__':
-    description = "Living Labs Challenge's Participant Client"
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-k', '--key', type=str, required=True,
-                        help='Provide a user key.')
-    parser.add_argument('-s', '--simulate_runs', action="store_true",
-                        default=False,
-                        help='Simulate runs.')
-    args = parser.parse_args()
-    if args.simulate_runs:
-        simulate_runs(args.key)
+    participant = Participant()

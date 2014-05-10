@@ -43,6 +43,7 @@ def get_site(site_id):
 
 
 def next_qid(site_id):
+    #TODO: make these thread save
     site = get_site(site_id)
     qid = site["qid_counter"]
     site["qid_counter"] += 1
@@ -51,6 +52,7 @@ def next_qid(site_id):
 
 
 def next_docid(site_id):
+    #TODO: make these thread save
     site = get_site(site_id)
     docid = site["docid_counter"]
     site["docid_counter"] += 1
@@ -59,6 +61,7 @@ def next_docid(site_id):
 
 
 def next_sid(site_id):
+    #TODO: make these thread save
     site = get_site(site_id)
     sid = site["sid_counter"]
     site["sid_counter"] += 1

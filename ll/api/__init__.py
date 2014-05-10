@@ -14,10 +14,10 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Flask
-from flask.ext.restful import Api
+from flask.ext.restful import Api, abort
 
 from .. import core
 from apiresource import ApiResource
 
 app = Flask(__name__)
-api = Api(app)
+api = Api(app, catch_all_404s=True)

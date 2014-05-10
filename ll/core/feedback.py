@@ -18,11 +18,11 @@ import doc
 
 
 def add_feedback(site_id, sid, feedback):
-    existing_feedback = db.feedback.find_one({"site_id": site_id, "sid": sid})
+    existing_feedback = db.feedback.find_one({"site_id": site_id, "_id": sid})
     if existing_feedback == None:
         raise LookupError("Session not found: sid = '%s'." % sid)
     for doc in feedback["doclist"]:
-        doc_found = doc.get_doc(site_id=site_id, site_docid=doc["site_docid"])
+        doc_found = db.doc.find_one(site_id=site_id, site_docid=doc["site_docid"])
         if not doc_found:
             raise LookupError("Document not found: site_docid = '%s'. Please"
                             "only provide feedback for documents that are"

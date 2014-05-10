@@ -107,8 +107,8 @@ def store_feedback(key, qid, sid, ranking, clicks):
                "site_qid": site_qid,
                "type": "clicks",
                "doclist": []}
-    for docid, click in zip(ranking, clicks):
-        site_docid = hashlib.sha1(docid).hexdigest()
+    for doc, click in zip(ranking, clicks):
+        site_docid = doc["site_docid"]
         doclist["doclist"].append({"site_docid": site_docid})
         if click:
             doclist["doclist"][-1]["clicked"] = True
@@ -125,14 +125,16 @@ def get_labels(qrel_file):
         qid, _, docid, label = line.split()
         if not qid in labels:
             labels[qid] = {}
-        labels[qid][docid] = int(label)
+        site_docid = hashlib.sha1(docid).hexdigest()
+        labels[qid][site_docid] = int(label)
     return labels
 
 
 def get_clicks(ranking, labels):
     clicks = [0] * len(ranking)
-    for pos, docid in enumerate(ranking):
-        label = labels[docid]
+    for pos, doc in enumerate(ranking):
+        site_docid = doc["site_docid"]
+        label = labels[site_docid]
         rand = random.random()
         if rand < PCLICK[label]:
             clicks[pos] = 1

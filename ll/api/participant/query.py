@@ -50,6 +50,7 @@ class Query(ApiResource):
             however, monitor for strange behavior.
 
         """
+        self.validate_participant(key)
         queries = core.query.get_query()
         return {"queries": [marshal(q, query_fields) for q in queries]}
 

@@ -15,6 +15,7 @@
 
 from db import db
 import random
+import datetime
 import site
 
 
@@ -24,13 +25,16 @@ def get_ranking(site_id, site_qid):
         raise LookupError("Query not found: site_qid = '%s'. Only rankings for"
                         "existing queries can be expected." % site_qid)
     run = get_run(site_qid)
+    sid = site.next_sid(site_id)
     feedback = {
-        "_id": site.next_sid(site_id),
+        "_id": sid,
         "site_qid": site_qid,
+        "site_id": site_id,
         "qid": query["_id"],
-        "rid": run["_id"],
+        "runid": run["runid"],
     }
     db.feedback.save(feedback)
+    run["sid"] = sid
     return run
 
 
@@ -41,14 +45,46 @@ def get_run(site_qid):
                         % site_qid)
     participants = set()
     for run in runs:
-        participants.add(run["participants_id"])
+        participants.add(run["userid"])
     participant = random.choice(list(participants))
-    last = 0
+    last = None
     selectedrun = None
+    runs = db.run.find({"site_qid": site_qid,
+                        "userid": participant})
     for run in runs:
-        if run["participants_id"] != participant:
-            continue
-        if run["creation_time"] > last:
+        if last == None or run["creation_time"] > last:
             last = run["creation_time"]
             selectedrun = run
+    print "SELECTED", selectedrun
     return selectedrun
+
+
+def add_run(key, qid, runid, doclist):
+    #run = db.run.find(userid=key, qid=qid, runid=runid)
+    #if run.count():
+    #    raise Exception("You can not upload a run for for a query twice (you "
+    #                    "can increment the runid): qid = '%s', runid = '%s'."
+    #                    % (qid, runid))
+    q = db.query.find_one({"_id": qid})
+    if not q:
+        raise Exception("Query does not exit: qid = '%s'" % qid)
+
+    store_doclist = []
+    for docid in doclist:
+        doc_found = db.doc.find_one(docid=docid)
+        if not doc_found:
+            raise LookupError("Document not found: docid = '%s'. Add"
+                            "documents before adding a doclist."
+                            % docid)
+        store_doclist.append(doc_found)
+
+    run = {
+        "userid": key,
+        "qid": qid,
+        "site_qid": q["site_qid"],
+        "runid": runid,
+        "doclist": store_doclist,
+        "creation_time": datetime.datetime.now(),
+        }
+    db.run.save(run)
+    return run

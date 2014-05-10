@@ -15,12 +15,14 @@
 
 from flask.ext.restful import Resource
 from .. import api
+from .. import core
 from .. import ApiResource
 
 
 class Feedback(ApiResource):
     def get(self, runid):
+        self.validate_participant(key)
         return {'hello': 'world'}
 
-api.add_resource(Feedback, '/api/participant/feedback/<runid>',
+api.add_resource(Feedback, '/api/participant/feedback/<key>/<runid>',
                  endpoint="participant/feedback")

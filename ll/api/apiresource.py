@@ -27,6 +27,7 @@ class ApiResource(Resource):
                       (", ".join(notfound), DOCUMENTATION))
 
     def trycall(self, function, *args, **kwargs):
+        #function(*args, **kwargs)
         try:
             return function(*args, **kwargs)
         except ValueError, e:
@@ -41,6 +42,15 @@ class ApiResource(Resource):
         if not user:
             abort(403, message="No such key. See %s." % DOCUMENTATION)
         if not user["is_site"]:
-            abort(403, message="Not a site. Please use the participant"
+            abort(403, message="Not a site. Please use the participant "
                   "API instead. See %s." % DOCUMENTATION)
         return user["site_id"]
+
+    def validate_participant(self, key):
+        user = self.trycall(core.user.get_user, key)
+        if not user:
+            abort(403, message="No such key. See %s." % DOCUMENTATION)
+        if not user["is_participant"]:
+            abort(403, message="Not a participant. Please use the site "
+                  "API instead. See %s." % DOCUMENTATION)
+        return True

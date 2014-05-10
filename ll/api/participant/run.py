@@ -13,17 +13,33 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.restful import Resource
+from flask import request
+from flask.ext.restful import Resource, fields, marshal
 from .. import api
+from .. import core
 from .. import ApiResource
+
+doclist_fields = {
+    "docid": fields.String(attribute="_id"),
+    "title": fields.String(),
+}
 
 
 class Run(ApiResource):
-    def get(self, runid):
+    def get(self, key, qid):
+        self.validate_participant(key)
         return {'hello': 'world'}
 
-    def put(self, runid):
-        return {'hello': 'world'}
+    def put(self, key, qid):
+        self.validate_participant(key)
+        run = request.get_json(force=True)
+        self.check_fields(run, ["doclist", "runid"])
+        self.trycall(core.run.add_run, key, qid, run["runid"], run["doclist"])
+        return {
+            "runid": run["runid"],
+            "qid": qid,
+            "doclist": run["doclist"]
+            }
 
-api.add_resource(Run, '/api/participant/run/<runid>',
+api.add_resource(Run, '/api/participant/run/<key>/<qid>',
                  endpoint="participant/run")

@@ -44,13 +44,13 @@ def get_doclist(site_id=None, site_qid=None, qid=None):
     if site_qid:
         q["site_qid"] = site_qid
     if qid:
-        q["qid"] = qid
+        q["_id"] = qid
     query = db.query.find_one(q)
     if not query:
         if site_qid:
-            raise LookupError("Query not found:  site_qid = '%s'." % site_qid)
+            raise LookupError("Query not found: site_qid = '%s'." % site_qid)
         else:
-            raise LookupError("Query not found:  qid = '%s'." % qid)
+            raise LookupError("Query not found: qid = '%s'." % qid)
     return [db.doc.find_one({"_id": d}) for d in query["doclist"]]
 
 

@@ -13,14 +13,33 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.restful import Resource
+from flask.ext.restful import Resource, fields, marshal
 from .. import api
+from .. import core
 from .. import ApiResource
+
+doclist_fields = {
+    "docid": fields.String(attribute="_id"),
+    "title": fields.String(),
+}
 
 
 class Doc(ApiResource):
-    def get(self, docid):
+    def get(self, key, docid):
+        self.validate_participant(key)
         return {'hello': 'world'}
 
-api.add_resource(Doc, '/api/participant/doc/<docid>',
+
+class DocList(ApiResource):
+    def get(self, key, qid):
+        self.validate_participant(key)
+        doclist = self.trycall(core.doc.get_doclist, qid=qid)
+        return {
+            "qid": qid,
+            "doclist": [marshal(d, doclist_fields) for d in doclist]
+            }
+
+api.add_resource(Doc, '/api/participant/doc/<key>/<docid>',
                  endpoint="participant/doc")
+api.add_resource(DocList, '/api/participant/doclist/<key>/<qid>',
+                 endpoint="participant/doclist")

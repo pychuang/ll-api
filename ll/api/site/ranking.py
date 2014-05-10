@@ -20,10 +20,13 @@ from .. import ApiResource
 
 doc_fields = {
     "site_docid": fields.String,
+}
+
+doclist_fields = {
+    "sid": fields.String(),
     "creation_time": fields.DateTime(),
-    "content": fields.String(),
-    "title": fields.String(),
     "content_encoding": fields.String(),
+    "doclist": fields.Nested(doc_fields)
 }
 
 
@@ -70,7 +73,7 @@ class Ranking(ApiResource):
         """
         site_id = self.get_site_id(key)
         ranking = self.trycall(core.run.get_ranking, site_id, site_qid)
-        return marshal(ranking, doc_fields)
+        return marshal(ranking, doclist_fields)
 
 
 api.add_resource(Ranking, '/api/site/ranking/<key>/<site_qid>', endpoint="site/ranking")
