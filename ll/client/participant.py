@@ -25,18 +25,12 @@ import random
 import time
 
 HOST = "http://127.0.0.1:5000/api"
-PCLICK = {0: 0.05,
-          1: 0.5,
-          2: 0.95}
-PSTOP = {0: 0.2,
-         1: 0.5,
-         2: 0.9}
 
-QUERYENDPOINT = "site/query"
-DOCENDPOINT = "site/doc"
-DOCLISTENDPOINT = "site/doclist"
-RANKIGNENDPOINT = "site/ranking"
-FEEDBACKENDPOINT = "site/feedback"
+QUERYENDPOINT = "participant/query"
+DOCENDPOINT = "participant/doc"
+DOCLISTENDPOINT = "participant/doclist"
+RUNENDPOINT = "participant/run"
+FEEDBACKENDPOINT = "participant/feedback"
 
 HEADERS = {'content-type': 'application/json'}
 
@@ -153,7 +147,7 @@ def simulate_clicks(key, qrel_file):
         time.sleep(random.random())
 
 if __name__ == '__main__':
-    description = "Living Labs Challenge's Site Client"
+    description = "Living Labs Challenge's Participant Client"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-k', '--key', type=str, required=True,
                         help='Provide a user key.')
