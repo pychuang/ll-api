@@ -54,3 +54,7 @@ def get_user(key):
     if not user:
         return False
     return user
+
+
+def delete_user(key):
+    pass

@@ -37,7 +37,7 @@ def get_ranking(site_id, site_qid):
 def get_run(site_qid):
     runs = db.run.find(site_qid=site_qid)
     if not runs.count():
-        raise Exception("No runs avaliable")
+        raise Exception("No runs available.")
     participants = set()
     for run in runs:
         participants.add(run["participants_id"])
