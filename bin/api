@@ -24,6 +24,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__),
 
 from ll.core.db import db
 from ll.api import app
+import ll.api.participant
+import ll.api.site
+
 
 if __name__ == '__main__':
     description = "Living Labs Challenge's API Server"
@@ -48,4 +51,5 @@ if __name__ == '__main__':
     app.debug = args.debug
     db.init_db(args.mongodb_db, user=args.mongodb_user,
                password=args.mongodb_pw)
-    app.run(host=args.host, port=args.port)
+    #app.run(host=args.host, port=args.port)
+    app.run()
