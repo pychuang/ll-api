@@ -21,13 +21,13 @@ import site
 def add_doclist(site_id, site_qid, doclist):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query == None:
-        raise Exception("Query not found: site_qid = '%s'. Add queries before"
-                        "adding a doclist." % site_qid)
+        raise LookupError("Query not found: site_qid = '%s'. Add queries "
+                          "before adding a doclist." % site_qid)
     store_doclist = []
     for doc in doclist:
         doc_found = get_doc(site_id=site_id, site_docid=doc["site_docid"])
         if not doc_found:
-            raise Exception("Document not found: site_docid = '%s'. Add"
+            raise LookupError("Document not found: site_docid = '%s'. Add"
                             "documents before adding a doclist."
                             % doc["site_docid"])
         store_doclist.append(doc_found["_id"])
@@ -48,9 +48,9 @@ def get_doclist(site_id=None, site_qid=None, qid=None):
     query = db.query.find_one(q)
     if not query:
         if site_qid:
-            raise Exception("Query not found:  site_qid = '%s'." % site_qid)
+            raise LookupError("Query not found:  site_qid = '%s'." % site_qid)
         else:
-            raise Exception("Query not found:  qid = '%s'." % qid)
+            raise LookupError("Query not found:  qid = '%s'." % qid)
     return [db.doc.find_one({"_id": d}) for d in query["doclist"]]
 
 

@@ -17,7 +17,7 @@ from flask import request
 from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
-from site import SiteResource
+from .. import ApiResource
 
 doclist_fields = {
     "site_docid": fields.String,
@@ -25,7 +25,7 @@ doclist_fields = {
 }
 
 
-class Feedback(SiteResource):
+class Feedback(ApiResource):
     def put(self, key, sid):
         """
         Return feedback for a session.

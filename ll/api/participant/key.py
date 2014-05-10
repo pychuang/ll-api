@@ -16,6 +16,7 @@
 from flask.ext.restful import Resource, abort, fields, marshal
 from .. import api
 from .. import core
+from .. import ApiResource
 
 user_fields = {
     "key": fields.String(attribute="_id"),
@@ -25,7 +26,7 @@ user_fields = {
 }
 
 
-class Key(Resource):
+class Key(ApiResource):
     def get(self, teamname, email):
         """Obtain an API key.
 

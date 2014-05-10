@@ -19,7 +19,7 @@ from .. import core
 DOCUMENTATION = "http://doc.living-labs.net/"
 
 
-class SiteResource(Resource):
+class ApiResource(Resource):
     def check_fields(self, o, fields):
         for f in fields:
             if f not in o:
@@ -29,6 +29,10 @@ class SiteResource(Resource):
     def trycall(self, function, *args, **kwargs):
         try:
             return function(*args, **kwargs)
+        except ValueError, e:
+            abort(409, message=str(e).strip() + " See %s." % DOCUMENTATION)
+        except LookupError, e:
+            abort(404, message=str(e).strip() + " See %s." % DOCUMENTATION)
         except Exception, e:
             abort(400, message=str(e).strip() + " See %s." % DOCUMENTATION)
 

@@ -15,9 +15,10 @@
 
 from flask.ext.restful import Resource
 from .. import api
+from .. import ApiResource
 
 
-class Doc(Resource):
+class Doc(ApiResource):
     def get(self, docid):
         return {'hello': 'world'}
 

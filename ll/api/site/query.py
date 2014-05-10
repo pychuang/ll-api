@@ -17,7 +17,7 @@ from flask import request
 from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
-from site import SiteResource
+from .. import ApiResource
 
 query_fields = {
     "site_qid": fields.String,
@@ -26,7 +26,7 @@ query_fields = {
 }
 
 
-class Query(SiteResource):
+class Query(ApiResource):
     def get(self, key):
         """
         Obtain the query set.

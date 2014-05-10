@@ -17,7 +17,7 @@ from flask import request
 from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
-from site import SiteResource
+from .. import ApiResource
 
 doclist_fields = {
     "site_docid": fields.String,
@@ -33,7 +33,7 @@ doc_fields = {
 }
 
 
-class Doc(SiteResource):
+class Doc(ApiResource):
     def get(self, key, site_docid):
         """
         Retreive a single document that was uploaded before. Identify it with
@@ -111,7 +111,7 @@ class Doc(SiteResource):
         return marshal(doc, doc_fields)
 
 
-class DocList(SiteResource):
+class DocList(ApiResource):
     def get(self, key, site_qid):
         """
         Retrieve the document list for a query.

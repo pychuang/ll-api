@@ -16,7 +16,7 @@
 from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
-from site import SiteResource
+from .. import ApiResource
 
 doc_fields = {
     "site_docid": fields.String,
@@ -27,7 +27,7 @@ doc_fields = {
 }
 
 
-class Ranking(SiteResource):
+class Ranking(ApiResource):
     def get(self, key, site_qid):
         """
         Obtain a ranking for a query.

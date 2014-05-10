@@ -16,6 +16,7 @@
 from flask.ext.restful import Resource, abort, fields, marshal
 from .. import api
 from .. import core
+from .. import ApiResource
 
 query_fields = {
     "qid": fields.String(attribute="_id"),
@@ -24,7 +25,7 @@ query_fields = {
 }
 
 
-class Query(Resource):
+class Query(ApiResource):
     def get(self, key):
         """Obtain the query set.
 

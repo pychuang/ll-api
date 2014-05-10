@@ -21,7 +21,7 @@ import site
 def get_ranking(site_id, site_qid):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query == None:
-        raise Exception("Query not found: site_qid = '%s'. Only rankings for"
+        raise LookupError("Query not found: site_qid = '%s'. Only rankings for"
                         "existing queries can be expected." % site_qid)
     run = get_run(site_qid)
     feedback = {
@@ -37,7 +37,8 @@ def get_ranking(site_id, site_qid):
 def get_run(site_qid):
     runs = db.run.find(site_qid=site_qid)
     if not runs.count():
-        raise Exception("No runs available.")
+        raise LookupError("No runs available for query: site_qid = '%s'."
+                        % site_qid)
     participants = set()
     for run in runs:
         participants.add(run["participants_id"])

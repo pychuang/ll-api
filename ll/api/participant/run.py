@@ -15,9 +15,10 @@
 
 from flask.ext.restful import Resource
 from .. import api
+from .. import ApiResource
 
 
-class Run(Resource):
+class Run(ApiResource):
     def get(self, runid):
         return {'hello': 'world'}
 

@@ -90,6 +90,7 @@ def get_ranking(key, qid):
     site_qid = hashlib.sha1(qid).hexdigest()
     url = "/".join([HOST, RANKIGNENDPOINT, key, site_qid])
     r = requests.get(url, headers=HEADERS)
+    print r.json()
     r.raise_for_status()
     json = r.json()
     return json["sid"], json["doclist"]
@@ -107,6 +108,7 @@ def store_feedback(key, qid, sid, ranking, clicks):
             doclist["doclist"][-1]["clicked"] = True
 
     url = "/".join([HOST, FEEDBACKENDPOINT, key, sid])
+    print r.json()
     r.raise_for_status()
     requests.put(url, data=json.dumps(doclist), headers=HEADERS)
 

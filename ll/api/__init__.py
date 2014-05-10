@@ -17,6 +17,7 @@ from flask import Flask
 from flask.ext.restful import Api
 
 from .. import core
+from apiresource import ApiResource
 
 app = Flask(__name__)
 api = Api(app)
