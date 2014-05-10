@@ -21,10 +21,10 @@ DOCUMENTATION = "http://doc.living-labs.net/"
 
 class ApiResource(Resource):
     def check_fields(self, o, fields):
-        for f in fields:
-            if f not in o:
-                abort(400, message="Please specify field '%s'. See %s." %
-                      (f, DOCUMENTATION))
+        notfound = [f for f in fields if f not in o]
+        if notfound:
+            abort(400, message="Please specify field(s): '%s'. See %s." %
+                      (", ".join(notfound), DOCUMENTATION))
 
     def trycall(self, function, *args, **kwargs):
         try:
