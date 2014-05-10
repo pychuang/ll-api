@@ -24,9 +24,6 @@ import json
 import random
 
 HOST = "http://127.0.0.1:5000/api"
-QUERYENDPOINT = "site/query"
-DOCENDPOINT = "site/doc"
-DOCLISTENDPOINT = "site/doclist"
 PCLICK = {0:0.05,
           1:0.5,
           2:0.95,}
@@ -34,11 +31,13 @@ PSTOP = {0:0.2,
          1:0.5,
          2:0.9}
 
-headers = {'content-type': 'application/json'}
+QUERYENDPOINT = "site/query"
+DOCENDPOINT = "site/doc"
+DOCLISTENDPOINT = "site/doclist"
+RANKIGNENDPOINT = "site/ranking"
+FEEDBACKENDPOINT = "site/feedback"
 
-def put(url, data):
-    r = requests.put(url, data=data, headers=headers)
-    return r.text
+HEADERS = {'content-type': 'application/json'}
 
 def store_queries(key, query_file):
     tree = et.parse(query_file)
@@ -49,15 +48,15 @@ def store_queries(key, query_file):
         query = topic.find("query")
         qstr = query.text
         queries["queries"].append({
-            "qstr" : qstr,
-            "site_qid" : hashlib.sha1(qid).hexdigest(),
+            "qstr": qstr,
+            "site_qid": hashlib.sha1(qid).hexdigest(),
         })
     url = "/".join([HOST, QUERYENDPOINT, key])
-    print put(url, json.dumps(queries))
+    requests.put(url, data=json.dumps(queries), headers=HEADERS)
 
 def store_doc(key, doc, site_docid):
-    title = "Dummy Title"
-    content = "Dummy Content"
+    title = "Dummy Title " + str(site_docid)
+    content = "Dummy Content " + str(site_docid)
     doc = { 
         "site_docid": site_docid,
         "title": title,
@@ -65,47 +64,65 @@ def store_doc(key, doc, site_docid):
         "content_encoding": "base64",
         }
     url = "/".join([HOST, DOCENDPOINT, key, site_docid])
-    print put(url, json.dumps(doc))
+    requests.put(url, data=json.dumps(doc), headers=HEADERS)
 
 def store_doclist(key, run_file):
     def put_doclist(doclist, current_qid):
         site_qid = hashlib.sha1(current_qid).hexdigest()
         doclist["site_qid"] = site_qid
         url = "/".join([HOST, DOCLISTENDPOINT, key, site_qid])
-        return put(url, json.dumps(doclist))
+        requests.put(url, data=json.dumps(doclist), headers=HEADERS)
 
     doclist = {"doclist": []}
     current_qid = None
     for line in open(run_file, "r"):
         qid, _, docid, _, _, _ = line.split()
         if current_qid != None and current_qid != qid: 
-            print put_doclist(doclist, current_qid)
+            put_doclist(doclist, current_qid)
             doclist = {"doclist": []}
         site_docid = hashlib.sha1(docid).hexdigest()
         store_doc(key, docid, site_docid)
         doclist["doclist"].append({"site_docid": site_docid})
         current_qid = qid
-    print put_doclist(doclist, current_qid)
+    put_doclist(doclist, current_qid)
 
-def get_ranking(site_qid):
-    pass
+def get_ranking(key, qid):
+    site_qid = hashlib.sha1(qid).hexdigest()
+    url = "/".join([HOST, RANKIGNENDPOINT, key, site_qid])
+    r = requests.get(url, headers=HEADERS)
+    r.raise_for_status()
+    json = r.json()
+    return json["sid"], json["doclist"]
 
-def store_feedback(site_qid, clicks):
-    pass
+def store_feedback(key, qid, sid, ranking, clicks):
+    site_qid = hashlib.sha1(qid).hexdigest()
+    doclist = {"sid": sid,
+               "site_qid": site_qid,
+               "type": "clicks",
+               "doclist": []}
+    for docid, click in zip(ranking, clicks):
+        site_docid = hashlib.sha1(docid).hexdigest()
+        doclist["doclist"].append({"site_docid":site_docid})
+        if click:
+            doclist["doclist"][-1]["clicked"] = True
+
+    url = "/".join([HOST, FEEDBACKENDPOINT, key, sid])
+    r.raise_for_status()
+    requests.put(url, data=json.dumps(doclist), headers=HEADERS)
 
 def get_labels(qrel_file):
     labels = {}
     for line in open(qrel_file, "r"):
-        site_qid, _, site_docid, label = line.split()
-        if not site_qid in labels:
-            labels[site_qid] = {}
-        labels[site_qid][site_docid] = int(label)
+        qid, _, docid, label = line.split()
+        if not qid in labels:
+            labels[qid] = {}
+        labels[qid][docid] = int(label)
     return labels
 
 def get_clicks(ranking, labels):
     clicks = [0]*len(ranking)
-    for site_docid in ranking:
-        label = labels[site_docid]
+    for docid in ranking:
+        label = labels[docid]
         rand = random.random()
         if rand < PCLICK[label]:
             clicks[pos] = 1
@@ -117,32 +134,36 @@ def get_clicks(ranking, labels):
 def simulate_clicks(key, qrel_file):
     labels = get_labels(qrel_file)
     while True:
-        site_qid = random.choice(labels.keys())
-        ranking = get_ranking(site_qid)
-        clicks = get_clicks(ranking, labels[site_qid])
-        store_feedback(site_qid, clicks)
+        qid = random.choice(labels.keys())
+        sid, ranking = get_ranking(key, qid)
+        #TODO: once in a while, drop a document before showing it to the user.
+        clicks = get_clicks(ranking, labels[qid])
+        store_feedback(key, qid, sid, ranking, clicks)
         time.sleep(random.random())
     
 if __name__ == '__main__':
     description = "Living Labs Challenge's API Server"
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--key', type=str, required=True,
+    parser.add_argument('-k', '--key', type=str, required=True,
                         help='Provide a user key.')
     parser.add_argument('-q', '--store_queries', action="store_true",
                         default=False,
-                        help='Store some queries.')
+                        help='Store some queries (needs --query_file).')
     parser.add_argument('--query_file', default="../data/queries.xml",
-                        help='Path to TREC style query file.')
+                        help='Path to TREC style query file '
+                        '(default: %(default)s).')
     parser.add_argument('-d', '--store_doclist', action="store_true", 
                         default=False,
-                        help='Store a document list.')
+                        help='Store a document list (needs --run_file)')
     parser.add_argument('--run_file', default="../data/run.txt",
-                        help='Path to TREC style run file.')
+                        help='Path to TREC style run file '
+                        '(default: %(default)s).')
     parser.add_argument('-s', '--simulate_clicks', action="store_true",
                         default=False,
-                        help='Simulate clicks.')
+                        help='Simulate clicks (needs --qrel_file).')
     parser.add_argument('--qrel_file', default="../data/qrel.txt",
-                        help='Path to TREC style qrel file.')
+                        help='Path to TREC style qrel file '
+                        '(default: %(default)s).')
     args = parser.parse_args()
     if args.store_queries:
         store_queries(args.key, args.query_file)
