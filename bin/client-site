@@ -21,11 +21,18 @@ import xml.etree.ElementTree as et
 import argparse
 import requests
 import json
+import random
 
 HOST = "http://127.0.0.1:5000/api"
 QUERYENDPOINT = "site/query"
 DOCENDPOINT = "site/doc"
 DOCLISTENDPOINT = "site/doclist"
+PCLICK = {0:0.05,
+          1:0.5,
+          2:0.95,}
+PSTOP = {0:0.2,
+         1:0.5,
+         2:0.9}
 
 headers = {'content-type': 'application/json'}
 
@@ -80,20 +87,66 @@ def store_doclist(key, run_file):
         current_qid = qid
     print put_doclist(doclist, current_qid)
 
+def get_ranking(site_qid):
+    pass
+
+def store_feedback(site_qid, clicks):
+    pass
+
+def get_labels(qrel_file):
+    labels = {}
+    for line in open(qrel_file, "r"):
+        site_qid, _, site_docid, label = line.split()
+        if not site_qid in labels:
+            labels[site_qid] = {}
+        labels[site_qid][site_docid] = int(label)
+    return labels
+
+def get_clicks(ranking, labels):
+    clicks = [0]*len(ranking)
+    for site_docid in ranking:
+        label = labels[site_docid]
+        rand = random.random()
+        if rand < PCLICK[label]:
+            clicks[pos] = 1
+            rand = random.random()
+            if rand < PSTOP[label]:
+                break
+    return clicks
+
+def simulate_clicks(key, qrel_file):
+    labels = get_labels(qrel_file)
+    while True:
+        site_qid = random.choice(labels.keys())
+        ranking = get_ranking(site_qid)
+        clicks = get_clicks(ranking, labels[site_qid])
+        store_feedback(site_qid, clicks)
+        time.sleep(random.random())
+    
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Living Labs Challenge's API Server")
+    description = "Living Labs Challenge's API Server"
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--key', type=str, required=True,
                         help='Provide a user key.')
-    parser.add_argument('-q', '--store_queries', action="store_true", default=False,
+    parser.add_argument('-q', '--store_queries', action="store_true",
+                        default=False,
                         help='Store some queries.')
-    parser.add_argument('--query_file', default="data/queries.xml",
+    parser.add_argument('--query_file', default="../data/queries.xml",
                         help='Path to TREC style query file.')
-    parser.add_argument('-d', '--store_doclist', action="store_true", default=False,
+    parser.add_argument('-d', '--store_doclist', action="store_true", 
+                        default=False,
                         help='Store a document list.')
-    parser.add_argument('--run_file', default="data/run.txt",
+    parser.add_argument('--run_file', default="../data/run.txt",
                         help='Path to TREC style run file.')
+    parser.add_argument('-s', '--simulate_clicks', action="store_true",
+                        default=False,
+                        help='Simulate clicks.')
+    parser.add_argument('--qrel_file', default="../data/qrel.txt",
+                        help='Path to TREC style qrel file.')
     args = parser.parse_args()
     if args.store_queries:
         store_queries(args.key, args.query_file)
     if args.store_doclist:
         store_doclist(args.key, args.run_file)
+    if args.simulate_clicks:
+        simulate_clicks(args.key, args.qrel_file)

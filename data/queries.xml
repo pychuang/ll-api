@@ -1,7 +1,12 @@
 <topics>
 <topic number="1">
-<query>feta cheese preservatives</query>
-<description>Find information on which substances are used to extend the shelf life of feta cheese.
+<query>apple</query>
+<description>Find information on apples.
+</description>
+</topic>
+<topic number="2">
+<query>jaguar</query>
+<description>Find information the animal jaguars.
 </description>
 </topic>
 </topics>
