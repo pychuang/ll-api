@@ -1,8 +1,8 @@
 API Reference for Participants
 ==============================
 
-We provide a basic API for participants of the Living Labs Challenge to perform 
-several actions such as obtaining a key, queries, documents and feedback. The 
+We provide a basic API for participants of the Living Labs Challenge to perform
+several actions such as obtaining a key, queries, documents and feedback. The
 API can also be used to update runs. Everything is implemented as HTTP request,
 and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX
 errors where possible.
@@ -18,11 +18,18 @@ Query
    :undoc-static:
    :include-empty-docstring:
 
-
 Doc
 ---
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/doc
+   :undoc-static:
+   :include-empty-docstring:
+
+
+Doclist
+-------
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/doclist
    :undoc-static:
    :include-empty-docstring:
 
