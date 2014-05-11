@@ -2,4 +2,3 @@
 *.swp
 *.pyc
 doc/build
-bin/client-*
