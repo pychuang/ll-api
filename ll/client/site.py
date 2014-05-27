@@ -53,19 +53,19 @@ class Site():
         parser.add_argument('-q', '--store_queries', action="store_true",
                             default=False,
                             help='Store some queries (needs --query_file).')
-        parser.add_argument('--query_file', default="../data/queries.xml",
+        parser.add_argument('--query_file', default="data/queries.xml",
                             help='Path to TREC style query file '
                             '(default: %(default)s).')
         parser.add_argument('-d', '--store_doclist', action="store_true",
                             default=False,
                             help='Store a document list (needs --run_file)')
-        parser.add_argument('--run_file', default="../data/run.txt",
+        parser.add_argument('--run_file', default="data/run.txt",
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
                             help='Simulate clicks (needs --qrel_file).')
-        parser.add_argument('--qrel_file', default="../data/qrel.txt",
+        parser.add_argument('--qrel_file', default="data/qrel.txt",
                             help='Path to TREC style qrel file '
                             '(default: %(default)s).')
         args = parser.parse_args()
