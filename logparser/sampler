@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+import argparse
+import requests
+import json
+import hashlib
+from urlparse import urlparse, parse_qsl
+from collections import Counter
+from parser import logparser
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Parse uva.nl access logs for queries to send to the Living Labs API.')
+    parser.add_argument("--api", "-a", type=str,
+                        default="http://living-labs.net/api/",
+                        help="Living labs API location (default: %(default)s).")
+    parser.add_argument("--key", "-k", type=str,
+                        default="KEY-123",
+                        help="API key (default: %(default)s).")
+    parser.add_argument("--upload", "-u", action="store_true",
+                        default=False,
+                        help="Actually upload to the API (default: %(default)s).")
+    parser.add_argument("--size", "-s", type=int)
+    args = parser.parse_args()
+    
+    queries = Counter()
+    for _, url, _ in logparser():
+        if "/search?q=" in url:
+            query = parse_qsl(urlparse(url)[4])[0][1]
+            queries[query] += 1
+    data = {"queries": []}
+    for query, _ in queries.most_common(args.size):
+        site_qid = hashlib.sha1(query).hexdigest()
+        data["queries"].append({"qstr": query,
+                                "site_qid": site_qid})    
+
+    apiurl = "/".join([args.api.strip("/"), "query", args.key])
+    if args.upload:
+        requests.put(apiurl,
+                     data=json.dumps(data),
+                     headers={'content-type': 'application/json'})
+    else:
+        print apiurl
+        print json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
+
