@@ -1,10 +1,17 @@
 Tutorial
 ========
 
+
+This tutorial describes how to install, run and develop with the Living Labs
+Challenge software. In case you have any comments or questions, please do not
+hesitate to file an issue here: http://git.living-labs.net/ll-challenge/issues.
+Or, you can contact anne.schuth@uva.nl.
+
 Obtain source code
 ------------------
 
-You can clone the repo with all Living Labs Challenge's code as follows:
+You can clone the repository that contains all the Living Labs Challenge's code
+as follows:
 
 .. sourcecode:: bash
 
@@ -14,40 +21,49 @@ You can clone the repo with all Living Labs Challenge's code as follows:
 Install prerequisites
 ---------------------
 
-Then, installing the python prerequisites is easy:
+If you want to run the API yourself, then a couple of prerequisites are needed.
+However, installing them is easy (if you have pip installed):
 
 .. sourcecode:: bash
 
     $ pip install -r requirements.txt
 
-.. note: If you don't have pip yet, install it using "easy_install pip".
+If you don't have pip yet, install it using :code:`easy_install pip`. Windows
+users may want to read here:
+http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows
 
 Done?
 -----
 
-If you only want to run a client, you have all you need. Expample clients are in ll/clients
+If you only want to run a client, you have all you need. Example clients are in
+the repository in the :code:`ll/clients` directory.
 
-In case you want to run your own version of the API (for testing purposes), you'll have to continue.
+In case you want to run your own version of the API (for testing purposes),
+you'll have to continue.
 
 Setup MongoDB
 -------------
 
-If you don't already have MongoDB, follow this guide: http://docs.mongodb.org/manual/installation/.
+If you don't already have MongoDB, you may follow a guide for your operating
+system at this page: http://docs.mongodb.org/manual/installation/.
 
-Then you can choose to run with or without authentication (without is easier).
+Then you can choose to run with or without authentication (without is easier,
+but unsecure).
 
 Authenticated
 ^^^^^^^^^^^^^
 
-To run MongoDB with authorization enabled you can run with the provided configuration file config/mongodb.conf (you may have to edit the data path).
+To run MongoDB with authentication enabled you can run it with the provided
+configuration file config/mongodb.conf (you may have to edit the data path).
 
-First start a deamon as follows:
+First start a MongoDB daemon as follows:
 
 .. sourcecode:: bash
 
     $ mongod --config ll-challenge/config/mongodb.con
 
-Then, create users (replace ADMINSECRET and USERSECRET with actual password and remember those):
+Then, create two users (replace ADMINSECRET and USERSECRET with actual password
+and remember those):
 
 .. sourcecode:: bash
 
@@ -79,39 +95,35 @@ Then, create users (replace ADMINSECRET and USERSECRET with actual password and 
         }
     )
 
-Create a local copy of the config/db.ini file and edit it to add the USERSECRET password. Also edit the database name if you wish.
+Create a local copy of the config/db.ini file and edit it to add the USERSECRET
+password. Also edit the database name if you wish.
 
 .. sourcecode:: bash
 
     $ cp config/db.ini config/db.local.ini
+    $ vim config/db.local.ini
+    
+Remember to never add the file containing your password to a code repository,
+that would be a severe security threat.
 
 Non-Authenticated
 ^^^^^^^^^^^^^^^^^
 
-For developping purposes, this is fine. Otherwise, make sure to use authentication.
-Start a MongoDB deamon as follows:
+For developping purposes, this is fine. Otherwise, make sure to use
+authentication. Start a MongoDB deamon as follows:
 
 .. sourcecode:: bash
 
     $ mongod
 
-Create a local copy of the config/db.ini file. Edit the database name if you wish.
+Create a local copy of the config/db.ini file. Edit the database name if you
+wish.
 
 .. sourcecode:: bash
 
     $ cp config/db.ini config/db.local.ini
 
-Fill the database
------------------
 
-To create a example user and a site (for development/testing purposes):
-
-.. sourcecode:: bash
-    
-    $ ./bin/admin user -c config/db.local.ini config/example-data/site.ini
-    $ ./bin/admin user -c config/db.local.ini config/example-data/user.1.ini
-
-Record both keys, you'll need them for the clients.
 
 Run the API
 -----------
@@ -122,35 +134,120 @@ To start the API, run the following command:
     
     $ ./bin/api -c config/db.local.ini config/api.ini
 
-If you did nit start MongoDB with authentication, or if you want automated code reloaded, then run this with --debug: 
+If you want to automatically have the API reload when you change the code (which
+is incredibly handy when developing) then run this with :code:`--debug` the
+debug flag: 
 
 .. sourcecode:: bash
 
     $ ./bin/api -c config/db.local.ini config/api.ini --debug
 
+In general, use :code:`--help` or :code:`-h` for more information.
+
+
+Fill the Database
+-----------------
+
+To create an example participant and a site (for development/testing purposes),
+you can run the following script: 
+
+.. sourcecode:: bash 
+
+    $ ./bin/admin user -c config/db.local.ini config/example-data/site.ini 
+    $ ./bin/admin user -c config/db.local.ini config/example-data/user.1.ini
+
+
+In return, you will see two API keys, one for a site and one for a participant.
+Record the keys as SITEKEY and PARTICIPANTKEY, you'll need them for the clients.
+
+Instead, you can also provide your own details, see the help on how to do that:
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin user -h
+
+
+Reset the Database
+------------------
+
+In case you need a reset, you can simply run this. But, BE CAREFUL, it can not
+be undone (or, probably it can, the MongoDB is journalled, but it will not be
+trivial).
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin db --clear
+
+Don't forget to recreate users (see above).
 
 Run a Site
 ----------
+
+To run a site client and upload queries and documents, you can do the following:
+
+.. sourcecode:: bash 
+
+   $ ./bin/client-site --key SITEKEY -q -d
+
+This will take TREC queries/runs/document (see :code:`-h` for file locations and
+how to change them) as a basis.
+
+Then, to simulate interactions, run the following:
+
+.. sourcecode:: bash 
+
+   $ ./bin/client-site --key SITEKEY -s
+   
+Again, this will take TREC data (qrels) to simulate clicks using a simple
+cascade click model.
+
+The simple simulator will print the NDCG value of all the rankings it receives
+from the API. 
+
+Note that the site client is not at all aware of the participants, the site
+client simply talks to the API. So if there are multiple participant clients
+present, the API does not know about this and the NDCG will thus reflect the
+average performance of all participants. This is by design. For per-participant
+statistics, one should use the dashboard.
+
+If you want to run multiple sites, you should create multiple keys.
 
 
 Run a Participant
 -----------------
 
+To run a simple participant implementation, you can do this:
+
+.. sourcecode:: bash 
+
+   $ ./bin/client-participant -k PARTICIPANTKEY -s
+
+This will run a baseline system that simply greedily reranks by the number of
+clicks. 
+
+If you want to run multiple participants, you should create multiple keys.
+
+Dashboard
+=========
+
+
 
 Building Documentation
 ======================
 
-To build the docs, run these commands in a shell:
+To build this documentation, run these commands in a shell:
 
 .. sourcecode:: bash
     
     $ cd doc
     $ make html
     $ open doc/build/html/index.html
+    
+Note that you probably don't have to build the documentation. A constantly
+updated version is available here: http://doc.living-labs.net/
 
 Troubleshooting
 ---------------
-
 
 If you receive the following error when building the documentation:
 

@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Living Labs Challenge Documentation'
+project = u'Living Labs Challenge'
 copyright = u'2014, Living Labs'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -120,11 +120,13 @@ html_theme_options = {
     'navbar_site_name': 'Documentation',
     'source_link_position': 'footer',
     'navbar_links': [
-            ("About", "http://living-labs.net/about/", True),
-            ("LL'13", "http://living-labs.net/ll13/", True),
-            ("LL'14", "http://living-labs.net/ll14/", True),
-            ("LLC", "http://living-labs.net/LLC/", True),
-            ("Challenge", "http://living-labs.net/challenge/", True),
+            ("Website", "http://living-labs.net/", True),
+            ("Dashboard", "http://dashboard.living-labs.net/", True),
+#            ("About", "http://living-labs.net/about/", True),
+#            ("LL'13", "http://living-labs.net/ll13/", True),
+#            ("LL'14", "http://living-labs.net/ll14/", True),
+#            ("LLC", "http://living-labs.net/LLC/", True),
+#            ("Challenge", "http://living-labs.net/challenge/", True),
     ]
 }
 

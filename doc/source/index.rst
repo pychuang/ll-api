@@ -6,6 +6,12 @@
 Living Labs Challenge's documentation
 =====================================
 
+
+.. image:: http://living-labs.net/wp-content/uploads/2014/05/livinglab.logo_.textunder.square200.png
+   :width: 200 px
+   :align: right
+   :target: http://living-labs.net/
+
 .. toctree::
    :maxdepth: 2
    

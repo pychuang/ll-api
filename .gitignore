@@ -1,4 +1,5 @@
 *.local.*
 *.swp
 *.pyc
+.pydevproject
 doc/build

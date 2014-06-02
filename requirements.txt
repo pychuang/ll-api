@@ -4,3 +4,5 @@ sphinxcontrib-httpdomain>=1.2.1
 Flask>=0.10.1
 Flask-RESTful>=0.2.12
 ConfArgParse>=1.0.15
+requests>=1.2.3
+numpy>=1.8.1
