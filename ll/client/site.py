@@ -53,6 +53,9 @@ class Site():
         parser.add_argument('-q', '--store_queries', action="store_true",
                             default=False,
                             help='Store some queries (needs --query_file).')
+        parser.add_argument('--delete_queries', action="store_true",
+                            default=False,
+                            help='Delete all queries for this site.')
         parser.add_argument('--query_file', default="data/queries.xml",
                             help='Path to TREC style query file '
                             '(default: %(default)s).')
@@ -71,6 +74,8 @@ class Site():
         args = parser.parse_args()
         if args.store_queries:
             self.store_queries(args.key, args.query_file)
+        if args.delete_queries:
+            self.delete_queries(args.key)
         if args.store_doclist:
             self.store_doclist(args.key, args.run_file)
         if args.simulate_clicks:
@@ -90,6 +95,10 @@ class Site():
             })
         url = "/".join([HOST, QUERYENDPOINT, key])
         requests.put(url, data=json.dumps(queries), headers=HEADERS)
+
+    def delete_queries(self, key):
+        url = "/".join([HOST, QUERYENDPOINT, key])
+        requests.delete(url, headers=HEADERS)
 
     def store_doc(self, key, doc, site_docid):
         title = "Dummy Title " + str(site_docid)

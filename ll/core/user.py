@@ -56,5 +56,9 @@ def get_user(key):
     return user
 
 
+def get_users():
+    return db.user.find()
+
+
 def delete_user(key):
     pass

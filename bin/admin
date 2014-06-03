@@ -43,6 +43,10 @@ def user(args, parser):
         user = ll.core.user.new_user(args.teamname, args.email)
         key = user["_id"]
         print "New user key:", key
+    elif args.show:
+        for user in ll.core.user.get_users():
+            print user["_id"], user["teamname"], user["email"], \
+            "PARTICIPANT" if user["is_participant"] else "SITE"
     else:
         parser.error("Wrong arguments.")
 
@@ -89,6 +93,8 @@ if __name__ == '__main__':
     subparser_user.add_argument('--create', action="store_true", default=False,
                                 help='Create user (teamname and email address '
                                 'required).')
+    subparser_user.add_argument('--show', action="store_true", default=False,
+                                help='Show users.')
     subparser_user.add_argument('--site', action="store_true", default=False,
                                 help='Make a site out of this user (key or '
                                 '--create and teamname and email required).')

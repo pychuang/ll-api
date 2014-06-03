@@ -46,6 +46,11 @@ def get_query(site_id=None, qid=None):
         q["_id"] = qid
     return db.query.find(q)
 
-if __name__ == '__main__':
-    for query in db.query.find():
-        print query
+
+def delete_query(site_id=None, qid=None):
+    q = {}
+    if site_id:
+        q["site_id"] = site_id
+    if qid:
+        q["_id"] = qid
+    return db.query.remove(q)

@@ -81,10 +81,10 @@ class Query(ApiResource):
                     ]
                 }
 
-        :status 403: invalid key
-        :status 400: bad request
+        :status 403: invalid key.
+        :status 400: bad request.
         :status 409: the query set is not updatable, the challenge is running.
-        :return: see :http:get:`/api/site/query/(key)`
+        :return: see :http:get:`/api/site/query/(key)`.
         """
 
         site_id = self.get_site_id(key)
@@ -99,15 +99,18 @@ class Query(ApiResource):
 
     def delete(self, key):
         """
-        Delete the query set. This can only be done before the challenge
+        Delete the query set. This can only be done before the challenge.
         started.
 
-        :param key: your API key
+        :param key: your API key.
 
-        :status 403: invalid key
-        :status 400: bad request
+        :status 403: invalid key.
+        :status 400: bad request.
         :status 409: the query set is not deletable, the challenge is running.
+        :status 200: the query set is deleted.
         """
-        pass
+
+        site_id = self.get_site_id(key)
+        self.trycall(core.query.delete_query, site_id=site_id)
 
 api.add_resource(Query, '/api/site/query/<key>', endpoint="site/query")
