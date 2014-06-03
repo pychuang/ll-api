@@ -90,6 +90,7 @@ class Query(ApiResource):
         site_id = self.get_site_id(key)
         queries = request.get_json(force=True)
         self.check_fields(queries, ["queries"])
+        self.trycall(core.query.delete_query, site_id=site_id)
         for q in queries["queries"]:
             self.check_fields(q, ["site_qid", "qstr"])
             self.trycall(core.query.add_query, site_id, q["site_qid"],
