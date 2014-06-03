@@ -1,0 +1,18 @@
+    {% macro render_field(field) %}
+        {% if field.errors %}
+	        <div class="form-group has-error">
+		        {{ field.label(class="col-lg-2 control-label") }}
+	            {{ field(**kwargs) }}
+				<span class="help-block col-lg-10 col-lg-offset-2">
+		            {% for error in field.errors %}
+		            {{ error|e }}
+		            {% endfor %}
+				</span>
+	        </div>
+        {% else %}
+	        <div class="form-group">
+	            {{ field.label(class="col-lg-2 control-label") }}
+	            {{ field(**kwargs) }}
+	        </div>
+        {% endif %}
+    {% endmacro %}
