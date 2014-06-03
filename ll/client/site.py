@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import base64
 import hashlib
 import xml.etree.ElementTree as et
@@ -46,6 +47,7 @@ HEADERS = {'content-type': 'application/json'}
 
 class Site():
     def __init__(self):
+        path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Site Client"
         parser = argparse.ArgumentParser(description=description)
         parser.add_argument('-k', '--key', type=str, required=True,
@@ -56,13 +58,17 @@ class Site():
         parser.add_argument('--delete_queries', action="store_true",
                             default=False,
                             help='Delete all queries for this site.')
-        parser.add_argument('--query_file', default="data/queries.xml",
+        parser.add_argument('--query_file',
+                            default=os.path.normpath(os.path.join(path,
+                                                 "../../data/queries.xml")),
                             help='Path to TREC style query file '
                             '(default: %(default)s).')
         parser.add_argument('-d', '--store_doclist', action="store_true",
                             default=False,
                             help='Store a document list (needs --run_file)')
-        parser.add_argument('--run_file', default="data/run.txt",
+        parser.add_argument('--run_file', 
+                            default=os.path.normpath(os.path.join(path,
+                                                "../../data/run.txt")),
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
