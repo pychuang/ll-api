@@ -79,9 +79,9 @@ class Doc(ApiResource):
 
     def put(self, key, site_docid):
         """
-        Store a single document. Unless you store plain ASCII documents, you
-        should encode the document using base64 encoding. Don't forget to
-        specify doing so in the content_encoding field.
+        Store a single document.
+        Feel free to use fields (such as 'description' in the example) if you
+        have them.
         You are free to use any document identifier you wish (be it a url, a
         hash of the url, or anything else you use internally).
 
