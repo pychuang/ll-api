@@ -1,25 +1,30 @@
 #!/usr/bin/env python
 
-import argparse
+# This file is part of Living Labs Challenge, see http://living-labs.net.
+#
+# Living Labs Challenge is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Living Labs Challenge is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
+
 import requests
 import json
 import datetime
 import hashlib
 from urlparse import urlparse, parse_qsl
-from parser import logparser
+
+from parser import logparser, argparser
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Parse uva.nl access logs for clicks to send to the Living Labs API.')
-    parser.add_argument("--api", "-a", type=str,
-                        default="http://living-labs.net/api/",
-                        help="Living labs API location (default: %(default)s).")
-    parser.add_argument("--key", "-k", type=str,
-                        default="KEY-123",
-                        help="API key (default: %(default)s).")
-    parser.add_argument("--upload", "-u", action="store_true",
-                        default=False,
-                        help="Actually upload to the API (default: %(default)s).")
-    args = parser.parse_args()
+    args = argparser.parse_args()
    
     feedbacks = {}
     for tm, url, ref in logparser():
@@ -50,6 +55,7 @@ if __name__ == "__main__":
                     },
                     ]}
             feedbacks[site_qid] = data
+            
             if args.upload:
                 requests.put(apiurl,
                              data=json.dumps(data),
