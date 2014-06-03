@@ -42,7 +42,11 @@ def user(args, parser):
     elif args.teamname and args.email and args.create:
         user = ll.core.user.new_user(args.teamname, args.email)
         key = user["_id"]
-        print "New user key:", key
+        if args.site:
+            ll.core.site.set_site(key, args.short, args.name, args.url)
+            print "New SITEKEY: %s" % key
+        else:
+            print "New PARTICIPANTKEY: %s" % key
     elif args.show:
         for user in ll.core.user.get_users():
             print user["_id"], user["teamname"], user["email"], \
@@ -50,9 +54,9 @@ def user(args, parser):
     else:
         parser.error("Wrong arguments.")
 
-    if args.site:
+    if args.site and not args.create:
         ll.core.site.set_site(key, args.short, args.name, args.url)
-        print "User is set to site."
+        print "Key is now a SITEKEY: %s" % key
 
 
 def status(args, parser):
