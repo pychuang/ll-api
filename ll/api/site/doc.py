@@ -93,8 +93,9 @@ class Doc(ApiResource):
             .. sourcecode:: javascript
 
                 {
-                     "content": "RHVtbXkgQ29udGVudA==",
-                     "content_encoding": "base64",
+                     "content": {"description": "Lorem ipsum dolor sit amet",
+                                 "short_description" : "Lorem ipsum",
+                                 ...}
                      "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737",
                      "title": "Document Title"
                 }
@@ -106,7 +107,7 @@ class Doc(ApiResource):
         """
         site_id = self.get_site_id(key)
         doc = request.get_json(force=True)
-        self.check_fields(doc, ["title", "content", "content_encoding"])
+        self.check_fields(doc, ["title", "content"])
         doc = self.trycall(core.doc.add_doc, site_id, site_docid, doc)
         return marshal(doc, doc_fields)
 

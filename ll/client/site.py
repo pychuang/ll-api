@@ -106,8 +106,9 @@ class Site():
         doc = {
             "site_docid": site_docid,
             "title": title,
-            "content": base64.b64encode(content),
-            "content_encoding": "base64",
+            "content": {"description": content},
+#            "content": base64.b64encode(content),
+#            "content_encoding": "base64",
             }
         url = "/".join([HOST, DOCENDPOINT, key, site_docid])
         requests.put(url, data=json.dumps(doc), headers=HEADERS)
