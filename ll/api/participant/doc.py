@@ -33,6 +33,26 @@ doc_fields = {
 
 class Doc(ApiResource):
     def get(self, key, docid):
+        """
+        Retrieve a single document.
+
+        :param key: your API key
+        :param docid: the document identifier
+        :status 403: invalid key
+        :status 404: document does not exist
+        :return:
+            .. sourcecode:: javascript
+
+                {
+                     "content": {"description": "Lorem ipsum dolor sit amet",
+                                 "short_description" : "Lorem ipsum",
+                                 ...}
+                     "creation_time": "Sun, 27 Apr 2014 23:40:29 -0000",
+                     "docid": "S-d1",
+                     "title": "Document Title"
+                }
+
+        """
         self.validate_participant(key)
         doc = self.trycall(core.doc.get_doc, docid=docid)
         return marshal(doc, doc_fields)
@@ -40,6 +60,31 @@ class Doc(ApiResource):
 
 class DocList(ApiResource):
     def get(self, key, qid):
+        """
+        Retrieve the document list for a query.
+
+        This doclist defines the set documents that are returnable for a query.
+        You are free to update this list when the set of documents changes over
+        time.
+
+        :param key: your API key
+        :param qid: the query identifier
+        :status 403: invalid key
+        :status 404: query does not exist
+        :status 400: bad request
+        :return:
+            .. sourcecode:: javascript
+
+                {
+                    "doclist": [
+                        {"docid": "S-d3"},
+                        {"docid": "S-d5"},
+                        {"docid": "S-d10"},
+                        ...
+                            ]
+                }
+
+        """
         self.validate_participant(key)
         doclist = self.trycall(core.doc.get_doclist, qid=qid)
         return {

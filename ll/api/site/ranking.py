@@ -25,7 +25,6 @@ doc_fields = {
 doclist_fields = {
     "sid": fields.String(),
     "creation_time": fields.DateTime(),
-    "content_encoding": fields.String(),
     "doclist": fields.Nested(doc_fields)
 }
 

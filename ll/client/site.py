@@ -74,7 +74,9 @@ class Site():
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
                             help='Simulate clicks (needs --qrel_file).')
-        parser.add_argument('--qrel_file', default="data/qrel.txt",
+        parser.add_argument('--qrel_file', 
+                            default=os.path.normpath(os.path.join(path,
+                                                    "../../data/qrel.txt")),
                             help='Path to TREC style qrel file '
                             '(default: %(default)s).')
         args = parser.parse_args()
@@ -208,12 +210,15 @@ class Site():
         rankings = {}
         while True:
             qid = random.choice(labels.keys())
+            #try:
             sid, ranking = self.get_ranking(key, qid)
             rankings[qid] = ranking
             print "NDCG: %.3f" % self.evaluate(rankings, labels)
             #TODO: once in a while, drop a document before return.
             clicks = self.get_clicks(ranking, labels[qid])
             self.store_feedback(key, qid, sid, ranking, clicks)
+            #except:
+            #    print "ERROR, fall back to normal processing"
             time.sleep(random.random())
 
 if __name__ == '__main__':

@@ -32,6 +32,31 @@ feedback_fields = {
 
 class Feedback(ApiResource):
     def get(self, key, qid):
+        """
+        Obtain feedback for a query.
+
+        :param key: your API key
+        :param sid: the query identifier
+        :status 403: invalid key
+        :status 404: query does not exist
+        :status 400: bad request
+        :return:
+            .. sourcecode:: javascript
+
+                {
+                    "feedback": [
+                        {"qid": "S-q1",
+                         "modified_time": "Sun, 27 Apr 2014 13:46:00 -0000",
+                         "doclist": [
+                             {"docid": "S-d1"
+                             "clicked": True},
+                             {"docid": "S-d2"},
+                             ...
+                         ]},
+                         ...
+                }
+        """
+
         self.validate_participant(key)
         feedbacks = self.trycall(core.feedback.get_feedback, userid=key,
                                 qid=qid)

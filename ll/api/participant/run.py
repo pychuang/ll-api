@@ -19,27 +19,55 @@ from .. import api
 from .. import core
 from .. import ApiResource
 
-doclist_fields = {
-    "docid": fields.String(attribute="_id"),
-    "title": fields.String(),
+doc_fields = {
+    "docid": fields.String(),
+}
+
+run_fields = {
+    "creation_time": fields.DateTime(),
+    "qid": fields.String(),
+    "runid": fields.String(),
+    "doclist": fields.Nested(doc_fields)
 }
 
 
 class Run(ApiResource):
     def get(self, key, qid):
+        """
+        Obtain the last submitted run for a specific query.
+
+        :param key: your API key
+        :param qid: the query identifier
+        :status 200: valid key
+        :status 403: invalid key
+
+        :return:
+            .. sourcecode:: javascript
+        {
+            "qid": "U-q22",
+            "runid": "82"
+            "creation_time": "Wed, 04 Jun 2014 15:03:56 -0000",
+            "doclist": [
+                {
+                    "docid": "U-d4"
+                },
+                {
+                    "docid": "U-d2"
+                }, ...
+            ],
+        }
+        """
         self.validate_participant(key)
-        return {'hello': 'world'}
+        run = self.trycall(core.run.get_run, key, qid)
+        return marshal(run, run_fields)
 
     def put(self, key, qid):
         self.validate_participant(key)
         run = request.get_json(force=True)
         self.check_fields(run, ["doclist", "runid"])
         self.trycall(core.run.add_run, key, qid, run["runid"], run["doclist"])
-        return {
-            "runid": run["runid"],
-            "qid": qid,
-            "doclist": run["doclist"]
-            }
+        return marshal(run, run_fields)
+
 
 api.add_resource(Run, '/api/participant/run/<key>/<qid>',
                  endpoint="participant/run")

@@ -15,6 +15,7 @@
 
 from db import db
 import random
+import pymongo
 import datetime
 import site
 
@@ -24,7 +25,7 @@ def get_ranking(site_id, site_qid):
     if query == None:
         raise LookupError("Query not found: site_qid = '%s'. Only rankings for"
                         "existing queries can be expected." % site_qid)
-    run = get_run(query["_id"])
+    run = get_next_run(query["_id"])
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
@@ -40,7 +41,7 @@ def get_ranking(site_id, site_qid):
     return run
 
 
-def get_run(qid):
+def get_next_run(qid):
     runs = db.run.find({"qid": qid})
     if not runs.count():
         raise LookupError("No runs available for query.")
@@ -48,15 +49,12 @@ def get_run(qid):
     for run in runs:
         participants.add(run["userid"])
     participant = random.choice(list(participants))
-    last = None
-    selectedrun = None
-    runs = db.run.find({"qid": qid,
-                        "userid": participant})
-    for run in runs:
-        if last == None or run["creation_time"] > last:
-            last = run["creation_time"]
-            selectedrun = run
-    return selectedrun
+    return get_run(participant, qid)
+
+
+def get_run(key, qid):
+    return db.run.find_one({"qid": qid, "userid": key},
+                           sort=[('creation_time', pymongo.DESCENDING)])
 
 
 def add_run(key, qid, runid, doclist):
