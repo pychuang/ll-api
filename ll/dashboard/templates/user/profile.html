@@ -1,5 +1,41 @@
    {% extends "base.html" %}
+   {% block header %}
+    	Profile for {{ user.teamname }}
+   {% endblock %}
    {% block content %}
-     Hi {{ user.teamname }}!
-     Your API key is {{ user._id }}
+    <table class="table table-striped table-hover ">
+    <tbody>
+    <tr>
+      <td>Teamname</td>
+      <td>{{ user.teamname }}</td>
+  	</tr>
+    <tr>
+      <td>Email</td>
+      <td>{{ user.email|urlize }}</td>
+  	</tr>
+    <tr>
+      <td>API key</td>
+      <td>{{ user._id }}</td>
+  	</tr>
+    <tr>
+      <td>Creation</td>
+      <td>{{ user.creation_time }}</td>
+  	</tr>
+  	{% if user.is_site %}
+    <tr>
+      <td>Type</td>
+      <td>Site</td>
+  	</tr>
+    <tr>
+      <td>Type</td>
+      <td>Site</td>
+  	</tr>
+    {% elif user.is_participant %}
+    <tr>
+      <td>Type</td>
+      <td>Participant</td>
+  	</tr>
+  	{% endif %}
+  	</tbody>
+	</table> 
    {% endblock %}

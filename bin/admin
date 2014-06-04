@@ -40,7 +40,7 @@ def user(args, parser):
     elif args.key:
         user = ll.core.user.get_user(args.key)
         key = args.key
-    elif args.teamname and args.email and args.create:
+    elif args.teamname and args.email and args.password and args.create:
         user = ll.core.user.new_user(args.teamname, args.email,
                                      generate_password_hash(args.password))
         key = user["_id"]

@@ -7,7 +7,7 @@ def requires_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if g.user is None:
-            flash(u'You need to be signed in for this page.')
+            flash(u'You need to be signed in for this page.', 'alert-warning')
             return redirect(url_for('user.login', next=request.path))
         return f(*args, **kwargs)
     return decorated_function
