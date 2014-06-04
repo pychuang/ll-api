@@ -31,8 +31,20 @@ def home():
 @requires_login
 def site(site_id):
     site = core.site.get_site(site_id)
-    querycount = core.query.get_query(site_id=site_id).count()
+    feedbacks = core.db.db.feedback.find({"site_id": site_id})
+    clicks = 0
+    for feedback in feedbacks:
+        if not "doclist" in feedback:
+            continue
+        clicks += len([d for d in feedback["doclist"] if d["clicked"]])
+
+    stats = {
+             "query": core.db.db.query.find({"site_id": site_id}).count(),
+             "doc": core.db.db.doc.find({"site_id": site_id}).count(),
+             "impression": feedbacks.count(),
+             "click": clicks,
+    }
     return render_template("site/site.html",
                            user=g.user,
                            site=site,
-                           querycount=querycount)
+                           stats=stats)

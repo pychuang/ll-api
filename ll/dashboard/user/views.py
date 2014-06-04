@@ -16,11 +16,11 @@
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
 from werkzeug import check_password_hash, generate_password_hash
 
-from .. import app, core, requires_login
+from .. import core, requires_login
 from forms import LoginForm, RegisterForm
 
 mod = Blueprint('user', __name__, url_prefix='/user')
-app.register_blueprint(mod)
+
 
 @mod.route('/me/')
 @requires_login

@@ -37,6 +37,16 @@ if __name__ == '__main__':
                         help='Host to listen on.')
     group_flask.add_argument('--port', dest='port', default=5001, type=int,
                         help='Port to listen on.')
+    group_flask.add_argument('--admin',
+                             help="")
+    group_flask.add_argument('--csrfsecrettoken',
+                             help="")
+    group_flask.add_argument('--secretkey',
+                             help="")
+    group_flask.add_argument('--recaptchapublic',
+                    help="Get from https://www.google.com/recaptcha/admin.")
+    group_flask.add_argument('--recaptchaprivate',
+                    help="Get from https://www.google.com/recaptcha/admin.")
     group_mongodb = parser.add_argument_group("mongodb", section="mongodb")
     group_mongodb.add_argument('--mongodb_db', default="ll", type=str,
                         help='')
@@ -47,6 +57,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(" * %s" % description)
     app.debug = args.debug
+    app.config['ADMINS'] = frozenset([args.admin])
+    app.config['CSRF_ENABLED'] = True
+    app.config['CSRF_SESSION_KEY'] = args.csrfsecrettoken
+    app.config['SECRET_KEY'] = args.secretkey
+    app.config['RECAPTCHA_PUBLIC_KEY'] = args.recaptchapublic
+    app.config['RECAPTCHA_PRIVATE_KEY'] = args.recaptchaprivate
+
     db.init_db(args.mongodb_db, user=args.mongodb_user,
                password=args.mongodb_pw)
     app.run(host=args.host, port=args.port)

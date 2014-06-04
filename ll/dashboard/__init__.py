@@ -19,13 +19,6 @@ from flask import Flask, render_template,  g, flash, redirect, url_for, \
 from .. import core
 app = Flask(__name__)
 
-app.config['ADMINS'] = frozenset(['anne.schuth@uva.nl'])
-app.config['CSRF_ENABLED'] = True
-app.config['CSRF_SESSION_KEY'] = "csrfsecrettoken"
-app.config['SECRET_KEY'] = "test1234"
-app.config['RECAPTCHA_PUBLIC_KEY'] = "6LdJm_QSAAAAAGJcrrPk9NI7hnYdOR_eMA1WAUci"
-app.config['RECAPTCHA_PRIVATE_KEY'] = "6LdJm_QSAAAAAISK9G2S0-aJZYR-zpDphHrj8ZNH"
-
 
 @app.errorhandler(404)
 def not_found(error):
