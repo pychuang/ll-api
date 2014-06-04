@@ -18,6 +18,7 @@
 import confargparse
 import os
 import sys
+from werkzeug import generate_password_hash
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__),
                                                 "../..")))
@@ -40,7 +41,8 @@ def user(args, parser):
         user = ll.core.user.get_user(args.key)
         key = args.key
     elif args.teamname and args.email and args.create:
-        user = ll.core.user.new_user(args.teamname, args.email)
+        user = ll.core.user.new_user(args.teamname, args.email,
+                                     generate_password_hash(args.password))
         key = user["_id"]
         if args.site:
             ll.core.site.set_site(key, args.short, args.name, args.url)
@@ -92,16 +94,20 @@ if __name__ == '__main__':
     subparser_user.add_argument('--email', type=str,
                                 help='Emailaddress (for --create and/or '
                                 '--site).')
+    subparser_user.add_argument('--password', type=str,
+                                help='Password (for --create and/or '
+                                '--site).')
     subparser_user.add_argument('--delete', action="store_true", default=False,
                                 help='Delete user (key required).')
     subparser_user.add_argument('--create', action="store_true", default=False,
-                                help='Create user (teamname and email address '
-                                'required).')
+                                help='Create user (teamname, email address, '
+                                'password required).')
     subparser_user.add_argument('--show', action="store_true", default=False,
                                 help='Show users.')
     subparser_user.add_argument('--site', action="store_true", default=False,
                                 help='Make a site out of this user (key or '
-                                '--create and teamname and email required).')
+                                '--create and teamname, email, password '
+                                'required).')
     subparser_user.add_argument('--short', type=str,
                                 help='Short name for a site (only used if '
                                 '--site).')

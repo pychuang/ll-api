@@ -153,9 +153,10 @@ you can run the following script:
 
 .. sourcecode:: bash 
 
-    $ ./bin/admin user -c config/db.local.ini config/example-data/site.ini 
-    $ ./bin/admin user -c config/db.local.ini config/example-data/user.1.ini
+    $ ./bin/admin user -c config/db.local.ini config/example-data/site.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/db.local.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
 
+The passwords are used for the dashboard.
 
 In return, you will see two API keys, one for a site and one for a participant.
 Record the keys as SITEKEY and PARTICIPANTKEY, you'll need them for the clients.

@@ -27,12 +27,12 @@ class LoginForm(Form):
 
 
 class RegisterForm(Form):
-    name = TextField('NickName', [Required()])
+    teamname = TextField('Teamname', [Required()])
     email = TextField('Email address', [Required(), Email()])
     password = PasswordField('Password', [Required()])
     confirm = PasswordField('Repeat Password', [
         Required(),
         EqualTo('password', message='Passwords must match')
         ])
-    accept_tos = BooleanField('I accept the TOS', [Required()])
+    #accept_tos = BooleanField('I accept the TOS', [Required()])
     recaptcha = RecaptchaField()

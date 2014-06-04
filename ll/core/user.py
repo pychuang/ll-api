@@ -29,11 +29,13 @@ def new_key(teamname, email):
     return "-".join([hstr, rstr]).upper()
 
 
-def new_user(teamname, email):
+def new_user(teamname, email, password):
     if db.user.find({"teamname": teamname}).count():
-        raise Exception("Teamname exists: teamname = '%s'" % teamname)
+        raise Exception("Teamname already exists: teamname = '%s'. "
+                        "Please choose another name." % teamname)
     if db.user.find({"email": email}).count():
-        raise Exception("Email exists: email = '%s'" % email)
+        raise Exception("Email already exists: email = '%s'. "
+                        "Please choose another email address." % email)
     #TODO: check valid email
     #TODO: send email with validation
     user = {
@@ -44,6 +46,7 @@ def new_user(teamname, email):
         "is_site": False,
         "is_verified": False,
         "creation_time": datetime.datetime.now(),
+        "password": password,
     }
     db.user.insert(user)
     return user
@@ -55,6 +58,12 @@ def get_user(key):
         return False
     return user
 
+
+def get_user_by_email(email):
+    user = db.user.find_one({"email": email})
+    if not user:
+        return False
+    return user
 
 def get_users():
     return db.user.find()

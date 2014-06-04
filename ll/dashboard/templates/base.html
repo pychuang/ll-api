@@ -41,7 +41,7 @@
     <div id="messages-wrap">
       <div id="messages">
         {% for category, msg in get_flashed_messages(with_categories=true) %}
-          <p class="message flash-{{ category }}">{{ msg }}</p>
+          <p class="alert {{ category }}">{{ msg }}</p>
         {% endfor %}
       </div>
     </div>

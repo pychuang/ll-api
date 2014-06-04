@@ -6,11 +6,10 @@
       {% from "forms/macros.html" import render_field %}
       <form method="POST" action="." class="form">
         {{ form.csrf_token }}
-        {{ render_field(form.name) }}
+        {{ render_field(form.teamname) }}
         {{ render_field(form.email) }}
         {{ render_field(form.password) }}
         {{ render_field(form.confirm) }}
-        {{ render_field(form.accept_tos) }}
         <div class="form-group">
     	    <label class="col-lg-2 control-label" >ReCaptcha</label>
 	        {{ form.recaptcha }}
