@@ -1,0 +1,26 @@
+   {% extends "base.html" %}
+   {% block header %}
+    	Sites
+   {% endblock %}
+   {% block content %}
+    <table class="table table-striped table-hover ">
+    <thead>
+    <tr>
+    	<th></th>
+    	<th>Short name</th>
+    	<th>Name</th>
+    	<th>Url</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for site in sites %}
+    <tr>
+      <td><a href="/site/site/{{ site._id}}">Details</a></td>
+      <td>{{ site._id }}</td>
+      <td>{{ site.name }}</td>
+      <td>{{ site.url|urlize }}</td>
+  	</tr>
+    {% endfor %}
+  	</tbody>
+	</table> 
+   {% endblock %}

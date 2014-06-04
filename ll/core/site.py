@@ -42,6 +42,10 @@ def get_site(site_id):
     return db.site.find_one({"_id": site_id})
 
 
+def get_sites():
+    return db.site.find()
+
+
 def next_qid(site_id):
     #TODO: make these thread save
     site = get_site(site_id)

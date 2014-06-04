@@ -13,8 +13,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+from functools import wraps
+from flask import Flask, render_template,  g, flash, redirect, url_for, \
+                    request, session
 from .. import core
-from flask import Flask, render_template
 app = Flask(__name__)
 
 app.config['ADMINS'] = frozenset(['anne.schuth@uva.nl'])
@@ -27,7 +29,34 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = "6LdJm_QSAAAAAISK9G2S0-aJZYR-zpDphHrj8ZNH"
 
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html'), 404
+    return render_template('404.html', user=g.user), 404
 
-from user.views import mod as usersModule
-app.register_blueprint(usersModule)
+
+@app.before_request
+def before_request():
+    """
+    pull user's profile from the database before every request are treated
+    """
+    g.user = None
+    if 'key' in session:
+        g.user = core.user.get_user(session['key'])
+
+
+@app.route('/')
+def home():
+    return render_template("base.html", user=g.user)
+
+
+def requires_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            flash(u'You need to be signed in for this page.', 'alert-warning')
+            return redirect(url_for('user.login', next=request.path))
+        return f(*args, **kwargs)
+    return decorated_function
+
+from user.views import mod as userModule
+from site.views import mod as siteModule
+app.register_blueprint(userModule)
+app.register_blueprint(siteModule)

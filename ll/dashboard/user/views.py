@@ -16,29 +16,16 @@
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
 from werkzeug import check_password_hash, generate_password_hash
 
-from .. import app
-from .. import core
+from .. import app, core, requires_login
 from forms import LoginForm, RegisterForm
-from decorators import requires_login
 
 mod = Blueprint('user', __name__, url_prefix='/user')
-
+app.register_blueprint(mod)
 
 @mod.route('/me/')
 @requires_login
 def home():
     return render_template("user/profile.html", user=g.user)
-
-
-@mod.before_request
-def before_request():
-    """
-    pull user's profile from the database before every request are treated
-    """
-    g.user = None
-    if 'key' in session:
-        g.user = core.user.get_user(session['key'])
-
 
 @mod.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -57,7 +44,7 @@ def login():
             flash('Welcome %s' % user["teamname"], 'alert-success')
             return redirect(url_for('user.home'))
         flash('Wrong email or password', 'alert-info')
-    return render_template("user/login.html", form=form)
+    return render_template("user/login.html", form=form, user=g.user)
 
 
 @mod.route('/logout/', methods=['GET'])
@@ -82,11 +69,11 @@ def register():
                                   generate_password_hash(form.password.data))
         except Exception, e:
             flash(e, 'alert-warning')
-            return render_template("user/register.html", form=form)
+            return render_template("user/register.html", form=form, user=g.user)
 
         key = user["_id"]
         session['key'] = key
         flash('Thanks for registering. Your key is: %s' % key, 'alert-success')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('user.home'))
-    return render_template("user/register.html", form=form)
+    return render_template("user/register.html", form=form, user=g.user)
