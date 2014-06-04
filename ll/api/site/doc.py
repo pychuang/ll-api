@@ -17,7 +17,7 @@ from flask import request
 from flask.ext.restful import fields, marshal
 from .. import api
 from .. import core
-from .. import ApiResource
+from .. import ApiResource, ContentField
 
 doclist_fields = {
     "site_docid": fields.String(),
@@ -27,9 +27,8 @@ doclist_fields = {
 doc_fields = {
     "site_docid": fields.String(),
     "creation_time": fields.DateTime(),
-    "content": fields.String(),
+    "content": ContentField(),
     "title": fields.String(),
-    "content_encoding": fields.String(),
 }
 
 

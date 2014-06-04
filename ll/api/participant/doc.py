@@ -16,10 +16,17 @@
 from flask.ext.restful import Resource, fields, marshal
 from .. import api
 from .. import core
-from .. import ApiResource
+from .. import ApiResource, ContentField
 
 doclist_fields = {
     "docid": fields.String(attribute="_id"),
+    "title": fields.String(),
+}
+
+doc_fields = {
+    "docid": fields.String(attribute="_id"),
+    "creation_time": fields.DateTime(),
+    "content": ContentField(),
     "title": fields.String(),
 }
 
@@ -27,7 +34,8 @@ doclist_fields = {
 class Doc(ApiResource):
     def get(self, key, docid):
         self.validate_participant(key)
-        return {'hello': 'world'}
+        doc = self.trycall(core.doc.get_doc, docid=docid)
+        return marshal(doc, doc_fields)
 
 
 class DocList(ApiResource):
