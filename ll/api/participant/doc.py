@@ -76,7 +76,7 @@ class DocList(ApiResource):
             .. sourcecode:: javascript
 
                 {
-                    "qid": "U-q22",
+                    "qid": "S-q22",
                     "doclist": [
                         {"docid": "S-d3"},
                         {"docid": "S-d5"},

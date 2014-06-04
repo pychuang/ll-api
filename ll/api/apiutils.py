@@ -14,7 +14,6 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from flask.ext.restful import Resource, abort, fields
-import json
 from .. import core
 
 DOCUMENTATION = "http://doc.living-labs.net/"

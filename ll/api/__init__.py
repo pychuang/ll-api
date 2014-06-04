@@ -17,7 +17,7 @@ from flask import Flask
 from flask.ext.restful import Api, abort
 
 from .. import core
-from apiresource import ApiResource, ContentField
+from apiutils import ApiResource, ContentField
 
 app = Flask(__name__)
 api = Api(app, catch_all_404s=True)

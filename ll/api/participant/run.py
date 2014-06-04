@@ -70,6 +70,5 @@ class Run(ApiResource):
         self.trycall(core.run.add_run, key, qid, run["runid"], run["doclist"])
         return marshal(run, run_fields)
 
-
 api.add_resource(Run, '/api/participant/run/<key>/<qid>',
                  endpoint="participant/run")
