@@ -43,19 +43,21 @@ class Run(ApiResource):
 
         :return:
             .. sourcecode:: javascript
-        {
-            "qid": "U-q22",
-            "runid": "82"
-            "creation_time": "Wed, 04 Jun 2014 15:03:56 -0000",
-            "doclist": [
+
                 {
-                    "docid": "U-d4"
-                },
-                {
-                    "docid": "U-d2"
-                }, ...
-            ],
-        }
+                    "qid": "U-q22",
+                    "runid": "82"
+                    "creation_time": "Wed, 04 Jun 2014 15:03:56 -0000",
+                    "doclist": [
+                        {
+                            "docid": "U-d4"
+                        },
+                        {
+                            "docid": "U-d2"
+                        }, ...
+                    ],
+                }
+
         """
         self.validate_participant(key)
         run = self.trycall(core.run.get_run, key, qid)
