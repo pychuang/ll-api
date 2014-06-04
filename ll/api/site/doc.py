@@ -36,7 +36,7 @@ doc_fields = {
 class Doc(ApiResource):
     def get(self, key, site_docid):
         """
-        Retreive a single document that was uploaded before. Identify it with
+        Retrieve a single document that was uploaded before. Identify it with
         your own identifier.
 
         :param key: your API key
@@ -47,8 +47,9 @@ class Doc(ApiResource):
             .. sourcecode:: javascript
 
                 {
-                     "content": "RHVtbXkgQ29udGVudA==",
-                     "content_encoding": "base64",
+                     "content": {"description": "Lorem ipsum dolor sit amet",
+                                 "short_description" : "Lorem ipsum",
+                                 ...}
                      "creation_time": "Sun, 27 Apr 2014 23:40:29 -0000",
                      "site_docid": "b59b2e327493c4fdb24296a90a20bdd20e40e737",
                      "title": "Document Title"
