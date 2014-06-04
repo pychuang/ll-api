@@ -232,6 +232,17 @@ Dashboard
 =========
 
 
+To start the Dashboard, first create a local copy of config/dashboard.ini and fill 
+out all fields
+Then run the following command:
+
+.. sourcecode:: bash
+
+    $ ./bin/api -c config/db.local.ini config/dashboard.local.ini
+
+In general, use :code:`--help` or :code:`-h` for more information.
+By default the dashboard will run on port 5001.
+
 
 Building Documentation
 ======================
