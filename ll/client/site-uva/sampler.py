@@ -40,33 +40,37 @@ def get_top(query, topsize):
     return [link.get("href") for link in soup.find("ul", "searchlist").find_all("a")]
 
 if __name__ == "__main__":
-    argparser.add_argument("--size", "-s", type=int, default=5)
+    argparser.add_argument("--size", "-s", type=int, default=20)
     argparser.add_argument("--topsize", "-t", type=int, default=5)
     args = argparser.parse_args()
     
     queries = Counter()
     for _, url, _ in logparser():
         if "/search?q=" in url:
-            query = parse_qsl(urlparse(url)[4])[0][1]
+            try:
+                query = parse_qsl(urlparse(url)[4])[0][1]
+            except:
+                continue
             queries[query] += 1
-    data = {"queries": []}
-    tops = {} 
-    for query, _ in queries.most_common(args.size):
-        site_qid = hashlib.sha1(query).hexdigest()
-        data["queries"].append({"qstr": query,
-                                "site_qid": site_qid})    
-        tops[query] = get_top(query, args.topsize)
-
-    apiurl = "/".join([args.api.strip("/"), "query", args.key])
-    if args.upload:
-        requests.put(apiurl,
-                     data=json.dumps(data),
-                     headers={'content-type': 'application/json'})
-    else:
-        print apiurl
-        print json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
-        for q in tops:
-            for url in tops[q]:
-                print q, url
-                get_content(url)
-                print
+#    data = {"queries": []}
+#    tops = {} 
+    for query, count in queries.most_common(args.size):
+        print query, count
+#        site_qid = hashlib.sha1(query).hexdigest()
+#        data["queries"].append({"qstr": query,
+#                                "site_qid": site_qid})    
+#        tops[query] = get_top(query, args.topsize)
+#
+#    apiurl = "/".join([args.api.strip("/"), "query", args.key])
+#    if args.upload:
+#        requests.put(apiurl,
+#                     data=json.dumps(data),
+#                     headers={'content-type': 'application/json'})
+#    else:
+#        print apiurl
+#        print json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
+#        for q in tops:
+#            for url in tops[q]:
+#                print q, url
+#                get_content(url)
+#                print
