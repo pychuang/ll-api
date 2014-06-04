@@ -27,7 +27,7 @@ def home():
     return render_template("site/sites.html", user=g.user, sites=sites)
 
 
-@mod.route('/site/<site_id>')
+@mod.route('/<site_id>')
 @requires_login
 def site(site_id):
     site = core.site.get_site(site_id)
@@ -48,3 +48,23 @@ def site(site_id):
                            user=g.user,
                            site=site,
                            stats=stats)
+
+
+@mod.route('/<site_id>/query')
+@requires_login
+def query(site_id):
+    site = core.site.get_site(site_id)
+    return render_template("site/query.html",
+                           user=g.user,
+                           site=site,
+                           queries=core.db.db.query.find({"site_id": site_id}))
+
+
+@mod.route('/<site_id>/doc')
+@requires_login
+def doc(site_id):
+    site = core.site.get_site(site_id)
+    return render_template("site/doc.html",
+                           user=g.user,
+                           site=site,
+                           docs=core.db.db.doc.find({"site_id": site_id}))

@@ -1,0 +1,25 @@
+   {% extends "base.html" %}
+   {% block header %}
+    	Queries for {{ site.name }}
+   {% endblock %}
+   {% block content %}
+    <table class="table table-striped table-hover ">
+    <thead>
+    <tr>
+    	<th>Qid</th>
+    	<th>Querystring</th>
+    	<th>Creation time</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for query in queries %}
+    <tr>
+      <td>{{ query._id }}</td>
+      <td>{{ query.qstr }}</td>
+      <td>{{ query.creation_time }}</td>
+  	</tr>
+    {% endfor %}
+  	</tbody>
+	</table> 
+   {% endblock %}
+ 

@@ -4,34 +4,42 @@
    {% endblock %}
    {% block content %}
     <table class="table table-striped table-hover ">
+    
     <tbody>
       <tr>
 	      <td>Short name</td>
 	      <td>{{ site._id }}</td>
+	      <td></td>
       </tr>
       <tr>
 	      <td>Name</td>
 	      <td>{{ site.name }}</td>
+	      <td></td>
       </tr>
 	  <tr>
 		  <td>Url</td>      
 	      <td>{{ site.url|urlize }}</td>
+	      <td></td>
       </tr>
 	  <tr>
 		  <td>#queries</td>      
 	      <td>{{ stats.query }}</td>
+	      <td><a href="/site/{{ site._id}}/query"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
 		  <td>#docs</td>      
 	      <td>{{ stats.doc }} ({{ (stats.doc/stats.query)|round(2) }} documents per query)</td>
+	      <td><a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
 		  <td>#impressions</td>      
 	      <td>{{ stats.impression }} ({{ (stats.impression/stats.query)|round(2) }} impressions per query)</td>
+	      <td></td>
       </tr>
 	  <tr>
 		  <td>#clicks</td>      
 	      <td>{{ stats.click }} ({{ (stats.click/stats.impression)|round(2) }} clicks per impression)</td>
+	      <td></td>
       </tr>
   	</tr>
   	</tbody>
