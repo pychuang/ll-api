@@ -25,6 +25,7 @@
     	<th>Site_qid</th>
     	<th>Querystring</th>
     	<th>Creation time</th>
+    	<th></th>
     </tr>
     </thead>
     <tbody>
@@ -34,6 +35,7 @@
       <td>{{ query.site_qid }}</td>
       <td>{{ query.qstr }}</td>
       <td>{{ query.creation_time }}</td>
+ 	  <td><a href="/site/{{ site._id}}/query/{{ query._id }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
   	</tr>
     {% endfor %}
   	</tbody>

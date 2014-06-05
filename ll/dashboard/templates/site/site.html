@@ -43,17 +43,17 @@
       </tr>
 	  <tr>
 		  <td>#docs</td>      
-	      <td>{{ stats.doc }} ({{ (stats.doc/stats.query)|round(2) }} documents per query)</td>
+	      <td>{{ stats.doc }} {% if stats.query > 0 %}({{ (stats.doc/stats.query)|round(2) }} documents per query){% endif %}</td>
 	      <td><a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
 		  <td>#impressions</td>      
-	      <td>{{ stats.impression }} ({{ (stats.impression/stats.query)|round(2) }} impressions per query)</td>
+	      <td>{{ stats.impression }} {% if stats.query > 0 %}({{ (stats.impression/stats.query)|round(2) }} impressions per query){% endif %}</td>
 	      <td></td>
       </tr>
 	  <tr>
 		  <td>#clicks</td>      
-	      <td>{{ stats.click }} ({{ (stats.click/stats.impression)|round(2) }} clicks per impression)</td>
+	      <td>{{ stats.click }} {% if stats.impression > 0 %}({{ (stats.click/stats.impression)|round(2) }} clicks per impression){% endif %}</td>
 	      <td></td>
       </tr>
   	</tr>
