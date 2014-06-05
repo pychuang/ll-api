@@ -122,7 +122,7 @@ class Site():
     def store_doc(self, key, docid, site_docid, docdir):
         fh = codecs.open(os.path.join(docdir, docid), "r", "utf-8")
         title = fh.readline().strip()
-        content = file.read().strip()
+        content = fh.read().strip()
         fh.close()
         doc = {
             "site_docid": site_docid,
