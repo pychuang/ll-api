@@ -23,7 +23,6 @@ import time
 import datetime
 import random
 
-HOST = "http://127.0.0.1:5000/api"
 
 QUERYENDPOINT = "participant/query"
 DOCENDPOINT = "participant/doc"
@@ -38,6 +37,10 @@ class Participant():
     def __init__(self):
         description = "Living Labs Challenge's Participant Client"
         parser = argparse.ArgumentParser(description=description)
+        parser.add_argument('--host', dest='host', default='127.0.0.1',
+                        help='Host to listen on.')
+        parser.add_argument('--port', dest='port', default=5000, type=int,
+                        help='Port to listen on.')
         parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
         parser.add_argument('-s', '--simulate_runs', action="store_true",
@@ -45,25 +48,27 @@ class Participant():
                             help='Simulate runs.')
         args = parser.parse_args()
 
+        self.host = "%s:%s/api" % (args.host, args.port)
+
         self.runid = 0
 
         if args.simulate_runs:
             self.simulate_runs(args.key)
 
     def get_queries(self, key):
-        url = "/".join([HOST, QUERYENDPOINT, key])
+        url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.get(url, headers=HEADERS)
         r.raise_for_status()
         return r.json()
 
     def get_doclist(self, key, qid):
-        url = "/".join([HOST, DOCLISTENDPOINT, key, qid])
+        url = "/".join([self.host, DOCLISTENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
         r.raise_for_status()
         return r.json()
 
     def get_feedback(self, key, qid):
-        url = "/".join([HOST, FEEDBACKENDPOINT, key, qid])
+        url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
         r.raise_for_status()
         return r.json()
@@ -72,7 +77,7 @@ class Participant():
         for qid in runs:
             run = runs[qid]
             run["runid"] = str(self.runid)
-            url = "/".join([HOST, RUNENDPOINT, key, qid])
+            url = "/".join([self.host, RUNENDPOINT, key, qid])
             r = requests.put(url, data=json.dumps(run), headers=HEADERS)
             r.raise_for_status()
 

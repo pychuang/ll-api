@@ -27,7 +27,6 @@ import time
 import datetime
 from numpy import log2, mean
 
-HOST = "http://127.0.0.1:5000/api"
 PCLICK = {0: 0.05,
           1: 0.5,
           2: 0.95}
@@ -50,6 +49,10 @@ class Site():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Site Client"
         parser = argparse.ArgumentParser(description=description)
+        parser.add_argument('--host', dest='host', default='127.0.0.1',
+                        help='Host to listen on.')
+        parser.add_argument('--port', dest='port', default=5000, type=int,
+                        help='Port to listen on.')
         parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
         parser.add_argument('-q', '--store_queries', action="store_true",
@@ -80,6 +83,8 @@ class Site():
                             help='Path to TREC style qrel file '
                             '(default: %(default)s).')
         args = parser.parse_args()
+        self.host = "%s:%s/api" % (args.host, args.port)
+
         if args.store_queries:
             self.store_queries(args.key, args.query_file)
         if args.delete_queries:
@@ -101,11 +106,11 @@ class Site():
                 "qstr": qstr,
                 "site_qid": hashlib.sha1(qid).hexdigest(),
             })
-        url = "/".join([HOST, QUERYENDPOINT, key])
+        url = "/".join([self.host, QUERYENDPOINT, key])
         requests.put(url, data=json.dumps(queries), headers=HEADERS)
 
     def delete_queries(self, key):
-        url = "/".join([HOST, QUERYENDPOINT, key])
+        url = "/".join([self.host, QUERYENDPOINT, key])
         requests.delete(url, headers=HEADERS)
 
     def store_doc(self, key, doc, site_docid):
@@ -118,14 +123,14 @@ class Site():
 #            "content": base64.b64encode(content),
 #            "content_encoding": "base64",
             }
-        url = "/".join([HOST, DOCENDPOINT, key, site_docid])
+        url = "/".join([self.host, DOCENDPOINT, key, site_docid])
         requests.put(url, data=json.dumps(doc), headers=HEADERS)
 
     def store_doclist(self, key, run_file):
         def put_doclist(doclist, current_qid):
             site_qid = hashlib.sha1(current_qid).hexdigest()
             doclist["site_qid"] = site_qid
-            url = "/".join([HOST, DOCLISTENDPOINT, key, site_qid])
+            url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
             requests.put(url, data=json.dumps(doclist), headers=HEADERS)
 
         doclist = {"doclist": []}
@@ -143,7 +148,7 @@ class Site():
 
     def get_ranking(self, key, qid):
         site_qid = hashlib.sha1(qid).hexdigest()
-        url = "/".join([HOST, RANKIGNENDPOINT, key, site_qid])
+        url = "/".join([self.host, RANKIGNENDPOINT, key, site_qid])
         r = requests.get(url, headers=HEADERS)
         r.raise_for_status()
         json = r.json()
@@ -160,7 +165,7 @@ class Site():
             doclist["doclist"].append({"site_docid": site_docid,
                                        "clicked": click == 1})
 
-        url = "/".join([HOST, FEEDBACKENDPOINT, key, sid])
+        url = "/".join([self.host, FEEDBACKENDPOINT, key, sid])
         r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
         r.raise_for_status()
 
