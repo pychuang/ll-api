@@ -44,7 +44,7 @@ def get_query(site_id=None, qid=None):
         q["site_id"] = site_id
     if qid:
         q["_id"] = qid
-    return db.query.find(q)
+    return [q for q in db.query.find(q) if "doclist" in q]
 
 
 def delete_query(site_id=None, qid=None):
