@@ -41,6 +41,10 @@ the repository in the :code:`ll/clients` directory.
 In case you want to run your own version of the API (for testing purposes),
 you'll have to continue.
 
+You don't neccesarily have to do that, an API is running here: 
+http://living-labs.net:5000/
+
+
 Setup MongoDB
 -------------
 
@@ -236,13 +240,14 @@ If you want to run multiple participants, you should create multiple keys.
 Dashboard
 =========
 
+A dashboard is running here: http://living-labs.net:5001/
 
 To start the Dashboard, fill out the dashboard fields in your local copy of the 
 config (config/livinglabs.local.ini).
 In particular, you will need a recaptcha key 
 (see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey.
 Then run the following command:
-2
+
 .. sourcecode:: bash
 
     $ ./bin/api -c config/livinglabs.local.ini
