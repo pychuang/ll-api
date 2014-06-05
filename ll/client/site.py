@@ -25,6 +25,7 @@ import json
 import random
 import time
 import datetime
+import codecs
 from numpy import log2, mean
 
 PCLICK = {0: 0.05,
@@ -77,10 +78,15 @@ class Site():
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
                             help='Simulate clicks (needs --qrel_file).')
-        parser.add_argument('--qrel_file', 
+        parser.add_argument('--qrel_file',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/qrel.txt")),
                             help='Path to TREC style qrel file '
+                            '(default: %(default)s).')
+        parser.add_argument('--docs_dir',
+                            default=os.path.normpath(os.path.join(path,
+                                                    "../../data/docs")),
+                            help='Path to document directory '
                             '(default: %(default)s).')
         args = parser.parse_args()
         self.host = "%s:%s/api" % (args.host, args.port)
@@ -90,7 +96,7 @@ class Site():
         if args.delete_queries:
             self.delete_queries(args.key)
         if args.store_doclist:
-            self.store_doclist(args.key, args.run_file)
+            self.store_doclist(args.key, args.run_file, args.docs_dir)
         if args.simulate_clicks:
             self.simulate_clicks(args.key, args.qrel_file)
 
@@ -113,20 +119,20 @@ class Site():
         url = "/".join([self.host, QUERYENDPOINT, key])
         requests.delete(url, headers=HEADERS)
 
-    def store_doc(self, key, doc, site_docid):
-        title = "Dummy Title " + str(site_docid)
-        content = "Dummy Content " + str(site_docid)
+    def store_doc(self, key, docid, site_docid, docdir):
+        fh = codecs.open(os.path(docdir, docid), "r", "utf-8")
+        title = fh.readline().strip()
+        content = file.read().strip()
+        fh.close()
         doc = {
             "site_docid": site_docid,
             "title": title,
-            "content": {"description": content},
-#            "content": base64.b64encode(content),
-#            "content_encoding": "base64",
+            "content": {"text": content},
             }
         url = "/".join([self.host, DOCENDPOINT, key, site_docid])
         requests.put(url, data=json.dumps(doc), headers=HEADERS)
 
-    def store_doclist(self, key, run_file):
+    def store_doclist(self, key, run_file, docdir):
         def put_doclist(doclist, current_qid):
             site_qid = hashlib.sha1(current_qid).hexdigest()
             doclist["site_qid"] = site_qid
@@ -141,7 +147,7 @@ class Site():
                 put_doclist(doclist, current_qid)
                 doclist = {"doclist": []}
             site_docid = hashlib.sha1(docid).hexdigest()
-            self.store_doc(key, docid, site_docid)
+            self.store_doc(key, docid, site_docid, docdir)
             doclist["doclist"].append({"site_docid": site_docid})
             current_qid = qid
         put_doclist(doclist, current_qid)
