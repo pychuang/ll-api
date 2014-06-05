@@ -22,6 +22,7 @@
     <thead>
     <tr>
     	<th>Qid</th>
+    	<th>Site_qid</th>
     	<th>Querystring</th>
     	<th>Creation time</th>
     </tr>
@@ -30,6 +31,7 @@
     {% for query in queries %}
     <tr>
       <td>{{ query._id }}</td>
+      <td>{{ query.site_qid }}</td>
       <td>{{ query.qstr }}</td>
       <td>{{ query.creation_time }}</td>
   	</tr>

@@ -14,7 +14,7 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
-
+import json
 from .. import core, requires_login
 
 mod = Blueprint('site', __name__, url_prefix='/site')
@@ -60,6 +60,20 @@ def query(site_id):
                            queries=core.db.db.query.find({"site_id": site_id}))
 
 
+@mod.route('/<site_id>/query/<qid>')
+@requires_login
+def query_detail(site_id, qid):
+    site = core.site.get_site(site_id)
+    stats = { }
+    return render_template("site/query_detail.html",
+                           user=g.user,
+                           site=site,
+                           query=core.db.db.query.find_one({"site_id": site_id,
+                                                            "_id": qid}),
+                           stats=stats)
+
+
+
 @mod.route('/<site_id>/doc')
 @requires_login
 def doc(site_id):
@@ -68,3 +82,19 @@ def doc(site_id):
                            user=g.user,
                            site=site,
                            docs=core.db.db.doc.find({"site_id": site_id}))
+
+@mod.route('/<site_id>/doc/<docid>')
+@requires_login
+def doc_detail(site_id, docid):
+    site = core.site.get_site(site_id)
+    stats = {
+             "queries": [q
+                           for q in core.db.db.query.find({"site_id": site_id})
+                           if docid in q["doclist"]],
+    }
+    return render_template("site/doc_detail.html",
+                           user=g.user,
+                           site=site,
+                           doc=core.db.db.doc.find_one({"site_id": site_id,
+                                                    "_id": docid}),
+                           stats=stats)

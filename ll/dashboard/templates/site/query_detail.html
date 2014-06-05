@@ -15,29 +15,31 @@
  #}
    {% extends "base.html" %}
    {% block header %}
-    	Documents for {{ site.name }}
+    	Query details for {{ query._id }}
    {% endblock %}
    {% block content %}
     <table class="table table-striped table-hover ">
-    <thead>
-    <tr>
-    	<th>Docid</th>
-    	<th>Site_docid</th>
-    	<th>Title</th>
-    	<th>Creation time</th>
-    	<th></th>
-    </tr>
-    </thead>
     <tbody>
-    {% for doc in docs %}
     <tr>
-      <td>{{ doc._id }}</td>
-      <td>{{ doc.site_docid }}</td>
-      <td>{{ doc.title }}</td>
-      <td>{{ doc.creation_time }}</td>
-	  <td><a href="/site/{{ site._id}}/doc/{{ doc._id }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-  	</tr>
-    {% endfor %}
+      <td>Qid</td>
+      <td>{{ query._id }}</td>
+    </tr>
+    <tr>
+      <td>Site_qid</td>
+      <td>{{ query.site_qid }}</td>
+    </tr>
+    <tr>
+      <td>Querystring</td>
+      <td>{{ query.qstr }}</td>
+    </tr>
+    <tr>
+      <td>Creation time</td>
+      <td>{{ query.creation_time }}</td>
+    </tr>
+    <tr>
+      <td>#docs</td>
+      <td>{{ query.doclist|length }} ({% for d in query.doclist %} <a href="/site/{{ site._id }}/doc/{{ d }}">{{ d }}</a>, {% endfor %})</td>
+    </tr>
   	</tbody>
 	</table> 
    {% endblock %}

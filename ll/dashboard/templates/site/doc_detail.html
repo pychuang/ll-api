@@ -15,29 +15,35 @@
  #}
    {% extends "base.html" %}
    {% block header %}
-    	Documents for {{ site.name }}
+    	Document details for {{ doc._id }}
    {% endblock %}
    {% block content %}
     <table class="table table-striped table-hover ">
-    <thead>
-    <tr>
-    	<th>Docid</th>
-    	<th>Site_docid</th>
-    	<th>Title</th>
-    	<th>Creation time</th>
-    	<th></th>
-    </tr>
-    </thead>
     <tbody>
-    {% for doc in docs %}
     <tr>
+      <td>Docid</td>
       <td>{{ doc._id }}</td>
+    </tr>
+    <tr>
+      <td>Site_docid</td>
       <td>{{ doc.site_docid }}</td>
+    </tr>
+    <tr>
+      <td>Title</td>
       <td>{{ doc.title }}</td>
+    </tr>
+    <tr>
+      <td>Creation time</td>
       <td>{{ doc.creation_time }}</td>
-	  <td><a href="/site/{{ site._id}}/doc/{{ doc._id }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
+    </tr>
+    <tr>
+      <td>#queries</td>
+      <td>{{ stats.queries|length }} ({% for q in stats.queries %} <a href="/site/{{ site._id }}/query/{{ q._id}}">{{ q._id}}</a>, {% endfor %})</td>
+    </tr
+    <tr>
+      <td>Content</td>
+	  <td>{{ doc.content }}</td>
   	</tr>
-    {% endfor %}
   	</tbody>
 	</table> 
    {% endblock %}
