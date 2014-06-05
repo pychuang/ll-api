@@ -13,11 +13,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
-from werkzeug import check_password_hash, generate_password_hash
+from flask import Blueprint, request, render_template, flash, g, session, \
+                    redirect, url_for
+from werkzeug import check_password_hash
 
 from .. import core, requires_login
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, ForgotForm
 
 mod = Blueprint('user', __name__, url_prefix='/user')
 
@@ -26,6 +27,7 @@ mod = Blueprint('user', __name__, url_prefix='/user')
 @requires_login
 def home():
     return render_template("user/profile.html", user=g.user)
+
 
 @mod.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -54,7 +56,7 @@ def logout():
     """
     g.user = None
     del session['key']
-    return redirect(url_for('user.home'))
+    return redirect("/")
 
 
 @mod.route('/register/', methods=['GET', 'POST'])
@@ -66,14 +68,29 @@ def register():
     if form.validate_on_submit():
         try:
             user = core.user.new_user(form.teamname.data, form.email.data,
-                                  generate_password_hash(form.password.data))
+                                      password=form.password.data)
         except Exception, e:
-            flash(e, 'alert-warning')
-            return render_template("user/register.html", form=form, user=g.user)
-
+            flash(str(e), 'alert-warning')
+            return render_template("user/register.html", form=form,
+                                   user=g.user)
         key = user["_id"]
         session['key'] = key
         flash('Thanks for registering. Your key is: %s' % key, 'alert-success')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('user.home'))
     return render_template("user/register.html", form=form, user=g.user)
+
+
+@mod.route('/forgot/', methods=['GET', 'POST'])
+def forgot():
+    form = ForgotForm(request.form)
+    if form.validate_on_submit():
+        try:
+            core.user.reset_password(form.email.data)
+        except Exception, e:
+            flash(str(e), 'alert-warning')
+            return redirect(url_for('user.forgot'))
+        flash('A new password has been sent to %s.' % form.email.data,
+              'alert-success')
+        return redirect("/")
+    return render_template("user/forgot.html", form=form, user=g.user)
