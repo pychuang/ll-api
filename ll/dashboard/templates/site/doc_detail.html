@@ -37,7 +37,7 @@
       <td>{{ doc.creation_time }}</td>
     </tr>
     <tr>
-      <td>#queries</td>
+      <td>#queries this document appears in a doclist for</td>
       <td>{{ stats.queries|length }} ({% for q in stats.queries %} <a href="/site/{{ site._id }}/query/{{ q._id}}">{{ q._id}}</a>, {% endfor %})</td>
     </tr
     <tr>

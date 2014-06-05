@@ -37,7 +37,7 @@
       <td>{{ query.creation_time }}</td>
     </tr>
     <tr>
-      <td>#docs</td>
+      <td>#docs this query has in the doclist</td>
       <td>{{ query.doclist|length }} ({% for d in query.doclist %} <a href="/site/{{ site._id }}/doc/{{ d }}">{{ d }}</a>, {% endfor %})</td>
     </tr>
   	</tbody>
