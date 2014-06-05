@@ -120,5 +120,9 @@ def get_users():
     return db.user.find()
 
 
+def get_participants():
+    return [u for u in get_users() if u["is_participant"]]
+
+
 def delete_user(key):
     pass

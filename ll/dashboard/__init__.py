@@ -50,6 +50,8 @@ def requires_login(f):
     return decorated_function
 
 from user.views import mod as userModule
-from site.views import mod as siteModule
 app.register_blueprint(userModule)
+from site.views import mod as siteModule
 app.register_blueprint(siteModule)
+from participant.views import mod as participantModule
+app.register_blueprint(participantModule)
