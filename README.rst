@@ -20,9 +20,9 @@ as follows:
 
     $ git clone git@bitbucket.org:living-labs/ll-challenge.git
 
-In case you plan on making changes, please first make a fork through the 
+In case you plan on making changes, please first make a fork through the
 bitbucket interface and then clone your own fork. That way, you will be able to
-push your changes and to ask for a pull request so that your changes can be 
+push your changes and to ask for a pull request so that your changes can be
 merged back.
 
 Install prerequisites
@@ -42,16 +42,15 @@ http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows
 Done?
 -----
 
-If you only want to run a client, you have all you need. 
-Clients are pieces of code that talk to the Living Labs API. 
-We recognize two types of clients: participants and sites.
-Example clients are in the repository in the :code:`ll/clients` directory.
-See `Running Clients`_.
+If you only want to run a client, you have all you need. Clients are pieces of
+code that talk to the Living Labs API. We recognize two types of clients:
+participants and sites. Example clients are in the repository in the
+:code:`ll/clients` directory. See `Running Clients`_.
 
 In case you want to run your own version of the API (for testing purposes),
 you'll have to continue.
 
-You don't necessarily have to do that, an API is running here: 
+You don't necessarily have to do that, an API is running here:
 http://living-labs.net:5000/
 
 
@@ -109,8 +108,9 @@ and remember those):
         }
     )
 
-Create a local copy of the config/livinglabs.ini file and edit it to add the USERSECRET
-password to the mongodb section. Also edit the database name if you wish.
+Create a local copy of the config/livinglabs.ini file and edit it to add the
+USERSECRET password to the mongodb section. Also edit the database name if you
+wish.
 
 .. sourcecode:: bash
 
@@ -142,7 +142,7 @@ wish.
 Run the API
 -----------
 
-If you didn't do so yet, make a copy of the configuration and at least fill out 
+If you didn't do so yet, make a copy of the configuration and at least fill out
 the mongodb section:
 
 .. sourcecode:: bash
@@ -172,6 +172,8 @@ Fill the Database
 
 If there is a `Dashboard`_ running, probably you should just create some users
 through the `Dashboard`_. Otherwise, continue here.
+
+To create site or admin users, you will still need the bin/admin tool.
 
 To create an example participant and a site (for development/testing purposes),
 you can run the following script: 
@@ -210,12 +212,11 @@ Don't forget to recreate users (see above).
 Running Clients
 ---------------
 
-Clients are pieces of code that talk to the Living Labs API. 
-We recognize two types of clients: participants and sites.
-Sites are search engines that share queries, documents and clicks. 
-Participants rank documents for queries using clicks.
-Clients need API keys. The easiest way of obtaining a key is through the 
-`Dashboard`_.
+Clients are pieces of code that talk to the Living Labs API. We recognize two
+types of clients: participants and sites. Sites are search engines that share
+queries, documents and clicks. Participants rank documents for queries using
+clicks. Clients need API keys. The easiest way of obtaining a key is through
+the `Dashboard`_.
 
 
 Run a Site
@@ -239,8 +240,8 @@ Then, to simulate interactions, run the following:
 Again, this will take TREC data (qrels) to simulate clicks using a simple
 cascade click model.
 
-Note that you may need to specify the host/port where the API is running 
-(see :code:`-h` for details on how to do that).
+Note that you may need to specify the host/port where the API is running (see
+:code:`-h` for details on how to do that).
 
 The simple simulator will print the NDCG value of all the rankings it receives
 from the API. 
@@ -251,7 +252,7 @@ present, the API does not know about this and the NDCG will thus reflect the
 average performance of all participants. This is by design. For per-participant
 statistics, one should use the `Dashboard`_.
 
-If you want to run multiple sites, you should create multiple keys and start 
+If you want to run multiple sites, you should create multiple keys and start
 multiple instances that talk to the same API.
 
 
@@ -268,11 +269,10 @@ The API key can be obtained through a procedure explained in `Fill the Database`
 or through the `Dashboard`_.
 
 This will run a baseline system that simply greedily reranks by the number of
-clicks. 
-Note that you may need to specify the host/port where the API is running 
-(see :code:`-h` for details on how to do that).
+clicks. Note that you may need to specify the host/port where the API is
+running (see :code:`-h` for details on how to do that).
 
-If you want to run multiple participants, you should create multiple keys and 
+If you want to run multiple participants, you should create multiple keys and
 start multiple instances that talk to the same API.
 
 Dashboard
@@ -280,14 +280,17 @@ Dashboard
 
 A dashboard is already running here: http://living-labs.net:5001/.
 
-However, if you are running a local version of the API for development, it is a 
+
+Users with admin privileges, have a few more options in the dashboard. Use the
+bin/admin tool to create a user with those privileges.
+
+However, if you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
-To start the dashboard, fill out the dashboard fields in your local copy of the 
-config (config/livinglabs.local.ini).
-In particular, you will need a recaptcha key 
-(see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey (both 
-are just random strings you should generate).
+To start the dashboard, fill out the dashboard fields in your local copy of the
+config (config/livinglabs.local.ini). In particular, you will need a recaptcha
+key (see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey
+(both are just random strings you should generate).
 
 Then run the following command:
 
@@ -295,8 +298,8 @@ Then run the following command:
 
     $ ./bin/api -c config/livinglabs.local.ini
 
-In general, use :code:`--help` or :code:`-h` for more information.
-By default the dashboard will run on port 5001.
+In general, use :code:`--help` or :code:`-h` for more information. By default
+the dashboard will run on port 5001.
 
 
 Building Documentation
