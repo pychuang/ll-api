@@ -21,13 +21,12 @@ import smtplib
 from email.mime.text import MIMEText
 from werkzeug import generate_password_hash
 from db import db
-
-KEY_LENGTH = 32
-PASSWORD_LENGHT = 8
-EMAIL_FROM = 'anne.schuth@uva.nl'
+from config import config
 
 
 def send_email(user, password, subject="New Account"):
+    if not config["SEND_EMAIL"]:
+        return False
     txt = "Hi %s,\n\n" % user["teamname"]
     txt += "These are your Living Labs account details:\n"
     txt += "teamname: %s\n" % user["teamname"]
@@ -35,19 +34,25 @@ def send_email(user, password, subject="New Account"):
     txt += "password: %s\n" % password
     txt += "\n\n"
     txt += "Some relevant urls:\n"
-    txt += "API: http://living.labs.net:5000/api\n"
-    txt += "Dashboard: http://living.labs.net:5001/\n"
-    txt += "Documentation: http://doc.living.labs.net\n"
-    txt += "Code: http://git.living.labs.net\n"
+    txt += "Website: %s\n" % config["URL_WEB"]
+    txt += "API: %s\n" % config["URL_API"]
+    txt += "Dashboard: %s\n" % config["URL_DASHBOARD"]
+    txt += "Documentation: %s\n" % config["URL_DOC"]
+    txt += "Code: %s\n" % config["URL_GIT"]
+    txt += "\n\n"
+    txt += "With regards,\n"
+    txt += "The organizers"
     msg = MIMEText(txt)
     msg['subject'] = "[Living Labs] %s" % subject
-    email_from = EMAIL_FROM
+    email_from = config["EMAIL_FROM"]
     email_to = user['email']
     msg['From'] = email_from
     msg['To'] = email_to
     s = smtplib.SMTP('localhost')
     s.sendmail(email_from, [email_to], msg.as_string())
     s.quit()
+    return True
+
 
 def random_string(length):
     return ''.join(random.choice(string.ascii_lowercase + string.digits)
@@ -55,8 +60,8 @@ def random_string(length):
 
 
 def new_key(teamname, email):
-    rstr = random_string(KEY_LENGTH / 2)
-    hstr = str(hashlib.sha1(teamname + email).hexdigest())[:KEY_LENGTH / 2]
+    rstr = random_string(config["KEY_LENGTH"] / 2)
+    hstr = str(hashlib.sha1(teamname + email).hexdigest())[:config["KEY_LENGTH"] / 2]
     return "-".join([hstr, rstr]).upper()
 
 
@@ -69,7 +74,7 @@ def new_user(teamname, email, password=None):
                         "Please choose another email address." % email)
 
     if password == None:
-        password = random_string(PASSWORD_LENGHT)
+        password = random_string(config["PASSWORD_LENGHT"])
 
     #TODO: check valid email
     #TODO: send email with validation
@@ -91,7 +96,7 @@ def new_user(teamname, email, password=None):
 
 def reset_password(email):
     user = get_user_by_email(email)
-    password = random_string(PASSWORD_LENGHT)
+    password = random_string(config["PASSWORD_LENGHT"])
     user["password"] = generate_password_hash(password)
     send_email(user, password, subject="Password Reset")
     db.user.save(user)

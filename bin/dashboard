@@ -32,7 +32,7 @@ if __name__ == '__main__':
                                         section="main")
     parser.add_argument('--debug', dest='debug', action='store_true',
                         help='Enable debugging mode.')
-    group_flask = parser.add_argument_group("flask", section="flask")
+    group_flask = parser.add_argument_group("dashboard", section="dashboard")
     group_flask.add_argument('--host', dest='host', default='127.0.0.1',
                         help='Host to listen on.')
     group_flask.add_argument('--port', dest='port', default=5001, type=int,
