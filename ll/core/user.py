@@ -86,6 +86,7 @@ def new_user(teamname, email, password=None):
         "is_participant": True,
         "is_site": False,
         "is_verified": False,
+        "is_admin": False,
         "creation_time": datetime.datetime.now(),
         "password": generate_password_hash(password),
     }
@@ -99,6 +100,12 @@ def reset_password(email):
     password = random_string(config["PASSWORD_LENGHT"])
     user["password"] = generate_password_hash(password)
     send_email(user, password, subject="Password Reset")
+    db.user.save(user)
+
+
+def set_admin(key):
+    user = get_user(key)
+    user["is_admin"] = True
     db.user.save(user)
 
 
@@ -125,4 +132,5 @@ def get_participants():
 
 
 def delete_user(key):
-    pass
+    user = get_user(key)
+    db.user.remove(user)

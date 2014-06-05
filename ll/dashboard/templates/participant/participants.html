@@ -31,7 +31,11 @@
     <tr>
       <td>{{ participant.teamname }}</td>
       <td>{{ participant.email|urlize }}</td>
-      <td><a href="/participant/{{ participant.email}}"><span class="glyphicon glyphicon-circle-arrow-right"> </span></a></td>
+      <td><a href="/participant/{{ participant.email}}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+      {% if user.is_admin %}
+      <a href="/participant/{{ participant.email}}/delete"><span class="glyphicon glyphicon-remove"></span></a>      
+      {% endif %}
+      </td>
   	</tr>
     {% endfor %}
   	</tbody>

@@ -60,6 +60,10 @@ def user(args, parser):
         ll.core.site.set_site(key, args.short, args.name, args.url)
         print "Key is now a SITEKEY: %s" % key
 
+    if args.admin and not args.create:
+        ll.core.user.set_admin(key)
+        print "Key is now an admin: %s" % key
+
 
 def status(args, parser):
     print "STATUS", args
@@ -106,6 +110,10 @@ if __name__ == '__main__':
                                 help='Show users.')
     subparser_user.add_argument('--site', action="store_true", default=False,
                                 help='Make a site out of this user (key or '
+                                '--create and teamname, email, password '
+                                'required).')
+    subparser_user.add_argument('--admin', action="store_true", default=False,
+                                help='Make a user an admin (key or '
                                 '--create and teamname, email, password '
                                 'required).')
     subparser_user.add_argument('--short', type=str,

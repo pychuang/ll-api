@@ -33,7 +33,11 @@
       <td>{{ site._id }}</td>
       <td>{{ site.name }}</td>
       <td>{{ site.url|urlize }}</td>
-      <td><a href="/site/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"> </span></a></td>
+      <td><a href="/site/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"> </span></a>
+      {% if user.is_admin %}
+      <a href="/site/{{ site._id}}/delete"><span class="glyphicon glyphicon-remove"></span></a>      
+      {% endif %}
+      </td>
   	</tr>
     {% endfor %}
   	</tbody>

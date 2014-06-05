@@ -30,7 +30,7 @@ def home():
 
 @mod.route('/<email>')
 @requires_login
-def site(email):
+def participant(email):
     participant = core.user.get_user_by_email(email)
     #feedbacks = core.db.db.feedback.find({"site_id": site_id})
     #clicks = 0
@@ -48,6 +48,20 @@ def site(email):
                            user=g.user,
                            participant=participant,
                            stats=stats)
+
+
+@mod.route('/<email>/delete')
+@requires_login
+def participant_delete(email):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        # redirect user to the 'home' method of the user module.
+        return redirect(url_for('participant.home'))
+    participant = core.user.get_user_by_email(email)
+    core.user.delete_user(participant["_id"])
+    flash('Participant is deleted.', 'alert-success')
+    return redirect(url_for('participant.home'))
+
 
 
 @mod.route('/<site_id>/query')
