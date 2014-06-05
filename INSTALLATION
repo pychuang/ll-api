@@ -237,7 +237,7 @@ config (config/livinglabs.local.ini)
 In particular, you will need a recaptcha key 
 (see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey.
 Then run the following command:
-
+2
 .. sourcecode:: bash
 
     $ ./bin/api -c config/livinglabs.local.ini
