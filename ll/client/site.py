@@ -104,7 +104,7 @@ class Site():
         tree = et.parse(query_file)
         topics = tree.getroot()
         queries = {"queries": []}
-        for topic in topics.getiterator("topic"):
+        for topic in topics.iterator("topic"):
             qid = topic.attrib["number"]
             query = topic.find("query")
             qstr = query.text
@@ -142,6 +142,7 @@ class Site():
         doclist = {"doclist": []}
         current_qid = None
         for line in open(run_file, "r"):
+            qid, _, docid, _, _, _ = line.split()
             if current_qid != None and current_qid != qid:
                 put_doclist(doclist, current_qid)
                 doclist = {"doclist": []}
