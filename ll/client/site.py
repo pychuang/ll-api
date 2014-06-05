@@ -104,7 +104,7 @@ class Site():
         tree = et.parse(query_file)
         topics = tree.getroot()
         queries = {"queries": []}
-        for topic in topics.iterator("topic"):
+        for topic in topics.getiterator("topic"):
             qid = topic.attrib["number"]
             query = topic.find("query")
             qstr = query.text
