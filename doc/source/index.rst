@@ -17,5 +17,5 @@ Living Labs Challenge's documentation
    
    api-participant
    api-site
-   installation
+   tutorial
 
