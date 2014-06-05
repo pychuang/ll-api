@@ -120,7 +120,7 @@ class Site():
         requests.delete(url, headers=HEADERS)
 
     def store_doc(self, key, docid, site_docid, docdir):
-        fh = codecs.open(os.path(docdir, docid), "r", "utf-8")
+        fh = codecs.open(os.path.join(docdir, docid), "r", "utf-8")
         title = fh.readline().strip()
         content = file.read().strip()
         fh.close()
