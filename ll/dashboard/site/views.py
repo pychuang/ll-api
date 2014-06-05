@@ -64,14 +64,11 @@ def query(site_id):
 @requires_login
 def query_detail(site_id, qid):
     site = core.site.get_site(site_id)
-    stats = { }
     return render_template("site/query_detail.html",
                            user=g.user,
                            site=site,
                            query=core.db.db.query.find_one({"site_id": site_id,
-                                                            "_id": qid}),
-                           stats=stats)
-
+                                                            "_id": qid}))
 
 
 @mod.route('/<site_id>/doc')
@@ -83,6 +80,7 @@ def doc(site_id):
                            site=site,
                            docs=core.db.db.doc.find({"site_id": site_id}))
 
+
 @mod.route('/<site_id>/doc/<docid>')
 @requires_login
 def doc_detail(site_id, docid):
@@ -90,7 +88,7 @@ def doc_detail(site_id, docid):
     stats = {
              "queries": [q
                            for q in core.db.db.query.find({"site_id": site_id})
-                           if docid in q["doclist"]],
+                           if "doclist" in q and docid in q["doclist"]],
     }
     return render_template("site/doc_detail.html",
                            user=g.user,
