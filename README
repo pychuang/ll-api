@@ -46,7 +46,7 @@ If you only want to run a client, you have all you need.
 Clients are pieces of code that talk to the Living Labs API. 
 We recognize two types of clients: participants and sites.
 Example clients are in the repository in the :code:`ll/clients` directory.
-See `Run a Participant`.
+See `Running Clients`_.
 
 In case you want to run your own version of the API (for testing purposes),
 you'll have to continue.
@@ -170,8 +170,8 @@ In general, use :code:`--help` or :code:`-h` for more information.
 Fill the Database
 -----------------
 
-If there is a `Dashboard` running, probably you should just create some users
-through the `Dashboard`. Otherwise, continue here.
+If there is a `Dashboard`_ running, probably you should just create some users
+through the `Dashboard`_. Otherwise, continue here.
 
 To create an example participant and a site (for development/testing purposes),
 you can run the following script: 
@@ -215,7 +215,7 @@ We recognize two types of clients: participants and sites.
 Sites are search engines that share queries, documents and clicks. 
 Participants rank documents for queries using clicks.
 Clients need API keys. The easiest way of obtaining a key is through the 
-`Dashboard`.
+`Dashboard`_.
 
 
 Run a Site
@@ -249,7 +249,7 @@ Note that the site client is not at all aware of the participants, the site
 client simply talks to the API. So if there are multiple participant clients
 present, the API does not know about this and the NDCG will thus reflect the
 average performance of all participants. This is by design. For per-participant
-statistics, one should use the `Dashboard`.
+statistics, one should use the `Dashboard`_.
 
 If you want to run multiple sites, you should create multiple keys and start 
 multiple instances that talk to the same API.
@@ -265,7 +265,7 @@ To run a simple participant implementation, you can do this:
    $ ./bin/client-participant -k PARTICIPANTKEY -s
    
 The API key can be obtained through a procedure explained in `Fill the Database`
-or through the `Dashboard`.
+or through the `Dashboard`_.
 
 This will run a baseline system that simply greedily reranks by the number of
 clicks. 
@@ -278,10 +278,10 @@ start multiple instances that talk to the same API.
 Dashboard
 =========
 
-A dashboard is running here: http://living-labs.net:5001/.
+A dashboard is already running here: http://living-labs.net:5001/.
 
-If you are running a local version of the API for development, it is a good idea 
-to also run a dashboard with it.
+However, if you are running a local version of the API for development, it is a 
+good idea to also run a dashboard with it.
  
 To start the dashboard, fill out the dashboard fields in your local copy of the 
 config (config/livinglabs.local.ini).
@@ -302,6 +302,9 @@ By default the dashboard will run on port 5001.
 Building Documentation
 ======================
 
+Note that you probably don't have to build the documentation. A constantly
+updated version is available here: http://doc.living-labs.net/
+
 To build this documentation, run these commands in a shell:
 
 .. sourcecode:: bash
@@ -310,8 +313,6 @@ To build this documentation, run these commands in a shell:
     $ make html
     $ open doc/build/html/index.html
     
-Note that you probably don't have to build the documentation. A constantly
-updated version is available here: http://doc.living-labs.net/
 
 Troubleshooting
 ---------------
@@ -323,7 +324,7 @@ If you receive the following error when building the documentation:
     ValueError: unknown locale: UTF-8
     make: *** [html] Error 1
 
-The, add these lines to your ~/.bash_profile:
+Then, add these lines to your ~/.bash_profile:
 
 .. sourcecode:: bash
     
