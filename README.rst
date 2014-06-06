@@ -33,7 +33,7 @@ However, installing them is easy (if you have pip installed):
 
 .. sourcecode:: bash
 
-    $ pip install -r requirements.txt
+    $ sudo pip install -r requirements.txt
 
 If you don't have pip yet, install it using :code:`easy_install pip`. Windows
 users may want to read here:
