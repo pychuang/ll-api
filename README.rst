@@ -18,7 +18,7 @@ as follows:
 
 .. sourcecode:: bash
 
-    $ git clone git@bitbucket.org:living-labs/ll-challenge.git
+    $ git clone https://bitbucket.org/living-labs/ll-challenge.git
 
 In case you plan on making changes, please first make a fork through the
 bitbucket interface and then clone your own fork. That way, you will be able to
@@ -33,11 +33,13 @@ However, installing them is easy (if you have pip installed):
 
 .. sourcecode:: bash
 
-    $ pip install -r requirements.txt
+    $ sudo pip install -r requirements.txt
 
 If you don't have pip yet, install it using :code:`easy_install pip`. Windows
 users may want to read here:
 http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows
+
+You may need to install the python-dev package.
 
 Done?
 -----
