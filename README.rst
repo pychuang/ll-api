@@ -61,6 +61,7 @@ Setup MongoDB
 
 If you don't already have MongoDB, you may follow a guide for your operating
 system at this page: http://docs.mongodb.org/manual/installation/.
+You'll need MongoDB version >=2.6.
 
 Then you can choose to run with or without authentication (without is easier,
 but unsecure).
