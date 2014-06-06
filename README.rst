@@ -39,6 +39,8 @@ If you don't have pip yet, install it using :code:`easy_install pip`. Windows
 users may want to read here:
 http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows
 
+You may need to install the python-dev package.
+
 Done?
 -----
 
