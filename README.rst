@@ -18,7 +18,7 @@ as follows:
 
 .. sourcecode:: bash
 
-    $ git clone git@bitbucket.org:living-labs/ll-challenge.git
+    $ git clone https://bitbucket.org/living-labs/ll-challenge.git
 
 In case you plan on making changes, please first make a fork through the
 bitbucket interface and then clone your own fork. That way, you will be able to
