@@ -78,5 +78,5 @@ def get_doc(site_id=None, site_docid=None, docid=None):
     if site_docid:
         q["site_docid"] = site_docid
     if docid:
-        q["docid"] = docid
+        q["_id"] = docid
     return db.doc.find_one(q)
