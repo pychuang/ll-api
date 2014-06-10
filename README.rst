@@ -28,7 +28,10 @@ merged back.
 Install prerequisites
 ---------------------
 
-If you want to run the API yourself, then a couple of prerequisites are needed.
+Our code is Python 2.6/2.7 code. It definitely won't run on Python 3.x, and most 
+likely not on earlier versions of Python.
+If you want to run the API yourself or if you want to run pre-packed clients 
+that communicate with an API, then a couple of prerequisites are needed.
 However, installing them is easy (if you have pip installed):
 
 .. sourcecode:: bash
@@ -39,7 +42,8 @@ If you don't have pip yet, install it using :code:`easy_install pip`. Windows
 users may want to read here:
 http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows
 
-You may need to install the python-dev package.
+You may need to install the python-dev package. And it sometimes happens 
+(for instance on Windows), that you need to install Numpy/Scipy manually first.
 
 Done?
 -----
