@@ -80,7 +80,7 @@ First start a MongoDB daemon as follows:
 
 .. sourcecode:: bash
 
-    $ mongod --config ll-challenge/config/mongodb.con
+    $ mongod --config ll-challenge/config/mongodb.conf
 
 Then, create two users (replace ADMINSECRET and USERSECRET with actual password
 and remember those):
@@ -116,8 +116,8 @@ and remember those):
     )
 
 Create a local copy of the config/livinglabs.ini file and edit it to add the
-USERSECRET password to the mongodb section. Also edit the database name if you
-wish.
+USERSECRET password to the mongodb section. Put this password in quotes. 
+Also edit the database name if you wish.
 
 .. sourcecode:: bash
 
@@ -303,7 +303,7 @@ Then run the following command:
 
 .. sourcecode:: bash
 
-    $ ./bin/api -c config/livinglabs.local.ini
+    $ ./bin/dashboard -c config/livinglabs.local.ini
 
 In general, use :code:`--help` or :code:`-h` for more information. By default
 the dashboard will run on port 5001.
