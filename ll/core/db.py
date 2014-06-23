@@ -27,7 +27,7 @@ class CoreDatabase(object):
         if self.db == None:
             client = MongoClient()
             self.db = client[db_name]
-            if user or password:
+            if user and password:
                 self.db.authenticate(user, password)
 
 db = CoreDatabase()
