@@ -40,10 +40,11 @@ class ForgotForm(Form):
 
 
 class SitesForm(Form):
-    sites = core.site.get_sites()
     sitefields = []
-    for site in sites:
-        sitefields.append(BooleanField(site['name']))
+    def __init__(self, data, sites=None):
+        Form.__init__(self, data) 
+        for site in sites:
+            sitefields.append(BooleanField(site['name']))
 
 
 
