@@ -44,7 +44,7 @@ class SitesForm(Form):
     def __init__(self, data, sites=None):
         Form.__init__(self, data) 
         for site in sites:
-            sitefields.append(BooleanField(site['name']))
+            self.sitefields.append(BooleanField(site['name']))
 
 
 

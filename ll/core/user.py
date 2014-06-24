@@ -127,7 +127,7 @@ def reset_password(email):
     user = get_user_by_email(email)
     password = random_string(config["PASSWORD_LENGHT"])
     user["password"] = generate_password_hash(password)
-    send_email(user, password, subject="Password Reset")
+    send_registration_email(user, password, subject="Password Reset")
     db.user.save(user)
 
 

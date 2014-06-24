@@ -85,6 +85,9 @@ def register():
 @mod.route('/sites/', methods=['GET', 'POST'])
 @requires_login
 def sites():
+    if not g.user["is_participant"]:
+        flash('Only participants can selects sites. Please register or sign in as a participant', 'alert-warning')
+        return redirect(url_for('user.home'))
     if not g.user["is_verified"]:
         flash('You need to be verified first, please send a signed registration form.', 'alert-warning')
         return redirect(url_for('user.home'))
