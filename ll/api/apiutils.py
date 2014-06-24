@@ -58,4 +58,7 @@ class ApiResource(Resource):
         if not user["is_participant"]:
             abort(403, message="Not a participant. Please use the site "
                   "API instead. See %s." % DOCUMENTATION)
+        if not user["is_verified"]:
+            abort(403, message="Not verified (yet). Please send the signed "
+                  "registration form.")
         return True
