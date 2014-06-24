@@ -71,7 +71,7 @@ def send_verification_email(user):
     txt += "\n\n"
     txt += "With regards,\n"
     txt += "The organizers"
-    return send_email(user, txt, subject)
+    return send_email(user, txt, "Verified")
 
 
 def random_string(length):
