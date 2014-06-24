@@ -24,7 +24,23 @@ from db import db
 from config import config
 
 
-def send_email(user, password, subject="New Account"):
+def send_email(user, txt, subject)
+    try:
+        msg = MIMEText(txt)
+        msg['subject'] = "[Living Labs] %s" % subject
+        email_from = config["EMAIL_FROM"]
+        email_to = user['email']
+        msg['From'] = email_from
+        msg['To'] = email_to
+        s = smtplib.SMTP('localhost')
+        s.sendmail(email_from, [email_to], msg.as_string())
+        s.quit()
+        return True
+    except:
+        raise Exception("Error sending email, either disable or setup properly.")
+    
+
+def send_registration_email(user, password, subject="New Account"):
     if not config["SEND_EMAIL"]:
         return False
     txt = "Hi %s,\n\n" % user["teamname"]
@@ -32,6 +48,9 @@ def send_email(user, password, subject="New Account"):
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
     txt += "password: %s\n" % password
+    txt += "\n\n"
+    txt += "Please fill out, scan, and email the form at "
+    txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
     txt += "\n\n"
     txt += "Some relevant urls:\n"
     txt += "Website: %s\n" % config["URL_WEB"]
@@ -42,16 +61,17 @@ def send_email(user, password, subject="New Account"):
     txt += "\n\n"
     txt += "With regards,\n"
     txt += "The organizers"
-    msg = MIMEText(txt)
-    msg['subject'] = "[Living Labs] %s" % subject
-    email_from = config["EMAIL_FROM"]
-    email_to = user['email']
-    msg['From'] = email_from
-    msg['To'] = email_to
-    s = smtplib.SMTP('localhost')
-    s.sendmail(email_from, [email_to], msg.as_string())
-    s.quit()
-    return True
+    return send_email(user, txt, subject)
+
+
+def send_verification_email(user):
+    txt = "Hi %s,\n\n" % user["teamname"]
+    txt += "We received your signed registration form. You are now ready to participate in the challenge.\n"
+    txt += "Please visit the dashboard to sign up for individual sites: %s/user/sites/\n" % config["URL_DASHBOARD"]
+    txt += "\n\n"
+    txt += "With regards,\n"
+    txt += "The organizers"
+    return send_email(user, txt, subject)
 
 
 def random_string(length):
@@ -86,13 +106,21 @@ def new_user(teamname, email, password=None):
         "is_participant": True,
         "is_site": False,
         "is_verified": False,
+        "signed_up_for": [],
         "is_admin": False,
         "creation_time": datetime.datetime.now(),
         "password": generate_password_hash(password),
     }
-    send_email(user, password)
+    send_registration_email(user, password)
     db.user.insert(user)
     return user
+
+
+def verify_user(key):
+    user = get_user(key)
+    user["is_verified"] = True
+    send_verification_email(user)
+    db.user.save(user)
 
 
 def reset_password(email):

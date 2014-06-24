@@ -17,11 +17,12 @@
 config = {
     "KEY_LENGTH": 32,
     "PASSWORD_LENGHT": 8,
-    "EMAIL_FROM": 'anne.schuth@uva.nl',
-    "SEND_EMAIL": True,
+    "EMAIL_FROM": 'challenge@living-labs.net',
+    "SEND_EMAIL": False,
     "URL_WEB": "http://living-labs.net",
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001/user/login/",
     "URL_DOC": "http://doc.living-labs.net",
     "URL_GIT": "http://git.living-labs.net",
+    "URL_REGISTRATION_FORM": "",
 }

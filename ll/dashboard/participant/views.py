@@ -63,6 +63,17 @@ def participant_delete(email):
     return redirect(url_for('participant.home'))
 
 
+@mod.route('/<email>/verify')
+@requires_login
+def participant_verify(email):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        return redirect(url_for('participant.home'))
+    participant = core.user.get_user_by_email(email)
+    core.user.verify_user(participant["_id"])
+    flash('Participant is verified.', 'alert-success')
+    return redirect(url_for('participant.home'))
+
 
 @mod.route('/<site_id>/query')
 @requires_login

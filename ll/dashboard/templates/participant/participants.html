@@ -34,6 +34,11 @@
       <td><a href="/participant/{{ participant.email}}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
       {% if user.is_admin %}
       <a href="/participant/{{ participant.email}}/delete"><span class="glyphicon glyphicon-remove"></span></a>      
+      {% if participant.is_verified %}
+      <span class="glyphicon glyphicon-star"></span>
+      {% else %}
+      <a href="/participant/{{ participant.email}}/verify"><span class="glyphicon glyphicon-star-empty"></span></a>      
+      {% endif %}
       {% endif %}
       </td>
   	</tr>
