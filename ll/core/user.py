@@ -24,7 +24,7 @@ from db import db
 from config import config
 
 
-def send_email(user, txt, subject)
+def send_email(user, txt, subject):
     try:
         msg = MIMEText(txt)
         msg['subject'] = "[Living Labs] %s" % subject
