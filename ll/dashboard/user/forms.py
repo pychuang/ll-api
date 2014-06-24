@@ -16,6 +16,7 @@
 from flask.ext.wtf import Form, RecaptchaField
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import Required, EqualTo, Email
+from .. import core
 
 
 class LoginForm(Form):
@@ -31,9 +32,18 @@ class RegisterForm(Form):
         Required(),
         EqualTo('password', message='Passwords must match')
         ])
-    #accept_tos = BooleanField('I accept the TOS', [Required()])
     recaptcha = RecaptchaField()
 
 
 class ForgotForm(Form):
     email = TextField('Email address', [Required(), Email()])
+
+
+class SitesForm(Form):
+    sites = core.site.get_sites()
+    sitefields = []
+    for site in sites:
+        sitefields.append(BooleanField(site['name']))
+
+
+

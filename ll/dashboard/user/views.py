@@ -81,6 +81,21 @@ def register():
     return render_template("user/register.html", form=form, user=g.user)
 
 
+
+@mod.route('/sites/', methods=['GET', 'POST'])
+@requires_login
+def sites():
+    if not g.user["is_verified"]:
+        flash('You need to be verified first, please send a signed registration form.', 'alert-warning')
+        return redirect(url_for('user.home'))
+    form = SitesForm(request.form)
+    if form.validate_on_submit():
+        core.user.signup(g.user, form.sitefields)
+        return redirect(url_for('user.home'))
+    return render_template("user/sites.html", form=form, user=g.user)
+    
+
+
 @mod.route('/forgot/', methods=['GET', 'POST'])
 def forgot():
     form = ForgotForm(request.form)
