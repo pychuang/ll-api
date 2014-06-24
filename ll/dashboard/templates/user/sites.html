@@ -23,7 +23,7 @@
         {{ form.csrf_token }}
 	{% for site in form.sitefields %}
 		{{ render_field(site) }}
-	{$ endfor %}
+	{% endfor %}
         <div class="form-group">
       		<div class="col-lg-10 col-lg-offset-2">
         		<button type="submit" class="btn btn-primary">Sign up</button>
