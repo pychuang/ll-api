@@ -42,7 +42,7 @@ def send_email(user, txt, subject):
         msgtxt += "\n\n"
         msgtxt += "With regards,\n"
         msgtxt += "The organizers"
-        msg = MIMEText(txt)
+        msg = MIMEText(msgtxt)
         msg['subject'] = "[Living Labs] %s" % subject
         email_from = config["EMAIL_FROM"]
         email_to = user['email']
