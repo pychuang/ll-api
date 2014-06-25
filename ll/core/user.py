@@ -25,7 +25,23 @@ from config import config
 
 
 def send_email(user, txt, subject):
+    if not config["SEND_EMAIL"]:
+        return False
     try:
+        msgtxt = "Hi %s,\n\n" % user["teamname"] 
+        msgtxt += txt
+        msgtxt += "\n\n"
+        msgtxt += "Some relevant urls:\n"
+        msgtxt += "Website: %s\n" % config["URL_WEB"]
+        msgtxt += "API: %s\n" % config["URL_API"]
+        msgtxt += "Dashboard: %s\n" % config["URL_DASHBOARD"]
+        msgtxt += "Documentation: %s\n" % config["URL_DOC"]
+        msgtxt += "Code: %s\n" % config["URL_GIT"]
+        msgtxt += "\n\n"
+        msgtxt += "Please do not hessitate to ask any questions.\n"
+        msgtxt += "\n\n"
+        msgtxt += "With regards,\n"
+        msgtxt += "The organizers"
         msg = MIMEText(txt)
         msg['subject'] = "[Living Labs] %s" % subject
         email_from = config["EMAIL_FROM"]
@@ -41,37 +57,29 @@ def send_email(user, txt, subject):
     
 
 def send_registration_email(user, password, subject="New Account"):
-    if not config["SEND_EMAIL"]:
-        return False
-    txt = "Hi %s,\n\n" % user["teamname"]
-    txt += "These are your Living Labs account details:\n"
+    txt = "These are your Living Labs account details:\n"
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
     txt += "password: %s\n" % password
     txt += "\n\n"
     txt += "Please fill out, scan, and email the form at "
     txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
-    txt += "\n\n"
-    txt += "Some relevant urls:\n"
-    txt += "Website: %s\n" % config["URL_WEB"]
-    txt += "API: %s\n" % config["URL_API"]
-    txt += "Dashboard: %s\n" % config["URL_DASHBOARD"]
-    txt += "Documentation: %s\n" % config["URL_DOC"]
-    txt += "Code: %s\n" % config["URL_GIT"]
-    txt += "\n\n"
-    txt += "With regards,\n"
-    txt += "The organizers"
     return send_email(user, txt, subject)
 
 
 def send_verification_email(user):
-    txt = "Hi %s,\n\n" % user["teamname"]
-    txt += "We received your signed registration form. You are now ready to participate in the challenge.\n"
+    txt = "We received and verified your signed registration form, thank you.\n"
+    txt += "You are now ready to participate in the challenge.\n"
     txt += "Please visit the dashboard to sign up for individual sites: %s/user/sites/\n" % config["URL_DASHBOARD"]
-    txt += "\n\n"
-    txt += "With regards,\n"
-    txt += "The organizers"
     return send_email(user, txt, "Verified")
+
+
+def send_form_email(user):
+    txt = "You've registered for the Living Labs Challenge."
+    txt += "We are almost ready to start the challenge."
+    txt += "But before we can do so, we need you to fill out, scan, and email the application form at "
+    txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
+    return send_email(user, txt, "Please Sign the Application Form")
 
 
 def random_string(length):

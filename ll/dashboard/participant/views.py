@@ -88,6 +88,18 @@ def participant_verify(email):
     return redirect(url_for('participant.home'))
 
 
+@mod.route('/<email>/form')
+@requires_login
+def participant_form(email):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        return redirect(url_for('participant.home'))
+    participant = core.user.get_user_by_email(email)
+    core.user.send_form_email(participant)
+    flash('Form email is sent.', 'alert-success')
+    return redirect(url_for('participant.home'))
+
+
 @mod.route('/<site_id>/query')
 @requires_login
 def query(site_id):
