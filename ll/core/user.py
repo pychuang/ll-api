@@ -62,8 +62,8 @@ def send_registration_email(user, password, subject="New Account"):
     txt += "email: %s\n" % user["email"]
     txt += "password: %s\n" % password
     txt += "\n\n"
-    txt += "Please fill out, scan, and email the form at "
-    txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
+    txt += "Before you can participate, please fill out, scan, and email the form at "
+    txt += "this location to us: %s\n" % config["URL_REGISTRATION_FORM"]
     return send_email(user, txt, subject)
 
 
@@ -75,8 +75,8 @@ def send_verification_email(user):
 
 
 def send_form_email(user):
-    txt = "You've registered for the Living Labs Challenge."
-    txt += "We are almost ready to start the challenge."
+    txt = "You've registered for the Living Labs Challenge. "
+    txt += "We are almost ready to start the challenge. "
     txt += "But before we can do so, we need you to fill out, scan, and email the application form at "
     txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
     return send_email(user, txt, "Please Sign the Application Form")
