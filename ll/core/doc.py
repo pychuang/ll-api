@@ -30,7 +30,14 @@ def add_doclist(site_id, site_qid, doclist):
             raise LookupError("Document not found: site_docid = '%s'. Add"
                             "documents before adding a doclist."
                             % doc["site_docid"])
-        store_doclist.append(doc_found["_id"])
+        if "relevance_signals" in doc:
+            # szn extension: store relevance signals for this doclist item
+            store_doclist.append({
+                "_id": doc_found["_id"],
+                "relevance_signals": doc["relevance_signals"],
+                })
+        else:
+            store_doclist.append(doc_found["_id"])
 
     query["doclist"] = store_doclist
     db.query.save(query)
@@ -51,7 +58,15 @@ def get_doclist(site_id=None, site_qid=None, qid=None):
             raise LookupError("Query not found: site_qid = '%s'." % site_qid)
         else:
             raise LookupError("Query not found: qid = '%s'." % qid)
-    return [db.doc.find_one({"_id": d}) for d in query["doclist"]]
+    doclist = []
+    for d in query["doclist"]:
+        if isinstance(d, basestring):
+            doclist.append(db.doc.find_one({"_id": d}))
+        else:
+            item = db.doc.find_one({"_id": d["_id"]})
+            item["relevance_signals"] = d["relevance_signals"]
+            doclist.append(item)
+    return doclist
 
 
 def add_doc(site_id, site_docid, doc):
