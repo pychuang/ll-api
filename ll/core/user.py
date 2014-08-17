@@ -57,7 +57,8 @@ def send_email(user, txt, subject):
 
 
 def send_password_email(user, password, subject="Password Reset"):
-    txt = "These are your Living Labs account details:\n"
+    txt = "Your password has been reset.\n"
+    txt += "These are now your Living Labs account details:\n"
     txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
