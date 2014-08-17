@@ -91,18 +91,26 @@ def sites():
         flash('Only participants can selects sites. Please register or sign in as a participant', 'alert-warning')
         return redirect(url_for('user.home'))
     if not g.user["is_verified"]:
-        flash('You need to be verified first, please send a signed registration form.', 'alert-warning')
+        flash('You need to be verified first, please send the organizers a signed <a href="%s">registration form<a/>.'
+              % core.config.config["URL_REGISTRATION_FORM"], 'alert-warning')
         return redirect(url_for('user.home'))
 
     class SitesForm(Form):
         pass
+
+    usersites = core.user.get_sites(g.user["_id"])
     for site in core.site.get_sites():
-        setattr(SitesForm, site['name'], BooleanField(site['name'], description="No additional terms."))
+        description = site["terms"] if "terms" in site else "No additional terms."
+        default = usersites[site['_id']] if site['_id'] in usersites else False
+        setattr(SitesForm, site['_id'], BooleanField(site['name'], 
+                                                     description=description,
+                                                     default=default))
     
     form = SitesForm(request.form)
     if form.validate_on_submit():
-        core.user.signup(g.user, form.sitefields)
-        return redirect(url_for('user.home'))
+        core.user.set_sites(g.user["_id"], form.data)
+        flash('Agreements to site terms have been saved.', 'alert-success')
+        return redirect(url_for('user.sites'))
     return render_template("user/sites.html", form=form, user=g.user)
     
 

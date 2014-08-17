@@ -138,6 +138,10 @@ def verify_user(key):
     send_verification_email(user)
     db.user.save(user)
 
+def unverify_user(key):
+    user = get_user(key)
+    user["is_verified"] = False
+    db.user.save(user)
 
 def reset_password(email):
     user = get_user_by_email(email)
@@ -178,3 +182,15 @@ def get_participants():
 def delete_user(key):
     user = get_user(key)
     db.user.remove(user)
+
+
+def set_sites(key, sites):
+    user = get_user(key)
+    user["sites"] = sites
+    db.user.save(user)
+    
+def get_sites(key):
+    user = get_user(key)
+    if "sites" in user:
+        return user["sites"]
+    return {}
