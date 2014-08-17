@@ -97,7 +97,7 @@ def sites():
     class SitesForm(Form):
         pass
     for site in core.site.get_sites():
-        setattr(SitesForm, site['name'], BooleanField(site['name'], description="balbal"))
+        setattr(SitesForm, site['name'], BooleanField(site['name'], description="No additional terms."))
     
     form = SitesForm(request.form)
     if form.validate_on_submit():
