@@ -53,7 +53,7 @@ class Query(ApiResource):
 
         """
         self.validate_participant(key)
-        queries = core.query.get_query(key=key)
+        queries = self.trycall(core.query.get_query, key=key)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 
 api.add_resource(Query, '/api/participant/query/<key>',
