@@ -22,6 +22,7 @@ import json
 import time
 import datetime
 import random
+import os
 
 
 QUERYENDPOINT = "participant/query"
@@ -35,6 +36,7 @@ HEADERS = {'content-type': 'application/json'}
 
 class Participant():
     def __init__(self):
+        path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Participant Client"
         parser = argparse.ArgumentParser(description=description)
         parser.add_argument('--host', dest='host', default='127.0.0.1',
@@ -46,6 +48,15 @@ class Participant():
         parser.add_argument('-s', '--simulate_runs', action="store_true",
                             default=False,
                             help='Simulate runs.')
+        parser.add_argument('--store_run', action="store_true",
+                            default=False,
+                            help='Store TREC run (needs --run_file).')
+        parser.add_argument('--run_file',
+                            default=os.path.normpath(os.path.join(path,
+                                                "../../data/run.txt")),
+                            help='Path to TREC style run file '
+                            '(default: %(default)s).')
+
         args = parser.parse_args()
 
         self.host = "%s:%s/api" % (args.host, args.port)
@@ -55,22 +66,31 @@ class Participant():
         if args.simulate_runs:
             self.simulate_runs(args.key)
 
+        if args.store_run:
+            self.store_run(args.key, args.run_file)
+
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.get(url, headers=HEADERS)
-        r.raise_for_status()
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
         return r.json()
 
     def get_doclist(self, key, qid):
         url = "/".join([self.host, DOCLISTENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
-        r.raise_for_status()
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
         return r.json()
 
     def get_feedback(self, key, qid):
         url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
-        r.raise_for_status()
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
         return r.json()
 
     def store_runs(self, key, runs):
@@ -79,7 +99,9 @@ class Participant():
             run["runid"] = str(self.runid)
             url = "/".join([self.host, RUNENDPOINT, key, qid])
             r = requests.put(url, data=json.dumps(run), headers=HEADERS)
-            r.raise_for_status()
+            if r.status_code != requests.codes.ok:
+                print r.text
+                r.raise_for_status()
 
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
@@ -113,6 +135,20 @@ class Participant():
                 feedbacks[qid] = self.get_feedback(key, qid)
             runs = self.update_runs(key, runs, feedbacks)
             time.sleep(random.random())
+
+    def store_run(self, key, run_file):
+        queries = self.get_queries(key)
+        runs = {}
+        current_qid = None
+        for line in open(run_file, "r"):
+            qid, _, docid, _, _, _ = line.split()
+            if qid not in queries["queries"]:
+                raise Exception("This queries is not known by the API: %s." % qid)
+            if current_qid is None or current_qid != qid:
+                runs[qid] = {"doclist": []}
+            runs[qid]["doclist"].append({"docid": docid})
+            current_qid = qid
+        self.store_runs(key, runs)
 
 if __name__ == '__main__':
     participant = Participant()

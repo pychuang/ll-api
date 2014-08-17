@@ -70,7 +70,7 @@ class Site():
         parser.add_argument('-d', '--store_doclist', action="store_true",
                             default=False,
                             help='Store a document list (needs --run_file)')
-        parser.add_argument('--run_file', 
+        parser.add_argument('--run_file',
                             default=os.path.normpath(os.path.join(path,
                                                 "../../data/run.txt")),
                             help='Path to TREC style run file '
