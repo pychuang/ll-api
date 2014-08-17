@@ -18,7 +18,7 @@ from db import db
 import user
 
 
-def set_site(key, short, name, url):
+def set_site(key, short, name, url, terms):
     if not key or not short or not name or not url:
         raise ValueError("Specify key, short, name, url")
     if db.site.find_one({"_id": short}):
@@ -31,6 +31,7 @@ def set_site(key, short, name, url):
         "_id": short,
         "name": name,
         "url": url,
+        "terms": terms,
         "qid_counter": 0,
         "docid_counter": 0,
         "sid_counter": 0})

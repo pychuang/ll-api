@@ -57,7 +57,7 @@ def user(args, parser):
         parser.error("Wrong arguments.")
 
     if args.site and not args.create:
-        ll.core.site.set_site(key, args.short, args.name, args.url)
+        ll.core.site.set_site(key, args.short, args.name, args.url, args.terms)
         print "Key is now a SITEKEY: %s" % key
 
     if args.admin and not args.create:
@@ -119,6 +119,9 @@ if __name__ == '__main__':
     subparser_user.add_argument('--short', type=str,
                                 help='Short name for a site (only used if '
                                 '--site).')
+    subparser_user.add_argument('--terms', type=str,
+                                help='Additional terms (only used if '
+                                '--site).', default="")
     subparser_user.add_argument('--name', type=str,
                                 help="Name for a site (only used if --site).")
     subparser_user.add_argument('--url', type=str,
