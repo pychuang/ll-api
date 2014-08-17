@@ -72,7 +72,8 @@
 	    <span class="glyphicon glyphicon-user"></span> {{ user.teamname }}<span class="caret"></span>
 	    </a>
 	    <ul class="dropdown-menu">
-	      <li><a href="/user/me">Profile</a></li>
+	      <li class="{% if request.path.startswith("/user/me") %}active{% endif %}"><a href="/user/me">Profile</a></li>
+	      <li class="{% if request.path.startswith("/user/sites") %}active{% endif %}"><a href="/user/sites/">Sites</a></li>
 	      <li class="divider"></li>
 	      <li><a href="/user/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 	    </ul>
@@ -92,7 +93,7 @@
     <div id="messages-wrap">
       <div id="messages">
         {% for category, msg in get_flashed_messages(with_categories=true) %}
-          <p class="alert {{ category }}">{{ msg }}</p>
+          <p class="alert {{ category }}">{{ msg|safe  }}</p>
         {% endfor %}
       </div>
     </div>
