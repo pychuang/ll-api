@@ -3,9 +3,19 @@ Tutorial
 
 
 This tutorial describes how to install, run and develop with the Living Labs
-Challenge software. In case you have any comments or questions, please do not
+Challenge software. 
+
+If all you want is to compete in the challenge, you do not necessarily need any
+of the following. Instead you could just go ahead and implement your client
+that talks to our API at http://living-labs.net:5000/api/.
+However, the code we provide does include a simple baseline implementation 
+that talks to our API and that you may find useful.
+Furthermore, if you do install the API/dashboard/.. on your own machine,
+debugging your code will become much easier.
+
+In case you have any comments or questions, please do not
 hesitate to file an issue here: http://git.living-labs.net/ll-challenge/issues.
-Or, you can contact anne.schuth@uva.nl.
+Or, you can contact the main developer directly at anne.schuth@uva.nl.
 
 For more information on the challenge, see http://living-labs.net/challenge.
 Documentation (including this tutorial) can be found here:
@@ -58,8 +68,8 @@ participants and sites. Example clients are in the repository in the
 In case you want to run your own version of the API (for testing purposes),
 you'll have to continue.
 
-You don't necessarily have to do that, an API is running here:
-http://living-labs.net:5000/
+You don't necessarily have to do that, our challenge API is running here:
+http://living-labs.net:5000/api/
 
 
 Setup MongoDB
