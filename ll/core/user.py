@@ -38,7 +38,7 @@ def send_email(user, txt, subject):
         msgtxt += "Documentation: %s\n" % config["URL_DOC"]
         msgtxt += "Code: %s\n" % config["URL_GIT"]
         msgtxt += "\n\n"
-        msgtxt += "Please do not hessitate to ask any questions.\n"
+        msgtxt += "Please do not hesitate to ask any questions.\n"
         msgtxt += "\n\n"
         msgtxt += "With regards,\n"
         msgtxt += "The organizers"
@@ -54,6 +54,14 @@ def send_email(user, txt, subject):
         return True
     except:
         raise Exception("Error sending email, either disable or setup properly.")
+    
+
+def send_password_email(user, password, subject="Password Reset"):
+    txt = "These are your Living Labs account details:\n"
+    txt += "teamname: %s\n" % user["teamname"]
+    txt += "email: %s\n" % user["email"]
+    txt += "password: %s\n" % password
+    return send_email(user, txt, subject)
     
 
 def send_registration_email(user, password, subject="New Account"):
@@ -135,7 +143,7 @@ def reset_password(email):
     user = get_user_by_email(email)
     password = random_string(config["PASSWORD_LENGHT"])
     user["password"] = generate_password_hash(password)
-    send_registration_email(user, password, subject="Password Reset")
+    send_password_email(user, password, subject="Password Reset")
     db.user.save(user)
 
 
