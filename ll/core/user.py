@@ -54,18 +54,20 @@ def send_email(user, txt, subject):
         return True
     except:
         raise Exception("Error sending email, either disable or setup properly.")
-    
+
 
 def send_password_email(user, password, subject="Password Reset"):
     txt = "These are your Living Labs account details:\n"
+    txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
     txt += "password: %s\n" % password
     return send_email(user, txt, subject)
-    
+
 
 def send_registration_email(user, password, subject="New Account"):
     txt = "These are your Living Labs account details:\n"
+    txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
     txt += "password: %s\n" % password
@@ -79,6 +81,11 @@ def send_verification_email(user):
     txt = "We received and verified your signed registration form, thank you.\n"
     txt += "You are now ready to participate in the challenge.\n"
     txt += "Please visit the dashboard to sign up for individual sites: %s/user/sites/\n" % config["URL_DASHBOARD"]
+    txt += "\n\n"
+    txt += "These are your Living Labs account details:\n"
+    txt += "API key: %s\n" % user["_id"]
+    txt += "teamname: %s\n" % user["teamname"]
+    txt += "email: %s\n" % user["email"]
     return send_email(user, txt, "Verified")
 
 
