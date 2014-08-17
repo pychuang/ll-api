@@ -23,6 +23,12 @@ doclist_fields = {
     "title": fields.String(),
 }
 
+doclist_fields_szn = {
+    "docid": fields.String(attribute="_id"),
+    "title": fields.String(),
+    "relevance_signals": fields.List(fields.List(fields.Float)),
+}
+
 doc_fields = {
     "docid": fields.String(attribute="_id"),
     "creation_time": fields.DateTime(),
@@ -90,7 +96,9 @@ class DocList(ApiResource):
         doclist = self.trycall(core.doc.get_doclist, qid=qid)
         return {
             "qid": qid,
-            "doclist": [marshal(d, doclist_fields) for d in doclist]
+            "doclist": [marshal(d, doclist_fields_szn)
+                if "relevance_signals" in d else marshal(d, doclist_fields)
+                for d in doclist]
             }
 
 api.add_resource(Doc, '/api/participant/doc/<key>/<docid>',

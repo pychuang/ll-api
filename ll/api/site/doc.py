@@ -24,6 +24,12 @@ doclist_fields = {
     "title": fields.String(),
 }
 
+doclist_fields_szn = {
+    "site_docid": fields.String(),
+    "title": fields.String(),
+    "relevance_signals": fields.List(fields.List(fields.Float)),
+}
+
 doc_fields = {
     "site_docid": fields.String(),
     "creation_time": fields.DateTime(),
@@ -143,7 +149,9 @@ class DocList(ApiResource):
                                site_qid=site_qid)
         return {
             "site_qid": site_qid,
-            "doclist": [marshal(d, doclist_fields) for d in doclist]
+            "doclist": [marshal(d, doclist_fields_szn)
+                if "relevance_signals" in d else marshal(d, doclist_fields)
+                for d in doclist]
             }
 
     def put(self, key, site_qid):
@@ -183,7 +191,9 @@ class DocList(ApiResource):
                                documents["doclist"])
         return {
             "site_qid": site_qid,
-            "doclist": [marshal(d, doclist_fields) for d in doclist]
+            "doclist": [marshal(d, doclist_fields_szn)
+                if "relevance_signals" in d else marshal(d, doclist_fields)
+                for d in doclist]
             }
 
 api.add_resource(Doc, '/api/site/doc/<key>/<site_docid>',
