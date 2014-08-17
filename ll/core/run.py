@@ -18,7 +18,7 @@ import random
 import pymongo
 import datetime
 import site
-
+import user
 
 def get_ranking(site_id, site_qid):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
@@ -58,14 +58,12 @@ def get_run(key, qid):
 
 
 def add_run(key, qid, runid, doclist):
-    #run = db.run.find(userid=key, qid=qid, runid=runid)
-    #if run.count():
-    #    raise Exception("You can not upload a run for for a query twice (you "
-    #                    "can increment the runid): qid = '%s', runid = '%s'."
-    #                    % (qid, runid))
     q = db.query.find_one({"_id": qid})
     if not q:
-        raise Exception("Query does not exit: qid = '%s'" % qid)
+        raise Exception("Query does not exist: qid = '%s'" % qid)
+    sites = user.get_sites(key)
+    if not q["site_id"] in sites:
+        raise Exception("First signup for site %s." % q["site_id"])
 
     for doc in doclist:
         doc_found = db.doc.find_one({"_id": doc["docid"]})

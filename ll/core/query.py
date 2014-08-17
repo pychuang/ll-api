@@ -17,6 +17,7 @@ import random
 import string
 import datetime
 import site
+import user
 from db import db
 
 
@@ -38,12 +39,18 @@ def add_query(site_id, site_qid, qstr):
     return query
 
 
-def get_query(site_id=None, qid=None):
+def get_query(site_id=None, qid=None, key=None):
     q = {}
+    if key:
+        sites = user.get_sites(key)
+        q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
+        if key and site_id not in sites:
+            raise Exception("First signup for site %s." % site_id)
         q["site_id"] = site_id
     if qid:
         q["_id"] = qid
+
     return [q for q in db.query.find(q) if "doclist" in q]
 
 

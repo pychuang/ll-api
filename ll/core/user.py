@@ -186,11 +186,12 @@ def delete_user(key):
 
 def set_sites(key, sites):
     user = get_user(key)
-    user["sites"] = sites
+    user["signed_up_for"] = sites
     db.user.save(user)
-    
+
+
 def get_sites(key):
     user = get_user(key)
-    if "sites" in user:
-        return user["sites"]
+    if "signed_up_for" in user:
+        return user["signed_up_for"]
     return {}

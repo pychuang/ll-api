@@ -16,6 +16,7 @@
 import datetime
 from db import db
 import site
+import user
 
 
 def add_doclist(site_id, site_qid, doclist):
@@ -44,9 +45,14 @@ def add_doclist(site_id, site_qid, doclist):
     return get_doclist(site_id=site_id, site_qid=site_qid)
 
 
-def get_doclist(site_id=None, site_qid=None, qid=None):
+def get_doclist(site_id=None, site_qid=None, qid=None, key=None):
     q = {}
+    if key:
+        sites = user.get_sites(key)
+        q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
+        if key and site_id not in sites:
+            raise Exception("First signup for site %s." % site_id)
         q["site_id"] = site_id
     if site_qid:
         q["site_qid"] = site_qid
@@ -86,9 +92,14 @@ def add_doc(site_id, site_docid, doc):
     return doc
 
 
-def get_doc(site_id=None, site_docid=None, docid=None):
+def get_doc(site_id=None, site_docid=None, docid=None, key=None):
     q = {}
+    if key:
+        sites = user.get_sites(key)
+        q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
+        if key and site_id not in sites:
+            raise Exception("First signup for site %s." % site_id)
         q["site_id"] = site_id
     if site_docid:
         q["site_docid"] = site_docid

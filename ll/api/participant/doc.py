@@ -60,7 +60,7 @@ class Doc(ApiResource):
 
         """
         self.validate_participant(key)
-        doc = self.trycall(core.doc.get_doc, docid=docid)
+        doc = self.trycall(core.doc.get_doc, docid=docid, key=key)
         return marshal(doc, doc_fields)
 
 
@@ -93,7 +93,7 @@ class DocList(ApiResource):
 
         """
         self.validate_participant(key)
-        doclist = self.trycall(core.doc.get_doclist, qid=qid)
+        doclist = self.trycall(core.doc.get_doclist, qid=qid, key=key)
         return {
             "qid": qid,
             "doclist": [marshal(d, doclist_fields_szn)

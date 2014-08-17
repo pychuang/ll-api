@@ -27,7 +27,9 @@ query_fields = {
 
 class Query(ApiResource):
     def get(self, key):
-        """Obtain the query set.
+        """Obtain the query set for all sites that you have agreed too.
+        If you update the sites you agree too through the dashboard, then
+        the query set will reflect this.
 
         :param key: your API key
         :status 200: valid key
@@ -51,7 +53,7 @@ class Query(ApiResource):
 
         """
         self.validate_participant(key)
-        queries = core.query.get_query()
+        queries = core.query.get_query(key=key)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 
 api.add_resource(Query, '/api/participant/query/<key>',

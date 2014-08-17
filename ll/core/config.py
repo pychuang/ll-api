@@ -18,7 +18,7 @@ config = {
     "KEY_LENGTH": 32,
     "PASSWORD_LENGHT": 8,
     "EMAIL_FROM": 'challenge@living-labs.net',
-    "SEND_EMAIL": True,
+    "SEND_EMAIL": False,
     "URL_WEB": "http://living-labs.net",
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001",
