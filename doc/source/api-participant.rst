@@ -7,6 +7,14 @@ API can also be used to update runs. Everything is implemented as HTTP request,
 and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX
 errors where possible.
 
+
+For all operations, an API key is required. Also, we require you to sign an
+agreement. Details on that process will be shared once you sign up.
+The dashboard that you can use to obtain an API key is here:
+http://living-labs.net:5001/
+
+Our API is located at this location: http://living-labs.net:5000/api/.
+
 .. note:: Please be nice to our API and don't flood it with multiple cores 
 	constantly sending multiple requests. We will place a decent machine behind 
 	the API, but we might not be able to match yours.
