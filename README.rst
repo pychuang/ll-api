@@ -7,7 +7,9 @@ Challenge software. In case you have any comments or questions, please do not
 hesitate to file an issue here: http://git.living-labs.net/ll-challenge/issues.
 Or, you can contact anne.schuth@uva.nl.
 
-For more information on the challenge, see http://living-labs.net/.
+For more information on the challenge, see http://living-labs.net/challenge.
+Documentation (including this tutorial) can be found here:
+http://doc.living-labs.net/en/latest/
 
 
 Obtain source code
