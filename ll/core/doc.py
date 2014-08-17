@@ -49,6 +49,8 @@ def get_doclist(site_id=None, site_qid=None, qid=None, key=None):
     q = {}
     if key:
         sites = user.get_sites(key)
+        if not sites:
+            raise Exception("First signup for sites.")
         q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
         if key and site_id not in sites:
@@ -96,6 +98,8 @@ def get_doc(site_id=None, site_docid=None, docid=None, key=None):
     q = {}
     if key:
         sites = user.get_sites(key)
+        if not sites:
+            raise Exception("First signup for sites.")
         q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
         if key and site_id not in sites:
