@@ -13,12 +13,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+from flask.ext.wtf import Form
+from wtforms import BooleanField
 from flask import Blueprint, request, render_template, flash, g, session, \
                     redirect, url_for
 from werkzeug import check_password_hash
 
 from .. import core, requires_login
-from forms import LoginForm, RegisterForm, ForgotForm, SitesForm
+from forms import LoginForm, RegisterForm, ForgotForm
 
 mod = Blueprint('user', __name__, url_prefix='/user')
 
@@ -91,8 +93,13 @@ def sites():
     if not g.user["is_verified"]:
         flash('You need to be verified first, please send a signed registration form.', 'alert-warning')
         return redirect(url_for('user.home'))
-    sites = core.site.get_sites()
-    form = SitesForm(request.form, sites=sites)
+
+    class SitesForm(Form):
+        pass
+    for site in core.site.get_sites():
+        setattr(SitesForm, site['name'], BooleanField(site['name'], description="balbal"))
+    
+    form = SitesForm(request.form)
     if form.validate_on_submit():
         core.user.signup(g.user, form.sitefields)
         return redirect(url_for('user.home'))

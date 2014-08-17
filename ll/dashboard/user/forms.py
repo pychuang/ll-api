@@ -39,12 +39,4 @@ class ForgotForm(Form):
     email = TextField('Email address', [Required(), Email()])
 
 
-class SitesForm(Form):
-    sitefields = []
-    def __init__(self, data, sites=None):
-        Form.__init__(self, data) 
-        for site in sites:
-            self.sitefields.append(BooleanField(site['name']))
-
-
 

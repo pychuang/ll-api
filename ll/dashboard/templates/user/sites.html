@@ -18,12 +18,42 @@
     	Signup for Sites
     {% endblock %}
     {% block content %}
+      <div class="alert alert-warning">
+      You are bound by the general agreement form that you already signed and sent 
+      to the organizers of the Living Labs challenge. In addition to the terms 1-7 
+      stated in that general agreement, specific additional terms and conditions may 
+      apply to the individual use-cases as detailed here.
+      </div>
+      Please check all the sites that you want to sign up for. By checking the box 
+      and clicking "signup", you agree to the additional terms and conditions, if 
+      specified.
+      
+  
+
+   
       {% from "forms/macros.html" import render_field %}
       <form method="POST" action="." class="form">
         {{ form.csrf_token }}
-	{% for site in form.sitefields %}
-		{{ render_field(site) }}
-	{% endfor %}
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Agreement</th>
+		      <th>Site</th>
+		      <th>Additional terms and conditions</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+			{% for field in form %}
+			    {% if field.name != "csrf_token" %}
+			    <div class="form-group">
+			        <td>{{ field }}</td>
+			        <td>{{ field.label }}</td>
+			        <td>{{ field.description }}</td>
+			    </div>
+			    {% endif %}
+			{% endfor %}
+		  </tbody>
+		</table>
         <div class="form-group">
       		<div class="col-lg-10 col-lg-offset-2">
         		<button type="submit" class="btn btn-primary">Sign up</button>
