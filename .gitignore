@@ -2,4 +2,5 @@
 *.swp
 *.pyc
 .pydevproject
+.project
 doc/build
