@@ -1,6 +1,7 @@
 ConfArgParse>=1.0.15
+Flask-Limiter>=0.6.2
 Flask-RESTful>=0.2.12
-Flask-WTF==0.9.5
+Flask-WTF>=0.9.5
 Flask>=0.10.1
 numpy>=1.8.1
 pymongo>=2.7
