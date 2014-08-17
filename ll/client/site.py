@@ -240,15 +240,15 @@ class Site():
         rankings = {}
         while True:
             qid = random.choice(labels.keys())
-            #try:
-            sid, ranking = self.get_ranking(key, qid)
-            rankings[qid] = ranking
-            print "NDCG: %.3f" % self.evaluate(rankings, labels)
-            #TODO: once in a while, drop a document before return.
-            clicks = self.get_clicks(ranking, labels[qid])
-            self.store_feedback(key, qid, sid, ranking, clicks)
-            #except:
-            #    print "ERROR, fall back to normal processing"
+            try:
+                sid, ranking = self.get_ranking(key, qid)
+                rankings[qid] = ranking
+                print "NDCG: %.3f" % self.evaluate(rankings, labels)
+                #TODO: once in a while, drop a document before return.
+                clicks = self.get_clicks(ranking, labels[qid])
+                self.store_feedback(key, qid, sid, ranking, clicks)
+            except:
+                print "ERROR"
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
 if __name__ == '__main__':
