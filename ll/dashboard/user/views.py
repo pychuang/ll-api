@@ -101,18 +101,19 @@ def sites():
     usersites = core.user.get_sites(g.user["_id"])
     for site in core.site.get_sites():
         description = site["terms"] if "terms" in site else "No additional terms."
-        default = usersites[site['_id']] if site['_id'] in usersites else False
-        setattr(SitesForm, site['_id'], BooleanField(site['name'], 
+        default = True if site['_id'] in usersites else False
+        setattr(SitesForm, site['_id'], BooleanField(site['name'],
                                                      description=description,
                                                      default=default))
-    
+
     form = SitesForm(request.form)
     if form.validate_on_submit():
-        core.user.set_sites(g.user["_id"], form.data)
+        sites = [k for k in form.data if form.data[k]]
+        core.user.set_sites(g.user["_id"], sites)
         flash('Agreements to site terms have been saved.', 'alert-success')
         return redirect(url_for('user.sites'))
     return render_template("user/sites.html", form=form, user=g.user)
-    
+
 
 
 @mod.route('/forgot/', methods=['GET', 'POST'])
