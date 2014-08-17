@@ -117,11 +117,17 @@ class Site():
                 "site_qid": hashlib.sha1(qid).hexdigest(),
             })
         url = "/".join([self.host, QUERYENDPOINT, key])
-        requests.put(url, data=json.dumps(queries), headers=HEADERS)
+        r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
 
     def delete_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
-        requests.delete(url, headers=HEADERS)
+        r = requests.delete(url, headers=HEADERS)
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
 
     def store_doc(self, key, docid, site_docid, docdir):
         fh = codecs.open(os.path.join(docdir, docid), "r", "utf-8")
@@ -134,15 +140,20 @@ class Site():
             "content": {"text": content},
             }
         url = "/".join([self.host, DOCENDPOINT, key, site_docid])
-        requests.put(url, data=json.dumps(doc), headers=HEADERS)
+        r = requests.put(url, data=json.dumps(doc), headers=HEADERS)
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
 
     def store_doclist(self, key, run_file, docdir):
         def put_doclist(doclist, current_qid):
             site_qid = hashlib.sha1(current_qid).hexdigest()
             doclist["site_qid"] = site_qid
             url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
-            requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-
+            r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
+            if r.status_code != requests.codes.ok:
+                print r.text
+                r.raise_for_status()
         doclist = {"doclist": []}
         current_qid = None
         for line in open(run_file, "r"):
@@ -160,7 +171,9 @@ class Site():
         site_qid = hashlib.sha1(qid).hexdigest()
         url = "/".join([self.host, RANKIGNENDPOINT, key, site_qid])
         r = requests.get(url, headers=HEADERS)
-        r.raise_for_status()
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
         json = r.json()
         return json["sid"], json["doclist"]
 
@@ -177,7 +190,9 @@ class Site():
 
         url = "/".join([self.host, FEEDBACKENDPOINT, key, sid])
         r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-        r.raise_for_status()
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
 
     def get_labels(self, qrel_file):
         labels = {}
