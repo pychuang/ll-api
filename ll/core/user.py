@@ -146,10 +146,12 @@ def verify_user(key):
     send_verification_email(user)
     db.user.save(user)
 
+
 def unverify_user(key):
     user = get_user(key)
     user["is_verified"] = False
     db.user.save(user)
+
 
 def reset_password(email):
     user = get_user_by_email(email)

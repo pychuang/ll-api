@@ -24,6 +24,7 @@ app = Flask(__name__)
 def not_found(error):
     return render_template('404.html', user=g.user), 404
 
+
 @app.errorhandler(500)
 def not_found(error):
     return render_template('500.html', user=g.user), 500
