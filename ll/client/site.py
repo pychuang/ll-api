@@ -75,6 +75,10 @@ class Site():
                                                 "../../data/run.txt")),
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
+        parser.add_argument('--wait_min', type=int, default=1,
+                            help='Minimum simulation waiting time in seconds.')
+        parser.add_argument('--wait_max', type=int, default=10,
+                            help='Max simulation waiting time in seconds.')
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
                             help='Simulate clicks (needs --qrel_file).')
@@ -98,7 +102,7 @@ class Site():
         if args.store_doclist:
             self.store_doclist(args.key, args.run_file, args.docs_dir)
         if args.simulate_clicks:
-            self.simulate_clicks(args.key, args.qrel_file)
+            self.simulate_clicks(args.key, args.qrel_file, args.wait_min, args.wait_max)
 
     def store_queries(self, key, query_file):
         tree = et.parse(query_file)
@@ -216,7 +220,7 @@ class Site():
             ndcgs.append(self.evaluate_ranking(rankings[qid], labels[qid]))
         return mean(ndcgs)
 
-    def simulate_clicks(self, key, qrel_file):
+    def simulate_clicks(self, key, qrel_file, wait_min, wait_max):
         labels = self.get_labels(qrel_file)
         rankings = {}
         while True:
@@ -230,7 +234,7 @@ class Site():
             self.store_feedback(key, qid, sid, ranking, clicks)
             #except:
             #    print "ERROR, fall back to normal processing"
-            time.sleep(random.random())
+            time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
 if __name__ == '__main__':
     site = Site()
