@@ -88,6 +88,19 @@ def participant_verify(email):
     return redirect(url_for('participant.home'))
 
 
+@mod.route('/<email>/unverify')
+@requires_login
+def participant_unverify(email):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        return redirect(url_for('participant.home'))
+    participant = core.user.get_user_by_email(email)
+    core.user.unverify_user(participant["_id"])
+    flash('Participant is unverified.', 'alert-success')
+    return redirect(url_for('participant.home'))
+
+
+
 @mod.route('/<email>/form')
 @requires_login
 def participant_form(email):

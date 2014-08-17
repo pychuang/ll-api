@@ -35,7 +35,7 @@
       {% if user.is_admin %}
       <a href="/participant/{{ participant.email}}/delete"><span class="glyphicon glyphicon-remove"></span></a>      
       {% if participant.is_verified %}
-      <span class="glyphicon glyphicon-eye-open"></span>
+       <a href="/participant/{{ participant.email}}/unverify"><span class="glyphicon glyphicon-eye-open"></span></a>
       {% else %}
       <a href="/participant/{{ participant.email}}/verify"><span class="glyphicon glyphicon-eye-close"></span></a>      
       {% endif %}

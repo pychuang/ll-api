@@ -36,11 +36,17 @@
       <td>Creation</td>
       <td>{{ user.creation_time }}</td>
   	</tr>
-  	{% if user.is_site %}
     <tr>
-      <td>Type</td>
-      <td>Site</td>
+      <td>Verified</td>
+      <td>
+      {% if not user.is_verified %}
+      Please send the organizers a signed registration form.
+      {% else %}
+      Yes
+      {% endif %}
+      </td>
   	</tr>
+  	{% if user.is_site %}
     <tr>
       <td>Type</td>
       <td>Site</td>
