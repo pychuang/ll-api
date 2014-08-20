@@ -44,7 +44,8 @@ def before_request():
 def home():
     return render_template("base.html", user=g.user,
                        sites=core.user.get_sites(g.user["_id"]) if g.user else True,
-                       verified=g.user["is_verified"] if g.user else True)
+                       verified=g.user["is_verified"] if g.user else True,
+                       config=core.config.config)
 
 
 def requires_login(f):

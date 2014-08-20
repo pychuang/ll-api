@@ -28,7 +28,7 @@ mod = Blueprint('user', __name__, url_prefix='/user')
 @mod.route('/me/')
 @requires_login
 def home():
-    return render_template("user/profile.html", user=g.user)
+    return render_template("user/profile.html", user=g.user, config=core.config.config)
 
 
 @mod.route('/login/', methods=['GET', 'POST'])

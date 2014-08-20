@@ -99,12 +99,12 @@
     </div>
     <div id="content">
     {% block content %}    
-    <p>Welcome to the dashboard of the Living Labs Challenge.</p>
-
 	{% if not verified %}
 	<div class="alert alert-warning">
-    Your account has not yet been varified. Please send the agreement form to the organizers.
-    If you have to wait long before validation, please send the organizers an email.
+    Your account has not yet been varified. Please send the 
+    <a href="{{config.URL_REGISTRATION_FORM}}">agreement form</a> to the organizers.
+    If you already did that and if verification takes longer than a few hours, please do not 
+    hesitate to <a href="{{config.URL_WEB}}/about/">send the organizers a quick email</a>.
     </div>
 	{% else %}
 	{% if not sites %}
@@ -115,6 +115,7 @@
     </div>
 	{% endif %}	
 	{% endif %}
+    <p>Welcome to the dashboard of the Living Labs Challenge.</p>
     {% endblock %}
     </div>
  </div>
