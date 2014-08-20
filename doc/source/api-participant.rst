@@ -18,6 +18,10 @@ Our API is located at this location: http://living-labs.net:5000/api/.
 .. note:: Please be nice to our API and don't flood it with multiple cores 
 	constantly sending multiple requests. We will place a decent machine behind 
 	the API, but we might not be able to match yours.
+	To enforce this a little bit, we have rate limited the API to 300 calls 
+	per minute or 10 calls per second, whichever hits first. Please do let us 
+	know if this is causing you any problems.
+
 
 Query
 -----
