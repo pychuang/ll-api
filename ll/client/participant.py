@@ -39,7 +39,7 @@ class Participant():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Participant Client"
         parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host', default='127.0.0.1',
+        parser.add_argument('--host', dest='host', default='http://127.0.0.1',
                         help='Host to listen on.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
                         help='Port to listen on.')
@@ -137,13 +137,10 @@ class Participant():
             time.sleep(random.random())
 
     def store_run(self, key, run_file):
-        queries = self.get_queries(key)
         runs = {}
         current_qid = None
         for line in open(run_file, "r"):
             qid, _, docid, _, _, _ = line.split()
-            if qid not in queries["queries"]:
-                raise Exception("This queries is not known by the API: %s." % qid)
             if current_qid is None or current_qid != qid:
                 runs[qid] = {"doclist": []}
             runs[qid]["doclist"].append({"docid": docid})
