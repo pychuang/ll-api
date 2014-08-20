@@ -56,6 +56,9 @@ class Participant():
                                                 "../../data/run.txt")),
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
+        parser.add_argument('--get_feedback', action="store_true",
+                            default=False,
+                            help="Get feedback, if any")
 
         args = parser.parse_args()
 
@@ -68,6 +71,9 @@ class Participant():
 
         if args.store_run:
             self.store_run(args.key, args.run_file)
+
+        if args.get_feedback:
+            self.get_feedbacks(args.key)
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
@@ -146,6 +152,16 @@ class Participant():
             runs[qid]["doclist"].append({"docid": docid})
             current_qid = qid
         self.store_runs(key, runs)
+
+    def get_feedbacks(self, key):
+        queries = self.get_queries(key)
+        for query in queries["queries"]:
+            qid = query["qid"]
+            feedbacks = self.get_feedback(key, qid)
+            for feedback in feedbacks['feedback']:
+                print qid, " ".join([doc["docid"]
+                                     for doc in feedback["doclist"]
+                                     if doc["clicked"]])
 
 if __name__ == '__main__':
     participant = Participant()
