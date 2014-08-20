@@ -19,9 +19,9 @@
    {% endblock %}
    {% block content %}
 	{% if sites %}
-    These are the sites you have signed up to. You will need to individually
-    <a href="{{ url_for('user.sites') }}">sign up</a> for each site to obtain 
-    their data.
+    <p>These are the sites you have signed up to. You will need to 
+    <a href="{{ url_for('user.sites') }}">sign up</a> for each site individually
+    to obtain their data.</p>
     <table class="table table-striped table-hover ">
     <thead>
     <tr>

@@ -73,7 +73,7 @@
 	    </a>
 	    <ul class="dropdown-menu">
 	      <li class="{% if request.path.startswith("/user/me") %}active{% endif %}"><a href="/user/me">Profile</a></li>
-	      <li class="{% if request.path.startswith("/user/sites") %}active{% endif %}"><a href="/user/sites/">Sites</a></li>
+	      <li class="{% if request.path.startswith("/user/sites") %}active{% endif %}"><a href="/user/sites/">Site Agreements</a></li>
 	      <li class="divider"></li>
 	      <li><a href="/user/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 	    </ul>
@@ -99,7 +99,14 @@
     </div>
     <div id="content">
     {% block content %}    
-    Welcome to the dashboard of the Living Labs Challenge.   
+    <p>Welcome to the dashboard of the Living Labs Challenge.</p>
+	{% if not sites %}
+	<div class="alert alert-warning">
+    You have not yet signed up for any sites. You will need to individually
+    <a href="{{ url_for('user.sites') }}">sign up</a> for each site to obtain 
+    their data.
+    </div>
+	{% endif %}
     {% endblock %}
     </div>
  </div>

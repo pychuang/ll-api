@@ -42,7 +42,8 @@ def before_request():
 
 @app.route('/')
 def home():
-    return render_template("base.html", user=g.user)
+    return render_template("base.html", user=g.user,
+                           sites=core.user.get_sites(g.user["_id"]) if g.user else True)
 
 
 def requires_login(f):

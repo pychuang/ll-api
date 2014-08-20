@@ -46,7 +46,7 @@ def login():
             # it's a safe place to store the user id
             session['key'] = user["_id"]
             flash('Welcome %s' % user["teamname"], 'alert-success')
-            return redirect(url_for('user.home'))
+            return redirect(url_for('home'))
         flash('Wrong email or password', 'alert-info')
     return render_template("user/login.html", form=form, user=g.user)
 
@@ -110,7 +110,7 @@ def sites():
         sites = [k for k in form.data if form.data[k]]
         core.user.set_sites(g.user["_id"], sites)
         flash('Agreements to site terms have been saved.', 'alert-success')
-        return redirect(url_for('user.sites'))
+        return redirect(url_for('site.home'))
     return render_template("user/sites.html", form=form, user=g.user)
 
 
