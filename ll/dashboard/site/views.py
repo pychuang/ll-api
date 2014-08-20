@@ -23,7 +23,8 @@ mod = Blueprint('site', __name__, url_prefix='/site')
 @mod.route('/')
 @requires_login
 def home():
-    sites = core.site.get_sites()
+    sites = [s for s in core.site.get_sites()
+             if s["_id"] in core.user.get_sites(g.user["_id"])]
     return render_template("site/sites.html", user=g.user, sites=sites)
 
 
