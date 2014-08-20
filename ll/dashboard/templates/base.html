@@ -100,12 +100,20 @@
     <div id="content">
     {% block content %}    
     <p>Welcome to the dashboard of the Living Labs Challenge.</p>
+
+	{% if not verified %}
+	<div class="alert alert-warning">
+    Your account has not yet been varified. Please send the agreement form to the organizers.
+    If you have to wait long before validation, please send the organizers an email.
+    </div>
+	{% else %}
 	{% if not sites %}
 	<div class="alert alert-warning">
     You have not yet signed up for any sites. You will need to individually
     <a href="{{ url_for('user.sites') }}">sign up</a> for each site to obtain 
     their data.
     </div>
+	{% endif %}	
 	{% endif %}
     {% endblock %}
     </div>
