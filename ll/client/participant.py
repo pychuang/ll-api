@@ -59,6 +59,10 @@ class Participant():
         parser.add_argument('--get_feedback', action="store_true",
                             default=False,
                             help="Get feedback, if any")
+        parser.add_argument('--wait_min', type=int, default=1,
+                            help='Minimum simulation waiting time in seconds.')
+        parser.add_argument('--wait_max', type=int, default=10,
+                            help='Max simulation waiting time in seconds.')
 
         args = parser.parse_args()
 
@@ -67,7 +71,7 @@ class Participant():
         self.runid = 0
 
         if args.simulate_runs:
-            self.simulate_runs(args.key)
+            self.simulate_runs(args.key, args.wait_min, args.wait_max)
 
         if args.store_run:
             self.store_run(args.key, args.run_file)
@@ -128,7 +132,7 @@ class Participant():
         self.store_runs(key, runs)
         return runs
 
-    def simulate_runs(self, key):
+    def simulate_runs(self, key, wait_min, wait_max):
         queries = self.get_queries(key)
         runs = {}
         for query in queries["queries"]:
@@ -140,7 +144,7 @@ class Participant():
                 qid = query["qid"]
                 feedbacks[qid] = self.get_feedback(key, qid)
             runs = self.update_runs(key, runs, feedbacks)
-            time.sleep(random.random())
+            time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
     def store_run(self, key, run_file):
         runs = {}
