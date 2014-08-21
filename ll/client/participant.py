@@ -109,6 +109,7 @@ class Participant():
             run["runid"] = str(self.runid)
             url = "/".join([self.host, RUNENDPOINT, key, qid])
             r = requests.put(url, data=json.dumps(run), headers=HEADERS)
+            time.sleep(random.random())
             if r.status_code != requests.codes.ok:
                 print r.text
                 r.raise_for_status()
@@ -143,6 +144,7 @@ class Participant():
             for query in queries["queries"]:
                 qid = query["qid"]
                 feedbacks[qid] = self.get_feedback(key, qid)
+                time.sleep(random.random())
             runs = self.update_runs(key, runs, feedbacks)
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
