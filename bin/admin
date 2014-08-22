@@ -44,7 +44,7 @@ def user(args, parser):
                                      password=args.password)
         key = user["_id"]
         if args.site:
-            ll.core.site.set_site(key, args.short, args.name, args.url)
+            ll.core.site.set_site(key, args.short, args.name, args.url, args.terms)
             print "New SITEKEY: %s" % key
         else:
             print "New PARTICIPANTKEY: %s" % key
