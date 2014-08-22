@@ -73,7 +73,9 @@
 	    </a>
 	    <ul class="dropdown-menu">
 	      <li class="{% if request.path.startswith("/user/me") %}active{% endif %}"><a href="/user/me">Profile</a></li>
+	      {% if user.is_participant %}
 	      <li class="{% if request.path.startswith("/user/sites") %}active{% endif %}"><a href="/user/sites/">Site Agreements</a></li>
+	      {% endif %}
 	      <li class="divider"></li>
 	      <li><a href="/user/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 	    </ul>
@@ -99,7 +101,7 @@
     </div>
     <div id="content">
     {% block content %}    
-	{% if not verified %}
+	{% if not verified and user.is_participant %}
 	<div class="alert alert-warning">
     Your account has not yet been varified. Please send the 
     <a href="{{config.URL_REGISTRATION_FORM}}">agreement form</a> to the organizers.
@@ -107,7 +109,7 @@
     hesitate to <a href="{{config.URL_WEB}}/about/">send the organizers a quick email</a>.
     </div>
 	{% else %}
-	{% if not sites %}
+	{% if not sites and user.is_participant %}
 	<div class="alert alert-warning">
     You have not yet signed up for any sites. You will need to individually
     <a href="{{ url_for('user.sites') }}">sign up</a> for each site to obtain 

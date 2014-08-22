@@ -19,9 +19,13 @@
    {% endblock %}
    {% block content %}
 	{% if sites %}
-    <p>These are the sites you have signed up to. You will need to 
+	{% if user.is_participant %}
+    <p>These are the sites you have signed up for. You will need to 
     <a href="{{ url_for('user.sites') }}">sign up</a> for each site individually
     to obtain their data.</p>
+	<p>Clicking on the <span class="glyphicon glyphicon-circle-arrow-right"></span> will 
+	give more information such as queries, documents and some basic statistics.</p>
+	{% endif %}
     <table class="table table-striped table-hover ">
     <thead>
     <tr>
@@ -37,7 +41,7 @@
       <td>{{ site._id }}</td>
       <td>{{ site.name }}</td>
       <td>{{ site.url|urlize }}</td>
-      <td><a href="/site/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"> </span></a>
+      <td><a href="/site/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
       {% if user.is_admin %}
       <a href="/site/{{ site._id}}/delete"><span class="glyphicon glyphicon-remove"></span></a>      
       {% endif %}

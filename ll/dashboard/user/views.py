@@ -28,7 +28,8 @@ mod = Blueprint('user', __name__, url_prefix='/user')
 @mod.route('/me/')
 @requires_login
 def home():
-    return render_template("user/profile.html", user=g.user, config=core.config.config)
+    return render_template("user/profile.html", user=g.user,
+                           config=core.config.config)
 
 
 @mod.route('/login/', methods=['GET', 'POST'])
@@ -39,15 +40,18 @@ def login():
     form = LoginForm(request.form)
     # make sure data are valid, but doesn't validate password is right
     if form.validate_on_submit():
-        user = core.user.get_user_by_email(form.email.data)
+        try:
+            user = core.user.get_user_by_email(form.email.data)
+        except:
+            user = None
         # we use werzeug to validate user's password
         if user and check_password_hash(user["password"], form.password.data):
             # the session can't be modified as it's signed,
             # it's a safe place to store the user id
             session['key'] = user["_id"]
-            flash('Welcome %s' % user["teamname"], 'alert-success')
+            flash('Logged in %s' % user["teamname"], 'alert-success')
             return redirect(url_for('home'))
-        flash('Wrong email or password', 'alert-info')
+        flash('Wrong email or password', 'alert-warning')
     return render_template("user/login.html", form=form, user=g.user)
 
 
