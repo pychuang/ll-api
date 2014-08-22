@@ -82,6 +82,7 @@ class Participant():
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.get(url, headers=HEADERS)
+        time.sleep(random.random())
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
@@ -90,6 +91,7 @@ class Participant():
     def get_doclist(self, key, qid):
         url = "/".join([self.host, DOCLISTENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
+        time.sleep(random.random())
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
@@ -98,6 +100,7 @@ class Participant():
     def get_feedback(self, key, qid):
         url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
+        time.sleep(random.random())
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
