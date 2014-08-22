@@ -20,12 +20,16 @@ import datetime
 import site
 import user
 
+
 def get_ranking(site_id, site_qid):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
-    if query == None:
-        raise LookupError("Query not found: site_qid = '%s'. Only rankings for"
-                        "existing queries can be expected." % site_qid)
-    run = get_next_run(query["_id"])
+    if query is None:
+        raise LookupError("Query not found: site_qid = '%s'. Only rankings "
+                          "for existing queries can be expected." % site_qid)
+    if "runs" not in query or not query["runs"]:
+        raise LookupError("No runs available for query.")
+    runid = query["runs"][random.choice(query["runs"].keys())]
+    run = db.run.find_one({"runid": runid})
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
@@ -41,36 +45,21 @@ def get_ranking(site_id, site_qid):
     return run
 
 
-def get_next_run(qid):
-    runs = db.run.find({"qid": qid})
-    if not runs.count():
-        raise LookupError("No runs available for query.")
-    participants = set()
-    for run in runs:
-        participants.add(run["userid"])
-    participant = random.choice(list(participants))
-    return get_run(participant, qid)
-
-
-def get_run(key, qid):
-    return db.run.find_one({"qid": qid, "userid": key},
-                           sort=[('creation_time', pymongo.DESCENDING)])
-
-
 def add_run(key, qid, runid, doclist):
     q = db.query.find_one({"_id": qid})
     if not q:
         raise Exception("Query does not exist: qid = '%s'" % qid)
     sites = user.get_sites(key)
     if not q["site_id"] in sites:
-        raise Exception("First signup for site %s." % q["site_id"])
+        raise Exception("First sign up for site %s." % q["site_id"])
 
+    # TODO: compare to site doclist instead of just checking for existing 
+    # documents
     for doc in doclist:
         doc_found = db.doc.find_one({"_id": doc["docid"]})
         if not doc_found:
-            raise LookupError("Document not found: docid = '%s'. Add "
-                            "only submit runs with existing documents."
-                            % doc["docid"])
+            raise LookupError("Document not found: docid = '%s'. Only submit "
+                              "runs with existing documents." % doc["docid"])
         doc["site_docid"] = doc_found["site_docid"]
     run = {
         "userid": key,
@@ -81,4 +70,11 @@ def add_run(key, qid, runid, doclist):
         "creation_time": datetime.datetime.now(),
         }
     db.run.save(run)
+    if "runs" in q:
+        runs = q["runs"]
+    else:
+        runs = {}
+    runs[key] = runid
+    q["runs"] = runs
+    db.query.save(q)
     return run
