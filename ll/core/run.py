@@ -53,9 +53,12 @@ def add_run(key, qid, runid, doclist):
     if not q["site_id"] in sites:
         raise Exception("First sign up for site %s." % q["site_id"])
 
-    # TODO: compare to site doclist instead of just checking for existing 
-    # documents
+    qdoclist = q["doclist"]
     for doc in doclist:
+        if doc["docid"] not in qdoclist:
+            raise LookupError("Document not in doclist for this query. "
+                              "You may have to update the doclist. "
+                              "docid = '%s', qid = '%s'" % (doc["docid"], qid))
         doc_found = db.doc.find_one({"_id": doc["docid"]})
         if not doc_found:
             raise LookupError("Document not found: docid = '%s'. Only submit "
