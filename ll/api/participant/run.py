@@ -67,7 +67,7 @@ class Run(ApiResource):
         self.validate_participant(key)
         run = request.get_json(force=True)
         self.check_fields(run, ["doclist", "runid"])
-        self.trycall(core.run.add_run, key, qid, run["runid"], run["doclist"])
+        run = self.trycall(core.run.add_run, key, qid, run["runid"], run["doclist"])
         return marshal(run, run_fields)
 
 api.add_resource(Run, '/api/participant/run/<key>/<qid>',

@@ -29,7 +29,8 @@ def get_ranking(site_id, site_qid):
     if "runs" not in query or not query["runs"]:
         raise LookupError("No runs available for query.")
     runid = query["runs"][random.choice(query["runs"].keys())]
-    run = db.run.find_one({"runid": runid})
+    run = db.run.find_one({"runid": runid,
+                           "site_qid": site_qid})
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
@@ -50,15 +51,19 @@ def add_run(key, qid, runid, doclist):
     if not q:
         raise Exception("Query does not exist: qid = '%s'" % qid)
     sites = user.get_sites(key)
-    if not q["site_id"] in sites:
+    if q["site_id"] not in sites:
         raise Exception("First sign up for site %s." % q["site_id"])
+    existingrun = db.run.find_one({"runid": runid})
+    if existingrun:
+        raise Exception("Run with this runid for this query already exists. "
+                        "runid = '%s', qid = '%s'" % (runid, qid))
 
-    #qdoclist = [d["doc_id"] for d in q["doclist"]]
+    qdoclist = q["doclist"]
     for doc in doclist:
-        #if doc["docid"] not in qdoclist:
-        #    raise LookupError("Document not in doclist for this query. "
-        #                      "You may have to update the doclist. "
-        #                      "docid = '%s', qid = '%s'" % (doc["docid"], qid))
+        if doc["docid"] not in qdoclist:
+            raise LookupError("Document not in doclist for this query. "
+                              "You may have to update the doclist. "
+                              "docid = '%s', qid = '%s'" % (doc["docid"], qid))
         doc_found = db.doc.find_one({"_id": doc["docid"]})
         if not doc_found:
             raise LookupError("Document not found: docid = '%s'. Only submit "

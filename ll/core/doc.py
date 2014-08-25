@@ -21,7 +21,7 @@ import user
 
 def add_doclist(site_id, site_qid, doclist):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
-    if query == None:
+    if query is None:
         raise LookupError("Query not found: site_qid = '%s'. Add queries "
                           "before adding a doclist." % site_qid)
     store_doclist = []
