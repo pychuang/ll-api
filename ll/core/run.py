@@ -58,12 +58,12 @@ def add_run(key, qid, runid, doclist):
     #    raise Exception("Run with this runid for this query already exists. "
     #                    "runid = '%s', qid = '%s'" % (runid, qid))
 
-    qdoclist = q["doclist"]
+    #qdoclist = q["doclist"]
     for doc in doclist:
-        if doc["docid"] not in qdoclist:
-            raise LookupError("Document not in doclist for this query. "
-                              "You may have to update the doclist. "
-                              "docid = '%s', qid = '%s'" % (doc["docid"], qid))
+        #if doc["docid"] not in qdoclist:
+        #    raise LookupError("Document not in doclist for this query. "
+        #                      "You may have to update the doclist. "
+        #                      "docid = '%s', qid = '%s'" % (doc["docid"], qid))
         doc_found = db.doc.find_one({"_id": doc["docid"]})
         if not doc_found:
             raise LookupError("Document not found: docid = '%s'. Only submit "
