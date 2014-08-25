@@ -49,13 +49,13 @@ def get_ranking(site_id, site_qid):
 def add_run(key, qid, runid, doclist):
     q = db.query.find_one({"_id": qid})
     if not q:
-        raise Exception("Query does not exist: qid = '%s'" % qid)
+        raise LookupError("Query does not exist: qid = '%s'" % qid)
     sites = user.get_sites(key)
     if q["site_id"] not in sites:
-        raise Exception("First sign up for site %s." % q["site_id"])
-    existingrun = db.run.find_one({"runid": runid})
-    if existingrun:
-        raise Exception("Run with this runid for this query already exists. "
+        raise LookupError("First sign up for site %s." % q["site_id"])
+    #existingrun = db.run.find_ond({"runid": runid, "qid": qid})
+    #if existingrun:
+    #    raise Exception("Run with this runid for this query already exists. "
                         "runid = '%s', qid = '%s'" % (runid, qid))
 
     qdoclist = q["doclist"]
@@ -77,6 +77,7 @@ def add_run(key, qid, runid, doclist):
         "doclist": doclist,
         "creation_time": datetime.datetime.now(),
         }
+    db.run.remove({"runid": runid, "qid": qid})
     db.run.save(run)
     if "runs" in q:
         runs = q["runs"]
