@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import traceback
 from flask.ext.restful import Resource, abort, fields
 from .. import core
 
@@ -36,11 +37,17 @@ class ApiResource(Resource):
         try:
             return function(*args, **kwargs)
         except ValueError, e:
-            abort(409, message=str(e).strip() + " See %s." % DOCUMENTATION)
+            tb = traceback.format_exc()
+            abort(409, message=str(e).strip() + ". See %s." % DOCUMENTATION,
+                  traceback=tb)
         except LookupError, e:
-            abort(404, message=str(e).strip() + " See %s." % DOCUMENTATION)
+            tb = traceback.format_exc()
+            abort(404, message=str(e).strip() + ". See %s." % DOCUMENTATION,
+                  traceback=tb)
         except Exception, e:
-            abort(400, message=str(e).strip() + " See %s." % DOCUMENTATION)
+            tb = traceback.format_exc()
+            abort(400, message=str(e).strip() + ". See %s." % DOCUMENTATION,
+                  traceback=tb)
 
     def get_site_id(self, key):
         user = self.trycall(core.user.get_user, key)
