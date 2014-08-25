@@ -53,7 +53,7 @@ def add_run(key, qid, runid, doclist):
     if not q["site_id"] in sites:
         raise Exception("First sign up for site %s." % q["site_id"])
 
-    qdoclist = q["doclist"]
+    qdoclist = [d["doc_id"] for d in q["doclist"]]
     for doc in doclist:
         if doc["docid"] not in qdoclist:
             raise LookupError("Document not in doclist for this query. "
