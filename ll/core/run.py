@@ -56,7 +56,7 @@ def add_run(key, qid, runid, doclist):
     #existingrun = db.run.find_ond({"runid": runid, "qid": qid})
     #if existingrun:
     #    raise Exception("Run with this runid for this query already exists. "
-                        "runid = '%s', qid = '%s'" % (runid, qid))
+    #                    "runid = '%s', qid = '%s'" % (runid, qid))
 
     qdoclist = q["doclist"]
     for doc in doclist:
