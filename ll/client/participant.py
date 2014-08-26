@@ -124,7 +124,7 @@ class Participant():
                                for doc in runs[qid]['doclist']])
                 for feedback in feedbacks[qid]['feedback']:
                     for doc in feedback["doclist"]:
-                        if doc["clicked"]:
+                        if doc["clicked"] and doc["docid"] in clicks:
                             clicks[doc["docid"]] += 1
                 runs[qid]['doclist'] = [{'docid': docid}
                                         for docid, _ in
@@ -146,6 +146,7 @@ class Participant():
             feedbacks = {}
             for query in queries["queries"]:
                 qid = query["qid"]
+                # TODO: update doclist
                 feedbacks[qid] = self.get_feedback(key, qid)
                 time.sleep(random.random())
             runs = self.update_runs(key, runs, feedbacks)
