@@ -28,9 +28,10 @@ def get_ranking(site_id, site_qid):
                           "for existing queries can be expected." % site_qid)
     if "runs" not in query or not query["runs"]:
         raise LookupError("No runs available for query.")
-    runid = query["runs"][random.choice(query["runs"].keys())]
+    userid, runid = random.choice(query["runs"].items())
     run = db.run.find_one({"runid": runid,
-                           "site_qid": site_qid})
+                           "site_qid": site_qid,
+                           "userid": userid})
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
@@ -77,7 +78,9 @@ def add_run(key, qid, runid, doclist):
         "doclist": doclist,
         "creation_time": datetime.datetime.now(),
         }
-    db.run.remove({"runid": runid, "qid": qid})
+    db.run.remove({"runid": runid,
+                   "qid": qid,
+                   "userid": key})
     db.run.save(run)
     if "runs" in q:
         runs = q["runs"]
