@@ -13,10 +13,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Flask
+import time
+from flask import Flask, g
 from flask.ext.restful import Api, abort
 from flask_limiter import Limiter
-
 
 from .. import core
 from apiutils import ApiResource, ContentField
@@ -24,3 +24,15 @@ from apiutils import ApiResource, ContentField
 app = Flask(__name__)
 limiter = Limiter(app, global_limits=["300/minute", "10/second"])
 api = Api(app, catch_all_404s=True)
+
+
+@app.before_request
+def before_request():
+    g.start = time.time()
+
+
+@app.after_request
+def after_request(response):
+    diff = int((time.time() - g.start) * 1000)
+    response.headers.add('X-Execution-Time', str(diff))
+    return response
