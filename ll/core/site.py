@@ -48,27 +48,21 @@ def get_sites():
 
 
 def next_qid(site_id):
-    #TODO: make these thread save
-    site = get_site(site_id)
-    qid = site["qid_counter"]
-    site["qid_counter"] += 1
-    db.site.save(site)
-    return "%s-q%d" % (site["_id"], qid)
+    ret = db.site.find_and_modify({"_id": site_id},
+                                  update={"$inc": {"qid_counter": 1}},
+                                  new=True)
+    return "%s-q%d" % (site_id, ret["qid_counter"])
 
 
 def next_docid(site_id):
-    #TODO: make these thread save
-    site = get_site(site_id)
-    docid = site["docid_counter"]
-    site["docid_counter"] += 1
-    db.site.save(site)
-    return "%s-d%d" % (site["_id"], docid)
+    ret = db.site.find_and_modify({"_id": site_id},
+                                  update={"$inc": {"docid_counter": 1}},
+                                  new=True)
+    return "%s-d%d" % (site_id, ret["docid_counter"])
 
 
 def next_sid(site_id):
-    #TODO: make these thread save
-    site = get_site(site_id)
-    sid = site["sid_counter"]
-    site["sid_counter"] += 1
-    db.site.save(site)
-    return "%s-s%d" % (site["_id"], sid)
+    ret = db.site.find_and_modify({"_id": site_id},
+                                  update={"$inc": {"sid_counter": 1}},
+                                  new=True)
+    return "%s-s%d" % (site_id, ret["sid_counter"])
