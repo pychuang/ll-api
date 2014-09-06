@@ -81,7 +81,9 @@ class Doc(ApiResource):
         :status 409: document can not be deleted, it still appears in a doclist
             for a query (the queryid will be returned).
         """
-        pass
+        site_id = self.get_site_id(key)
+        deleted = self.trycall(core.doc.delete_doc, site_id, site_docid)
+        return {"deleted": deleted}
 
     def put(self, key, site_docid):
         """

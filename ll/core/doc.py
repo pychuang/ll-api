@@ -29,8 +29,8 @@ def add_doclist(site_id, site_qid, doclist):
         doc_found = get_doc(site_id=site_id, site_docid=doc["site_docid"])
         if not doc_found:
             raise LookupError("Document not found: site_docid = '%s'. Add"
-                            "documents before adding a doclist."
-                            % doc["site_docid"])
+                              "documents before adding a doclist."
+                              % doc["site_docid"])
         if "relevance_signals" in doc:
             # szn extension: store relevance signals for this doclist item
             store_doclist.append({
@@ -77,6 +77,16 @@ def get_doclist(site_id=None, site_qid=None, qid=None, key=None):
     return doclist
 
 
+def delete_doc(site_id, site_docid):
+    existing_doc = db.doc.find_one({"site_id": site_id,
+                                    "site_docid": site_docid})
+    if existing_doc:
+        existing_doc["deleted"] = True
+        db.doc.save(existing_doc)
+        return True
+    return False
+
+
 def add_doc(site_id, site_docid, doc):
     existing_doc = db.doc.find_one({"site_id": site_id,
                                     "site_docid": site_docid})
@@ -84,18 +94,20 @@ def add_doc(site_id, site_docid, doc):
         for k in doc:
             existing_doc[k] = doc[k]
         existing_doc["creation_time"] = datetime.datetime.now()
+        existing_doc["deleted"] = False
         db.doc.save(existing_doc)
         return existing_doc
     doc["_id"] = site.next_docid(site_id)
     doc["site_id"] = site_id
     doc["site_docid"] = site_docid
     doc["creation_time"] = datetime.datetime.now()
+    doc["deleted"] = False
     db.doc.insert(doc)
     return doc
 
 
 def get_doc(site_id=None, site_docid=None, docid=None, key=None):
-    q = {}
+    q = {"deleted": {"$ne": True}}
     if key:
         sites = user.get_sites(key)
         if not sites:
