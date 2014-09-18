@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Living Labs Challenge'
+project = u'Living Labs API'
 copyright = u'2014, Living Labs'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -120,7 +120,7 @@ html_theme_options = {
     'navbar_site_name': 'Documentation',
     'source_link_position': 'footer',
     'navbar_links': [
-            ("Website", "http://living-labs.net/challenge/", True),
+            ("CLEF Lab", "http://living-labs.net/clef-lab/", True),
             ("Dashboard", "http://living-labs.net:5001/", True),
 #            ("About", "http://living-labs.net/about/", True),
 #            ("LL'13", "http://living-labs.net/ll13/", True),
@@ -224,7 +224,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'll-challenge.tex', u'Living Labs Challenge Documentation',
+  ('index', 'll-challenge.tex', u'Living Labs API Documentation',
    u'Living Labs', 'manual'),
 ]
 
@@ -254,7 +254,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'll-challenge', u'll-challenge Documentation',
+    ('index', 'll-challenge', u'Living Labs API Documentation',
      [u'Krisztian Balog, Liadh Kelly, Anne Schuth'], 1)
 ]
 
@@ -268,7 +268,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'll-challenge', u'll-challenge Documentation',
+  ('index', 'll-challenge', u'Living Labs API Documentation',
    u'Krisztian Balog, Liadh Kelly, Anne Schuth', 'll-challenge', 'One line description of project.',
    'Miscellaneous'),
 ]

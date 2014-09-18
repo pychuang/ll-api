@@ -3,9 +3,9 @@ Tutorial
 
 
 This tutorial describes how to install, run and develop with the Living Labs
-Challenge software. 
+API. 
 
-If all you want is to compete in the challenge, you do not necessarily need any
+If all you want is to participate in the Lab, you do not necessarily need any
 of the following. Instead you could just go ahead and implement your client
 that talks to our API at http://living-labs.net:5000/api/.
 However, the code we provide does include a simple baseline implementation 
@@ -17,7 +17,7 @@ In case you have any comments or questions, please do not
 hesitate to file an issue here: http://git.living-labs.net/ll-challenge/issues.
 Or, you can contact the main developer directly at anne.schuth@uva.nl.
 
-For more information on the challenge, see http://living-labs.net/challenge.
+For more information on the CLEF Lab, see http://living-labs.net/clef-lab/.
 Documentation (including this tutorial) can be found here:
 http://doc.living-labs.net/en/latest/
 
@@ -25,7 +25,7 @@ http://doc.living-labs.net/en/latest/
 Obtain source code
 ------------------
 
-You can clone the repository that contains all the Living Labs Challenge's code
+You can clone the repository that contains all the Living Labs API's code
 as follows:
 
 .. sourcecode:: bash
@@ -68,7 +68,7 @@ participants and sites. Example clients are in the repository in the
 In case you want to run your own version of the API (for testing purposes),
 you'll have to continue.
 
-You don't necessarily have to do that, our challenge API is running here:
+You don't necessarily have to do that, our API is running here:
 http://living-labs.net:5000/api/
 
 
