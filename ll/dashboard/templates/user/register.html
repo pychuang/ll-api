@@ -18,6 +18,7 @@
     	Register
     {% endblock %}
     {% block content %}
+     Please use the form below to register to the CLEF Living Lab.
       {% from "forms/macros.html" import render_field %}
       <form method="POST" action="." class="form">
         {{ form.csrf_token }}
