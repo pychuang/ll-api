@@ -28,7 +28,7 @@ def send_email(user, txt, subject):
     if not config["SEND_EMAIL"]:
         return False
     try:
-        msgtxt = "Hi %s,\n\n" % user["teamname"] 
+        msgtxt = "Hi %s,\n\n" % user["teamname"]
         msgtxt += txt
         msgtxt += "\n\n"
         msgtxt += "Some relevant urls:\n"
@@ -56,6 +56,24 @@ def send_email(user, txt, subject):
         raise Exception("Error sending email, either disable or setup properly.")
 
 
+def notify_organizers(teamname):
+    if not config["SEND_EMAIL"]:
+        return False
+    try:
+        msgtxt = "%s just registered." % teamname
+        msg = MIMEText(msgtxt)
+        msg['subject'] = "[Living Labs] New Registration"
+        email_from = config["EMAIL_FROM"]
+        email_to = config["EMAIL_ORGANIZERS"]
+        msg['From'] = email_from
+        msg['To'] = email_to
+        s = smtplib.SMTP('localhost')
+        s.sendmail(email_from, email_to, msg.as_string())
+        s.quit()
+    except:
+        raise Exception("Error sending email, either disable or setup properly.")
+
+
 def send_password_email(user, password, subject="Password Reset"):
     txt = "Your password has been reset.\n"
     txt += "These are now your Living Labs account details:\n"
@@ -67,7 +85,9 @@ def send_password_email(user, password, subject="Password Reset"):
 
 
 def send_registration_email(user, password, subject="New Account"):
-    txt = "These are your Living Labs account details:\n"
+    txt = "Thank you for registering to the CLEF Living Lab.\n"
+    txt += "\n\n"
+    txt += "These are your Living Labs account details:\n"
     txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
@@ -80,19 +100,20 @@ def send_registration_email(user, password, subject="New Account"):
 
 def send_verification_email(user):
     txt = "We received and verified your signed registration form, thank you.\n"
-    txt += "You are now ready to participate in the challenge.\n"
+    txt += "You are now ready to participate in the CLEF Living Lab.\n"
     txt += "Please visit the dashboard to sign up for individual sites: %s/user/sites/\n" % config["URL_DASHBOARD"]
     txt += "\n\n"
-    txt += "These are your Living Labs account details:\n"
+    txt += "These are your CLEF Living Labs account details:\n"
     txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
+    notify_organizers(user["teamname"])
     return send_email(user, txt, "Verified")
 
 
 def send_form_email(user):
-    txt = "You've registered for the Living Labs Challenge. "
-    txt += "We are almost ready to start the challenge. "
+    txt = "You've registered for the CLEF Living Lab. "
+    txt += "We are almost ready to start the lab. "
     txt += "But before we can do so, we need you to fill out, scan, and email the application form at "
     txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
     return send_email(user, txt, "Please Sign the Application Form")
