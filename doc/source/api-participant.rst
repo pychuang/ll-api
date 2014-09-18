@@ -1,7 +1,7 @@
 API Reference for Participants
 ==============================
 
-We provide a basic API for participants of the Living Labs Challenge to perform
+We provide a basic API for participants of the CLEF Living Labs  to perform
 several actions such as obtaining a key, queries, documents and feedback. The
 API can also be used to update runs. Everything is implemented as HTTP request,
 and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX

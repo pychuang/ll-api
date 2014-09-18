@@ -3,9 +3,9 @@ API Reference for Sites
 
 We provide a basic API for sites. We use the term 'sites' to refer to search
 engines that dedicate a (small) part of their traffic to evaluating runs from
-participants of the Living Labs Challenge. This API can be used by sites to
-update the query set, the documents and to retreive rankings. For each
-retreived ranking, the site is expected to provide feedback. Everything is
+participants of the CLEF Living Labs. This API can be used by sites to
+update the query set, the documents and to retrieve rankings. For each
+retrieved ranking, the site is expected to provide feedback. Everything is
 implemented as HTTP request, and we use the request types GET, HEAD and PUT. We
 try to throw appropriate 4XX errors where possible.
 
@@ -14,7 +14,7 @@ try to throw appropriate 4XX errors where possible.
 
 Query
 -----
-From each site, it expected to receiv a static sample of (N=100) queries at the
+From each site, it expected to receive a static sample of (N=100) queries at the
 beginning of the challenge. The sample is static in the sense that it will not
 change during the challenge. It is important that the sample of queries is
 expected to be frequent enough for the duration of the challence. The least
