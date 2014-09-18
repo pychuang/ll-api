@@ -92,7 +92,7 @@ First start a MongoDB daemon as follows:
 
 .. sourcecode:: bash
 
-    $ mongod --config ll-challenge/config/mongodb.conf
+    $ mongod --config ll-api/config/mongodb.conf
 
 Then, create two users (replace ADMINSECRET and USERSECRET with actual password
 and remember those):
