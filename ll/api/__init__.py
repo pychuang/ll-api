@@ -33,6 +33,9 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-    diff = int((time.time() - g.start) * 1000)
-    response.headers.add('X-Execution-Time', str(diff))
+    try:
+        diff = int((time.time() - g.start) * 1000)
+        response.headers.add('X-Execution-Time', str(diff))
+    except:
+        pass
     return response
