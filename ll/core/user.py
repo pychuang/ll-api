@@ -107,7 +107,6 @@ def send_verification_email(user):
     txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
-    notify_organizers(user["teamname"])
     return send_email(user, txt, "Verified")
 
 
