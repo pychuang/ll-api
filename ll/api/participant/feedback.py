@@ -33,7 +33,12 @@ feedback_fields = {
 class Feedback(ApiResource):
     def get(self, key, qid):
         """
-        Obtain feedback for a query.
+        Obtain feedback for a query. Only feedback for runs you submitted
+        will be returned. So, first submit a run, wait a while to give a user
+        the change to enter the query for which you submitted the run.
+        Then, wait even longer to given the site the change to feed the click
+        back into our API. As soon as all this happens, the feedback will
+        become availaible here.
 
         :param key: your API key
         :param sid: the query identifier
