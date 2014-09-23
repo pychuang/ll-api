@@ -90,3 +90,17 @@ def add_run(key, qid, runid, doclist):
     q["runs"] = runs
     db.query.save(q)
     return run
+
+
+def get_run(key, qid):
+    q = db.query.find_one({"_id": qid})
+    if not q:
+        raise LookupError("Query does not exist: qid = '%s'" % qid)
+
+    if "runs" not in q or key not in q["runs"]:
+        raise LookupError("No run for this query: qid = '%s'" % qid)
+
+    run = db.run.find_one({"userid": key,
+                           "qid": qid,
+                           "runid": q["runs"][key]})
+    return run
