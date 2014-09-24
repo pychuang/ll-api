@@ -26,7 +26,8 @@ doc_fields = {
 feedback_fields = {
     "qid": fields.String(),
     "modified_time": fields.DateTime(),
-    "doclist": fields.Nested(doc_fields)
+    "doclist": fields.Nested(doc_fields),
+    "runid": fields.String()
 }
 
 
@@ -38,7 +39,10 @@ class Feedback(ApiResource):
         the change to enter the query for which you submitted the run.
         Then, wait even longer to given the site the change to feed the click
         back into our API. As soon as all this happens, the feedback will
-        become availaible here.
+        become available here.
+
+        Note that you may receive multiple feedbacks for a single query as
+        it may have been shown to a user more than once.
 
         :param key: your API key
         :param sid: the query identifier
@@ -51,6 +55,7 @@ class Feedback(ApiResource):
                 {
                     "feedback": [
                         {"qid": "S-q1",
+                         "runid": "baseline",
                          "modified_time": "Sun, 27 Apr 2014 13:46:00 -0000",
                          "doclist": [
                              {"docid": "S-d1"
@@ -63,8 +68,9 @@ class Feedback(ApiResource):
         """
 
         self.validate_participant(key)
-        feedbacks = self.trycall(core.feedback.get_feedback, userid=key,
-                                qid=qid)
+        feedbacks = self.trycall(core.feedback.get_feedback,
+                                 userid=key,
+                                 qid=qid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
 
