@@ -1,16 +1,21 @@
+.. _api-sites:
+
 API Reference for Sites
 =======================
 
 We provide a basic API for sites. We use the term 'sites' to refer to search
 engines that dedicate a (small) part of their traffic to evaluating runs from
-participants of the CLEF Living Labs. This API can be used by sites to
-update the query set, the documents and to retrieve rankings. For each
-retrieved ranking, the site is expected to provide feedback. Everything is
-implemented as HTTP request, and we use the request types GET, HEAD and PUT. We
-try to throw appropriate 4XX errors where possible.
+participants of the CLEF Living Labs. 
+This API can be used by sites to update the query set, the documents and to 
+retrieve  rankings. For each retrieved ranking, the site is expected to provide
+feedback. Everything is implemented as HTTP request, and we use the request
+types GET, HEAD and PUT. We try to throw appropriate 4XX errors where possible.
 
-.. toctree::
-    :maxdepth: 2
+
+.. note:: We have rate limited the API to 300 calls per minute or 10 calls per 
+	second, whichever hits first. Please do let us know if this is causing you
+	any problems.
+
 
 Query
 -----
@@ -29,6 +34,20 @@ queries before the challenge starts.
    :undoc-static:
    :include-empty-docstring:
 
+Doclist
+-------
+Per query, the challenge will provide a preselected doclist of (M=100) documents
+to the participants. The selection criteria are up to the site.
+
+As documents to be considered for a query may change over the course of the
+challenge, the API provides an endpoint at :http:get:`/api/site/doclist`
+to keep the doclist up to date.
+
+.. autoflask:: ll.api.site:app
+   :endpoints: site/doclist
+   :undoc-static:
+   :include-empty-docstring:
+
 Doc
 ---
 The endpoint at :http:get:`/api/site/doc` can be used to update content of
@@ -36,20 +55,6 @@ individual documents.
 
 .. autoflask:: ll.api.site:app
    :endpoints: site/doc
-   :undoc-static:
-   :include-empty-docstring:
-
-Doclist
--------
-Per query, the challenge will provide a preselected doclist of (M=100) documents
-to the participants. The selection criteria are up to the site.
-
-As documents to be considered for a query may change over the course of the
-challenge, the challenge provide an endpoint at :http:get:`/api/site/doclist`
-to keep the doclist up to date.
-
-.. autoflask:: ll.api.site:app
-   :endpoints: site/doclist
    :undoc-static:
    :include-empty-docstring:
 

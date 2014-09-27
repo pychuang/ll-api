@@ -1,3 +1,5 @@
+.. _api-participants:
+
 API Reference for Participants
 ==============================
 
@@ -15,25 +17,15 @@ http://living-labs.net:5001/
 
 Our API is located at this location: http://living-labs.net:5000/api/.
 
-.. note:: Please be nice to our API and don't flood it with multiple cores 
-	constantly sending multiple requests. We will place a decent machine behind 
-	the API, but we might not be able to match yours.
-	To enforce this a little bit, we have rate limited the API to 300 calls 
-	per minute or 10 calls per second, whichever hits first. Please do let us 
-	know if this is causing you any problems.
+.. note:: We have rate limited the API to 300 calls per minute or 10 calls per 
+	second, whichever hits first. Please do let us know if this is causing you
+	any problems.
 
 
 Query
 -----
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/query
-   :undoc-static:
-   :include-empty-docstring:
-
-Doc
----
-.. autoflask:: ll.api.participant:app
-   :endpoints: participant/doc
    :undoc-static:
    :include-empty-docstring:
 
@@ -46,10 +38,10 @@ Doclist
    :include-empty-docstring:
 
 
-Feedback
---------
+Doc
+---
 .. autoflask:: ll.api.participant:app
-   :endpoints: participant/feedback
+   :endpoints: participant/doc
    :undoc-static:
    :include-empty-docstring:
 
@@ -61,3 +53,9 @@ Run
    :undoc-static:
    :include-empty-docstring:
 
+Feedback
+--------
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/feedback
+   :undoc-static:
+   :include-empty-docstring:

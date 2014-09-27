@@ -3,9 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Living Labs API documentation
-=====================================
-
+Living Labs Documentation
+=========================
 
 .. image:: http://living-labs.net/wp-content/uploads/2014/05/livinglab.logo_.textunder.square200.png
    :width: 200 px
@@ -13,9 +12,9 @@ Living Labs API documentation
    :target: http://living-labs.net/
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+   :numbered:
    
-   api-participant
-   api-site
-   tutorial
-
+   guide-participant
+   api
+   other

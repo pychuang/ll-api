@@ -255,7 +255,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'll-challenge', u'Living Labs API Documentation',
-     [u'Krisztian Balog, Liadh Kelly, Anne Schuth'], 1)
+     [u'Living Labs'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -269,7 +269,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'll-challenge', u'Living Labs API Documentation',
-   u'Krisztian Balog, Liadh Kelly, Anne Schuth', 'll-challenge', 'One line description of project.',
+   u'Living Labs', 'll-challenge', 'One line description of project.',
    'Miscellaneous'),
 ]
 
