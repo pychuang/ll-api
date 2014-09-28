@@ -3,6 +3,9 @@
 API Reference for Participants
 ==============================
 
+.. note:: Please refer the :ref:`guide` before reading this.
+
+
 We provide a basic API for participants of the CLEF Living Labs  to perform
 several actions such as obtaining a key, queries, documents and feedback. The
 API can also be used to update runs. Everything is implemented as HTTP request,
