@@ -120,8 +120,7 @@ class Participant():
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
             if qid in feedbacks and feedbacks[qid]['feedback']:
-                clicks = dict([(doc['docid'], 0)
-                               for doc in runs[qid]['doclist']])
+                clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
                 for feedback in feedbacks[qid]['feedback']:
                     for doc in feedback["doclist"]:
                         if doc["clicked"] and doc["docid"] in clicks:
