@@ -22,7 +22,7 @@ from .. import core
 from apiutils import ApiResource, ContentField
 
 app = Flask(__name__)
-limiter = Limiter(app, global_limits=["300/minute", "100/second"])
+limiter = Limiter(app, global_limits=["300/minute", "10/second"])
 api = Api(app, catch_all_404s=True)
 
 

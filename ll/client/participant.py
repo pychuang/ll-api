@@ -142,21 +142,11 @@ class Participant():
                     for doc in feedback["doclist"]:
                         if doc["clicked"] and doc["docid"] in clicks:
                             clicks[doc["docid"]] += 1
-                doclist = [{'docid': docid}
-                           for docid, _ in
-                           sorted(clicks.items(),
-                                  key=lambda x: x[1],
-                                  reverse=True)]
-                if random.random() <= 0.05:
-                    print "Exploration!"
-                    selectIndex = int(random.random()*len(doclist))
-                    placeIndex = int(random.random()*min(5,len(doclist)))
-                    selection = doclist[selectIndex]
-                    doclist = doclist[:selectIndex] + doclist[selectIndex+1:]
-                    doclist = doclist[:placeIndex] + [selection] + doclist[placeIndex:]
-                    print "Placed object", selectIndex, "at",placeIndex
-                runs[qid]['doclist'] = doclist
-                                               
+                runs[qid]['doclist'] = [{'docid': docid}
+                                        for docid, _ in
+                                        sorted(clicks.items(),
+                                               key=lambda x: x[1],
+                                               reverse=True)]
                 print clicks
         self.runid += 1
         self.store_runs(key, runs)
