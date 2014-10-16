@@ -59,6 +59,9 @@ class Participant():
         parser.add_argument('--get_feedback', action="store_true",
                             default=False,
                             help="Get feedback, if any")
+        parser.add_argument('--reset_feedback', action="store_true",
+                            default=False,
+                            help="Get feedback, if any")
         parser.add_argument('--wait_min', type=int, default=1,
                             help='Minimum simulation waiting time in seconds.')
         parser.add_argument('--wait_max', type=int, default=10,
@@ -78,6 +81,9 @@ class Participant():
 
         if args.get_feedback:
             self.get_feedbacks(args.key)
+
+        if args.reset_feedback:
+            self.reset_feedback(args.key)
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
@@ -106,6 +112,17 @@ class Participant():
             r.raise_for_status()
         return r.json()
 
+    def reset_feedback(self, key):
+        queries = self.get_queries(key)
+        for query in queries["queries"]:
+            qid = query["qid"]
+            url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
+            r = requests.delete(url, headers=HEADERS)
+            time.sleep(random.random())
+            if r.status_code != requests.codes.ok:
+                print r.text
+                r.raise_for_status()
+
     def store_runs(self, key, runs):
         for qid in runs:
             run = runs[qid]
@@ -120,8 +137,7 @@ class Participant():
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
             if qid in feedbacks and feedbacks[qid]['feedback']:
-                clicks = dict([(doc['docid'], 0)
-                               for doc in runs[qid]['doclist']])
+                clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
                 for feedback in feedbacks[qid]['feedback']:
                     for doc in feedback["doclist"]:
                         if doc["clicked"] and doc["docid"] in clicks:
