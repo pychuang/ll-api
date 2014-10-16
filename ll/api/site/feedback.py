@@ -129,8 +129,5 @@ class Feedback(ApiResource):
 
         return feedback
 
-    def delete(self, key, sid):
-        self.trycall(core.feedback.reset_feedback, user_id=key, sid=sid)
-
 api.add_resource(Feedback, '/api/site/feedback/<key>/<sid>',
                  endpoint="site/feedback")
