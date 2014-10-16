@@ -38,7 +38,7 @@ def add_feedback(site_id, sid, feedback):
     db.feedback.save(existing_feedback)
     return feedback
 
-def reset_feedback(userid, site_id=None, sid=None, qid=None):
+def reset_feedback(userid=None, site_id=None, sid=None, qid=None):
     q = {}
     if userid:
         q["userid"] = userid

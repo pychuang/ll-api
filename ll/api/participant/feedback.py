@@ -73,6 +73,14 @@ class Feedback(ApiResource):
                                  qid=qid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
+    def delete(self, key, qid):
+        """
+        resets feedback for a user and a query, by removing it from the database
+        """
+        self.validate_participant(key)
+        self.trycall(core.feedback.reset_feedback,
+                                 userid=key,
+                                 qid=qid)
 
 api.add_resource(Feedback, '/api/participant/feedback/<key>/<qid>',
                  endpoint="participant/feedback")
