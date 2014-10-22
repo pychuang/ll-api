@@ -73,14 +73,20 @@ class Feedback(ApiResource):
                                  qid=qid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
+
     def delete(self, key, qid):
         """
-        resets feedback for a user and a query, by removing it from the database
+        Remove feedback for a query. Only your own feedback will be removed.
+
+        :param key: your API key
+        :param sid: the query identifier
+        :status 403: invalid key
+        :status 404: query does not exist
+        :status 400: bad request
         """
         self.validate_participant(key)
         self.trycall(core.feedback.reset_feedback,
-                                 userid=key,
-                                 qid=qid)
+                     userid=key, qid=qid)
 
 api.add_resource(Feedback, '/api/participant/feedback/<key>/<qid>',
                  endpoint="participant/feedback")
