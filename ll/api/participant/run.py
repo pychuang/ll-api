@@ -34,7 +34,7 @@ run_fields = {
 class Run(ApiResource):
     def get(self, key, qid):
         """
-        Obtain the last submitted run for a specific query.
+        Obtain the last submitted run (ranking) for a specific query.
 
         :param key: your API key
         :param qid: the query identifier
@@ -64,6 +64,33 @@ class Run(ApiResource):
         return marshal(run, run_fields)
 
     def put(self, key, qid):
+        """
+        Submit a run (ranking) for a specific query.
+
+        :param key: your API key
+        :param qid: the query identifier
+        :status 200: valid key
+        :status 403: invalid key
+
+        :reqheader Content-Type: application/json
+        :content:
+            .. sourcecode:: javascript
+
+                {
+                    "qid": "U-q22",
+                    "runid": "82"
+                    "creation_time": "Wed, 04 Jun 2014 15:03:56 -0000",
+                    "doclist": [
+                        {
+                            "docid": "U-d4"
+                        },
+                        {
+                            "docid": "U-d2"
+                        }, ...
+                    ],
+                }
+
+        """
         self.validate_participant(key)
         run = request.get_json(force=True)
         self.check_fields(run, ["doclist", "runid"])
