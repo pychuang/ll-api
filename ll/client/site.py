@@ -50,10 +50,11 @@ class Site():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Site Client"
         parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host', default='http://127.0.0.1',
-                        help='Host to listen on.')
+        parser.add_argument('--host', dest='host',
+                            default='http://living-labs.net',
+                            help='Host to connect to.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
-                        help='Port to listen on.')
+                            help='Port to connect to.')
         parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
         parser.add_argument('-q', '--store_queries', action="store_true",
@@ -94,6 +95,8 @@ class Site():
                             '(default: %(default)s).')
         args = parser.parse_args()
         self.host = "%s:%s/api" % (args.host, args.port)
+        if not self.host.startswith("http://"):
+            self.host = "http://" + self.host
 
         if args.store_queries:
             self.store_queries(args.key, args.query_file)
@@ -165,6 +168,7 @@ class Site():
             self.store_doc(key, docid, site_docid, docdir)
             doclist["doclist"].append({"site_docid": site_docid})
             current_qid = qid
+            time.sleep(random.random())
         put_doclist(doclist, current_qid)
 
     def get_ranking(self, key, qid):
@@ -240,15 +244,15 @@ class Site():
         rankings = {}
         while True:
             qid = random.choice(labels.keys())
-            try:
-                sid, ranking = self.get_ranking(key, qid)
-                rankings[qid] = ranking
-                print "NDCG: %.3f" % self.evaluate(rankings, labels)
-                #TODO: once in a while, drop a document before return.
-                clicks = self.get_clicks(ranking, labels[qid])
-                self.store_feedback(key, qid, sid, ranking, clicks)
-            except:
-                print "ERROR"
+            #try:
+            sid, ranking = self.get_ranking(key, qid)
+            rankings[qid] = ranking
+            print "NDCG: %.3f" % self.evaluate(rankings, labels)
+            #TODO: once in a while, drop a document before return.
+            clicks = self.get_clicks(ranking, labels[qid])
+            self.store_feedback(key, qid, sid, ranking, clicks)
+            #except:
+            #    print "ERROR"
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
 if __name__ == '__main__':

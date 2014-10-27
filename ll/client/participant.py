@@ -43,7 +43,7 @@ class Participant():
                             default='http://living-labs.net',
                             help='Host to listen on.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
-                            help='Port to listen on.')
+                            help='Port to connect to.')
         parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
         parser.add_argument('-s', '--simulate_runs', action="store_true",
@@ -71,6 +71,8 @@ class Participant():
         args = parser.parse_args()
 
         self.host = "%s:%s/api" % (args.host, args.port)
+        if not self.host.startswith("http://"):
+            self.host = "http://" + self.host
 
         self.runid = 0
 
