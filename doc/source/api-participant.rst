@@ -29,9 +29,7 @@ Query
 -----
 From each site that a participant signed up for (see 
 http://living-labs.net:5001/user/sites/), a sample of (N=100) queries is made
-available. 
-The :http:get:`/api/participant/query` endpoint allows for downloading these
-queries.
+available. This endpoint allows for downloading these queries.
 
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/query
