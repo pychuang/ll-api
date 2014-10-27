@@ -35,7 +35,8 @@ def set_site(key, short, name, url, terms):
         "qid_counter": 0,
         "docid_counter": 0,
         "sid_counter": 0,
-        "enabled": False})
+        "enabled": False,
+        "is_robot": False})
     u["site_id"] = site
     db.user.save(u)
 
