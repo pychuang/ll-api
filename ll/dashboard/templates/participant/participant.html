@@ -31,10 +31,25 @@
       <td></td>
     </tr>
    	<tr>
+	  <td>Since</td>      
+	  <td>{{ participant.creation_time.strftime('%Y-%m-%d') }}</td>
+	  <td></td>
+	</tr>
+   	<tr>
+	  <td>Signed up for sites</td>      
+	  <td>{{ stats.sites|join(", ") }}</td>
+	  <td></td>
+	</tr>
+   	<tr>
 	  <td>#runs</td>      
 	  <td>{{ stats.run }}</td>
-	  <td><a href="/participant/{{ participant.email}}/run"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
+	  <td></td>
 	</tr>
+   	<tr>
+	  <td>#impressions</td>      
+	  <td>{{ stats.impression }}</td>
+	  <td></td>
+	</tr>	
   	</tbody>
 	</table> 
    {% endblock %}

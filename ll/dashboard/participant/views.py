@@ -32,7 +32,7 @@ def home():
 @requires_login
 def participant(email):
     participant = core.user.get_user_by_email(email)
-    #feedbacks = core.db.db.feedback.find({"site_id": site_id})
+    feedbacks = core.feedback.get_feedback(userid=participant["_id"])
     #clicks = 0
     #for feedback in feedbacks:
     #    if not "doclist" in feedback:
@@ -41,8 +41,10 @@ def participant(email):
 
     stats = {
              "run": core.db.db.run.find({"userid": participant["_id"]}).count(),
-             #"impression": feedbacks.count(),
+             "impression": len(feedbacks),
              #"click": clicks,
+             "sites": [s["name"] for s in core.site.get_sites()
+                       if s["_id"] in core.user.get_sites(participant["_id"])],
     }
     return render_template("participant/participant.html",
                            user=g.user,

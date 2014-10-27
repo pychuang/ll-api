@@ -26,7 +26,7 @@ def not_found(error):
 
 
 @app.errorhandler(500)
-def not_found(error):
+def internal_error(error):
     return render_template('500.html', user=g.user), 500
 
 
@@ -63,3 +63,5 @@ from site.views import mod as siteModule
 app.register_blueprint(siteModule)
 from participant.views import mod as participantModule
 app.register_blueprint(participantModule)
+from my.views import mod as myModule
+app.register_blueprint(myModule)

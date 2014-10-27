@@ -30,6 +30,7 @@
     </thead>
     <tbody>
     {% for participant in participants %}
+    {% if participant.is_verified or user.is_admin %}
     <tr>
       <td>{{ participant.teamname }}</td>
       <td>{{ participant.email|urlize }}</td>
@@ -50,6 +51,7 @@
       {% endif %}
       </td>
   	</tr>
+    {% endif %}
     {% endfor %}
   	</tbody>
 	</table> 

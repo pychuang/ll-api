@@ -66,6 +66,7 @@
 	  <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
 	  <li {% if request.path.startswith("/participant") %}class="active"{% endif %}><a href="/participant">Participants</a></li>
 	  <li {% if request.path.startswith("/site") %}class="active"{% endif %}><a href="/site">Sites</a></li>
+	  <li {% if request.path.startswith("/my") %}class="active"{% endif %}><a href="/my">My</a></li>
 	  {% if user %}
 	  <li class="dropdown {% if request.path.startswith("/user") %}active{% endif %}">
 	    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
