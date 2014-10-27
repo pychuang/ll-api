@@ -95,12 +95,16 @@ following logical steps:
 #.	Obtain queries
 #.	For each query, obtain a doclist, a list of candidate documents
 #.	For each document in these doclists, obtain the content of the documents
-	(if any, Seznam only provides feature vectors as part of the doclist).
+	(if any, some uses cases such as Seznam only provides feature vectors as
+	part of the doclist).
 #.	Create runs, using your ranking algorithm.
 #.	Upload runs
 #.	Wait a while to give users a change to interact with your run
 #.	Download feedback
 #.	Potentially update your run and repeat from 5.
+
+Examples that implement the above steps are included in the code repository
+which can be found here: http://git.living-labs.net/ll-api/
 
 
 .. _run:
