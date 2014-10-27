@@ -39,7 +39,8 @@
     {% for site in sites %}
     {% if site.enabled or user.is_admin%}
     <tr>
-      <td>{{ site._id }}</td>
+      <td>{{ site._id }}{% if site.is_robot %}<img src="/static/icon_robot.svg" height="14px"/>{% endif %} 
+      </td>
       <td>{{ site.name }}</td>
       <td>{{ site.url|urlize }}</td>
       <td><a href="/site/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
@@ -50,6 +51,11 @@
       {% else %}
          <a href="/site/{{ site._id}}/enable"><span class="glyphicon glyphicon-eye-close"></span></a>
       {% endif %}
+      {% if site.is_robot %}
+        <a href="/site/{{ site._id}}/unset_robot"><img src="/static/icon_robot.svg" height="14px"/></a>  
+      {% else %}
+        <a href="/site/{{ site._id}}/set_robot"><img src="/static/icon_robot.svg" height="14px"/></a>
+      {% endif %}      
       {% endif %}
       </td>
   	</tr>

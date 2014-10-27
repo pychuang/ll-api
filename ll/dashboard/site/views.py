@@ -126,3 +126,23 @@ def site_enable(site_id):
     return redirect(url_for('site.home'))
 
 
+@mod.route('/<site_id>/unset_robot')
+@requires_login
+def site_unset_robot(site_id):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        return redirect(url_for('site.home'))
+    core.site.unset_robot(site_id)
+    flash('Site is set not to be a robot.', 'alert-success')
+    return redirect(url_for('site.home'))
+
+
+@mod.route('/<site_id>/set_robot')
+@requires_login
+def site_set_robot(site_id):
+    if not g.user["is_admin"]:
+        flash('You need to be admin', 'alert-warning')
+        return redirect(url_for('site.home'))
+    core.site.set_robot(site_id)
+    flash('Site is set to be a robot.', 'alert-success')
+    return redirect(url_for('site.home'))

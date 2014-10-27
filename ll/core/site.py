@@ -79,3 +79,15 @@ def disable(site_id):
     site = db.site.find_one({"_id": site_id})
     site["enabled"] = False
     db.site.save(site)
+
+
+def unset_robot(site_id):
+    site = db.site.find_one({"_id": site_id})
+    site["is_robot"] = False
+    db.site.save(site)
+
+
+def set_robot(site_id):
+    site = db.site.find_one({"_id": site_id})
+    site["is_robot"] = True
+    db.site.save(site)
