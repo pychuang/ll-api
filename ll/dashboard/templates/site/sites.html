@@ -46,9 +46,9 @@
       {% if user.is_admin %}
       <a href="/site/{{ site._id}}/delete"><span class="glyphicon glyphicon-remove"></span></a>   
       {% if site.enabled %}
-        <a href="/site/{{ site._id}}/disable"><span class="glyphicon glyphicon-eye-close"></span></a>      
+        <a href="/site/{{ site._id}}/disable"><span class="glyphicon glyphicon-eye-open"></span></a>      
       {% else %}
-         <a href="/site/{{ site._id}}/enable"><span class="glyphicon glyphicon-eye-open"></span></a>
+         <a href="/site/{{ site._id}}/enable"><span class="glyphicon glyphicon-eye-close"></span></a>
       {% endif %}
       {% endif %}
       </td>
