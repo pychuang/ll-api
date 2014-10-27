@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+x#!/usr/bin/env python
 
 # This file is part of Living Labs Challenge, see http://living-labs.net.
 #
@@ -39,10 +39,11 @@ class Participant():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Participant Client"
         parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host', default='http://127.0.0.1',
-                        help='Host to listen on.')
+        parser.add_argument('--host', dest='host',
+                            default='http://living-labs.net',
+                            help='Host to listen on.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
-                        help='Port to listen on.')
+                            help='Port to listen on.')
         parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
         parser.add_argument('-s', '--simulate_runs', action="store_true",
@@ -53,7 +54,7 @@ class Participant():
                             help='Store TREC run (needs --run_file).')
         parser.add_argument('--run_file',
                             default=os.path.normpath(os.path.join(path,
-                                                "../../data/run.txt")),
+                                                     "../../data/run.txt")),
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
         parser.add_argument('--get_feedback', action="store_true",
