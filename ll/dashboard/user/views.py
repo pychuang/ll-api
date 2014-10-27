@@ -103,7 +103,7 @@ def sites():
 
     usersites = core.user.get_sites(g.user["_id"])
     for site in core.site.get_sites():
-        if not site["enabled"]:
+        if "enabled" in site and not site["enabled"]:
             continue
         description = site["terms"] if "terms" in site and site["terms"] else "No additional terms."
         default = True if site['_id'] in usersites else False
