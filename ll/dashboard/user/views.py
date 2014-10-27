@@ -107,7 +107,8 @@ def sites():
             continue
         description = site["terms"] if "terms" in site and site["terms"] else "No additional terms."
         default = True if site['_id'] in usersites else False
-        setattr(SitesForm, site['_id'], BooleanField(site['name'],
+        setattr(SitesForm, site['_id'], BooleanField(site['name'] + ("<img src=\"/static/icon_robot.svg\" style=\"height: 14px; position: relative;top: -3px;left: 2px;\"/>" 
+                                                                     if site["is_robot"] else ""),
                                                      description=description,
                                                      default=default))
 

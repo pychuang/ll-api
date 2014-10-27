@@ -45,7 +45,7 @@
 			    {% if field.name != "csrf_token" %}
 			    <tr>
 			        <td>{{ field }}</td>
-			        <td>{{ field.label }}</td>
+			        <td>{{ field.label }}{% if field.is_robot %}<img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/>{% endif %}</td>
 			        <td>{{ field.description }}</td>
 			    </tr>
 			    {% endif %}
@@ -57,5 +57,7 @@
         		<button type="submit" class="btn btn-primary">Sign up</button>
       		</div>
     	</div>
+    	Sites marked with a <img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/> are simulations. 
+    
       </form>
     {% endblock %}

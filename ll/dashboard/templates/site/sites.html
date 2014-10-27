@@ -39,7 +39,7 @@
     {% for site in sites %}
     {% if site.enabled or user.is_admin%}
     <tr>
-      <td>{{ site._id }}{% if site.is_robot %}<img src="/static/icon_robot.svg" height="14px"/>{% endif %} 
+      <td>{{ site._id }}{% if site.is_robot %}<img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/>{% endif %} 
       </td>
       <td>{{ site.name }}</td>
       <td>{{ site.url|urlize }}</td>
@@ -62,7 +62,8 @@
     {% endif %}
     {% endfor %}
   	</tbody>
-	</table> 
+	</table>
+	Sites marked with a <img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/> are simulations. 
 	{% else %}
 	<div class="alert alert-warning">
     You have not yet signed up for any sites. You will need to individually
