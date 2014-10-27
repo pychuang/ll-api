@@ -11,6 +11,8 @@ several actions such as obtaining a key, queries, documents and feedback. The
 API can also be used to update runs. Everything is implemented as HTTP request,
 and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX
 errors where possible.
+Note that participants are free to implement their own client to communicate
+with this API. However, example clients are provided by the organization.
 
 
 For all operations, an API key is required. Also, we require you to sign an

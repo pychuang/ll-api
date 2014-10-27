@@ -52,6 +52,12 @@ Frequent queries and offline processing
 	require participants to respond to a query within a few milliseconds.
 	The down side is that we only consider frequent (head) queries.
 	
+No server required
+	Participants do not need to implement nor run a server for serving search
+	results to users. This overhead would be a prohibitive burden and is
+	lifted by our design that uses head queries for which rankings can be
+	pre-computed.
+	
 Feedback is *not* immediate
 	Feedback comes from real users. That means that real users have to enter
 	a query that is part of the lab into the search box on the site. They
