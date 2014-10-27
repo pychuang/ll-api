@@ -23,7 +23,7 @@ def set_site(key, short, name, url, terms):
         raise ValueError("Specify key, short, name, url")
     if db.site.find_one({"_id": short}):
         raise ValueError("Site with short name exists: shortname = '%s'"
-                        % short)
+                         % short)
     u = user.get_user(key)
     u["is_participant"] = False
     u["is_site"] = True
@@ -34,7 +34,8 @@ def set_site(key, short, name, url, terms):
         "terms": terms,
         "qid_counter": 0,
         "docid_counter": 0,
-        "sid_counter": 0})
+        "sid_counter": 0,
+        "enabled": False})
     u["site_id"] = site
     db.user.save(u)
 

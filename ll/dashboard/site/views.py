@@ -25,7 +25,8 @@ mod = Blueprint('site', __name__, url_prefix='/site')
 def home():
     if g.user["is_participant"]:
         sites = [s for s in core.site.get_sites()
-             if s["_id"] in core.user.get_sites(g.user["_id"])]
+                 if g.user["is_admin"] or
+                 s["_id"] in core.user.get_sites(g.user["_id"])]
     else:
         sites = core.site.get_sites()
     return render_template("site/sites.html", user=g.user, sites=sites)
