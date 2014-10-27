@@ -66,3 +66,15 @@ def next_sid(site_id):
                                   update={"$inc": {"sid_counter": 1}},
                                   new=True)
     return "%s-s%d" % (site_id, ret["sid_counter"])
+
+
+def enable(site_id):
+    site = db.site.find_one({"_id": site_id})
+    site["enabled"] = True
+    db.site.save(site)
+
+
+def disable(site_id):
+    site = db.site.find_one({"_id": site_id})
+    site["enabled"] = False
+    db.site.save(site)
