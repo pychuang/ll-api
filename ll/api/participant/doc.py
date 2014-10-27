@@ -84,13 +84,28 @@ class DocList(ApiResource):
                 {
                     "qid": "S-q22",
                     "doclist": [
-                        {"docid": "S-d3"},
+                        {"docid": "S-d3" },
                         {"docid": "S-d5"},
                         {"docid": "S-d10"},
                         ...
                             ]
                 }
 
+        For use cases with relevance signals, the returned data looks like
+        this:
+
+        :return:
+            .. sourcecode:: javascript
+
+                {
+                    "qid": "S-q22",
+                    "doclist": [
+                        {"docid": "S-d3", relevance_signals: {1:.6, 4:.83}},
+                        {"docid": "S-d5", relevance_signals: {3:.45, 4:.83}},
+                        {"docid": "S-d10", relevance_signals: {1:.1, 4:.25}},
+                        ...
+                            ]
+                }
         """
         self.validate_participant(key)
         doclist = self.trycall(core.doc.get_doclist, qid=qid, key=key)

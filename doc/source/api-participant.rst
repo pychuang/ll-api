@@ -27,6 +27,12 @@ Our API is located at this location: http://living-labs.net:5000/api/.
 
 Query
 -----
+From each site that a participant signed up for (see 
+http://living-labs.net:5001/user/sites/), a sample of (N=100) queries is made
+available. 
+The :http:get:`/api/participant/query` endpoint allows for downloading these
+queries.
+
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/query
    :undoc-static:
@@ -35,6 +41,20 @@ Query
 
 Doclist
 -------
+For each query, there is a fixed set of documents available. These documents
+are selected by the site. And this selection may change over time. Therefore,
+participants should update the doclist for a query on a regular (daily?) 
+basis.
+
+For some use cases, the doclist will contain relevance signals (also referred
+to as features, or ranking signals). These are always sparse representations, 
+missing values can be assumed to be zeros. The relevance signals can be query
+only, document only, or query document dependent. 
+For these uses cases, the actual query and document content are generally not
+provided.
+The use cases that do not have relevance signals, will need to provide query
+and document content.
+
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/doclist
    :undoc-static:
@@ -43,6 +63,9 @@ Doclist
 
 Doc
 ---
+When a use case does not define relevance signals for each query document pair
+then this is where the content of documents is made available.
+
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/doc
    :undoc-static:
@@ -51,6 +74,11 @@ Doc
 
 Run
 ---
+Runs (TREC terminology) are just rankings of document ids as shown to actual
+users. Participants can keep updating their runs. They also have the option
+of updating an identifier for the run. This identifier is then used in the
+feedback that is returned.
+
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/run
    :undoc-static:

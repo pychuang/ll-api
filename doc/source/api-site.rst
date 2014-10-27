@@ -26,7 +26,7 @@ expected to be frequent enough for the duration of the challence. The least
 frequent (tail) queries are not very useful for they challenge as they will not
 be issued often enough.
 
-The :http:get:`/api/site/query` enpoint provides ways to manipulate the set of
+The :http:get:`/api/site/query` endpoint provides ways to manipulate the set of
 queries before the challenge starts.
 
 .. autoflask:: ll.api.site:app
