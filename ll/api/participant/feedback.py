@@ -45,7 +45,7 @@ class Feedback(ApiResource):
         it may have been shown to a user more than once.
 
         :param key: your API key
-        :param sid: the query identifier
+        :param qid: the query identifier
         :status 403: invalid key
         :status 404: query does not exist
         :status 400: bad request
@@ -79,7 +79,7 @@ class Feedback(ApiResource):
         Remove feedback for a query. Only your own feedback will be removed.
 
         :param key: your API key
-        :param sid: the query identifier
+        :param qid: the query identifier
         :status 403: invalid key
         :status 404: query does not exist
         :status 400: bad request
