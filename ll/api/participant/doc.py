@@ -100,9 +100,9 @@ class DocList(ApiResource):
                 {
                     "qid": "S-q22",
                     "doclist": [
-                        {"docid": "S-d3", relevance_signals: {1:.6, 4:.83}},
-                        {"docid": "S-d5", relevance_signals: {3:.45, 4:.83}},
-                        {"docid": "S-d10", relevance_signals: {1:.1, 4:.25}},
+                        {"docid": "S-d3", "relevance_signals": {1:.6, 4:.83}},
+                        {"docid": "S-d5", "relevance_signals": {3:.45, 4:.83}},
+                        {"docid": "S-d10", "relevance_signals": {1:.1, 4:.25}},
                         ...
                             ]
                 }
