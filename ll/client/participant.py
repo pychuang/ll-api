@@ -1,4 +1,4 @@
-x#!/usr/bin/env python
+#!/usr/bin/env python
 
 # This file is part of Living Labs Challenge, see http://living-labs.net.
 #
