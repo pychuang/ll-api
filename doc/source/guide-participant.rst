@@ -203,6 +203,10 @@ Obtain Feedback and Update Runs
 							   reverse=True)]
 			r = requests.put("/".join([HOST, RUNENDPOINT, KEY, qid]),
 						data=json.dumps(runs[qid]), headers=HEADERS)
+						
+			if r.status_code != requests.codes.ok:
+				print r.text
+				r.raise_for_status()
 			time.sleep(random.random())
 
 .. _help:
