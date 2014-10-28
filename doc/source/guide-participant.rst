@@ -15,7 +15,7 @@ on those differences.
 
 Participating in the lab involves following these steps:
 
-#.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below.
+#.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
 #.	Sign up:
 
 	#.	`Register <http://living-labs.net:5001/user/register/>`_ starting 3 November 2014.
@@ -25,8 +25,8 @@ Participating in the lab involves following these steps:
 #.	Implement your method as a client that can talk to the API. Examples are provided. See :ref:`method` below.
 #.	Run your client:
 
-	#. See :ref:`run` below.
-	#. When the test phase starts, submit your test runs.
+	#. The client you implement should probably run continuously over several weeks and can potentially constantly update runs.
+	#. When the test phase starts, download test queries and submit your test runs. Again, the test phase will last for several weeks but there is no need (nor the possibility) to update runs.
 
 #.	Write up your findings. Publication details will become available.
 #.	Come to and present your work at `CLEF 2014 in Toulouse <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
@@ -39,7 +39,9 @@ We hope that all steps but 3. and 4. are self explanatory. Below we detail these
 Key Concepts
 ------------
 First some key concepts some of which may come as a surprise and that you
-will need to be aware of.
+will need to be aware of. These points all surfaced in discussions with
+participants. If you think something is missing or if something could be 
+explained better or in more detail: please let us know!
 
 Please, read the `lab description <http://living-labs.net/clef-lab/>`_ 
 for a general idea of what the lab is about.
@@ -89,8 +91,8 @@ Implement a Client
 
 We advise you to first familiarize yourself with the :ref:`api-participants`. 
 
-The code that implements a client that talks to this API should take the
-following logical steps:
+Code that implements a client that talks to this API should approximately take 
+the following logical steps:
 
 #.	Obtain queries
 #.	For each query, obtain a doclist, a list of candidate documents
@@ -106,14 +108,102 @@ following logical steps:
 Examples that implement the above steps are included in the code repository
 which can be found here: http://git.living-labs.net/ll-api/
 
+What follows is a *very minimal* example of the above steps. But it should get
+you up and running. 
 
-.. _run:
+Note that this really is a very basic example that is purely exploitative. 
+It sorts documents only by their click counts. While this may be a reasonable
+baseline, it has a huge risk of getting stuck in local optima (unseen documents
+never have a change to be clicked). Plus, this approach does not look at the
+content of document nor at relevance signals (features). Therefore, it will
+not generalize to unseen queries. Nevertheless, it illustrates how to 
+communicate with the Living Labs API.
 
-Run a Client
-------------
+Initialize
+~~~~~~~~~~
+
+.. sourcecode:: python
+
+	import requests
+	import json
+	import time
+	import random
+	
+	HOST = "http://living-labs.net:5000/api"
+	KEY = "ABC-123"
+
+	QUERYENDPOINT = "participant/query"
+	DOCENDPOINT = "participant/doc"
+	DOCLISTENDPOINT = "participant/doclist"
+	RUNENDPOINT = "participant/run"
+	FEEDBACKENDPOINT = "participant/feedback"
+	
+	HEADERS = {'content-type': 'application/json'}
+
+Obtain Queries
+~~~~~~~~~~~~~~
+
+.. sourcecode:: python
+
+	def get_queries():
+		r = requests.get("/".join([HOST, QUERYENDPOINT, KEY]), headers=HEADERS)
+		if r.status_code != requests.codes.ok:
+			print r.text
+			r.raise_for_status()
+		return r.json()
+
+	queries = get_queries()
 
 
+Obtain Doclists
+~~~~~~~~~~~~~~~
 
+.. sourcecode:: python
+
+	def get_doclist(qid):
+		r = requests.get("/".join([HOST, DOCLISTENDPOINT, KEY, qid]), headers=HEADERS)
+		if r.status_code != requests.codes.ok:
+			print r.text
+			r.raise_for_status()
+		return r.json()
+
+	runs = {}
+	for query in queries["queries"]:
+		qid = query["qid"]
+		runs[qid] = get_doclist(qid)
+
+
+Obtain Feedback and Update Runs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. sourcecode:: python
+
+	def get_feedback(qid):
+		r = requests.get("/".join([HOST, FEEDBACKENDPOINT, KEY, qid]),
+						headers=HEADERS)
+		time.sleep(random.random())
+		if r.status_code != requests.codes.ok:
+			print r.text
+			r.raise_for_status()
+		return r.json()
+
+	while True:
+		for query in queries["queries"]:
+			qid = query["qid"]
+			feedbacks = get_feedback(qid)
+			clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
+			for feedback in feedbacks['feedback']:
+				for doc in feedback["doclist"]:
+					if doc["clicked"] and doc["docid"] in clicks:
+						clicks[doc["docid"]] += 1
+			runs[qid]['doclist'] = [{'docid': docid}
+						for docid, _ in
+						sorted(clicks.items(),
+							   key=lambda x: x[1],
+							   reverse=True)]
+			r = requests.put("/".join([HOST, RUNENDPOINT, KEY, qid]),
+						data=json.dumps(runs[qid]), headers=HEADERS)
+			time.sleep(random.random())
 
 .. _help:
 
@@ -121,15 +211,16 @@ Getting Help
 ------------
 
 We do our best to run everything smoothly, but given that this is the first
-year and the first lab of its kind, you may hit some bumbs.
+year and the first lab of its kind, you may hit some bumps.
 
 Please let us know if you have any problems.
 
--	`File an issue <https://bitbucket.org/living-labs/ll-api/issues/new>`_ if you think something is wrong with the API.
--	Ask questions
--	Sign up for the mailinglist
+-	`File an issue <https://bitbucket.org/living-labs/ll-api/issues/new>`_ if 
+	you think something is wrong with the API.
+-	Ask questions to `Anne Schuth <mailto:anne.schuth@uva.nl>`_
+-	Sign up for the `mailinglist <https://groups.google.com/forum/#!forum/living-labs>`_
 
-If you do so, please provide as many details as you can!
+If you report issues or ask questions, please provide as many details as you can!
 
 - 	What API endpoint where you calling?
 - 	What was response?
@@ -138,5 +229,5 @@ If you do so, please provide as many details as you can!
 -	(How) can you reproduce the problem?
 
 If you are contacting the organizers, it is fine to share a full
-http request to the API including your API-key. However, please do not share
+HTTP request to the API including your API-key. However, please do not share
 this key publicly.
