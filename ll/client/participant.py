@@ -23,6 +23,7 @@ import time
 import datetime
 import random
 import os
+import hashlib
 
 
 QUERYENDPOINT = "participant/query"
@@ -76,9 +77,6 @@ class Participant():
 
         self.runid = 0
 
-        if args.simulate_runs:
-            self.simulate_runs(args.key, args.wait_min, args.wait_max)
-
         if args.store_run:
             self.store_run(args.key, args.run_file)
 
@@ -87,6 +85,9 @@ class Participant():
 
         if args.reset_feedback:
             self.reset_feedback(args.key)
+
+        if args.simulate_runs:
+            self.simulate_runs(args.key, args.wait_min, args.wait_max)
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
