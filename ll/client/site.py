@@ -50,9 +50,8 @@ class Site():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Site Client"
         parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host',
-                            default='http://living-labs.net',
-                            help='Host to connect to.')
+        parser.add_argument('--host', dest='host', default='http://127.0.0.1',
+                        help='Host to listen on.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
                             help='Port to connect to.')
         parser.add_argument('-k', '--key', type=str, required=True,
@@ -68,6 +67,9 @@ class Site():
                                                  "../../data/queries.xml")),
                             help='Path to TREC style query file '
                             '(default: %(default)s).')
+        parser.add_argument('--letor', action="store_true",
+                            default=False,
+                            help='Flags that files are in letor format.')
         parser.add_argument('-d', '--store_doclist', action="store_true",
                             default=False,
                             help='Store a document list (needs --run_file)')
@@ -98,14 +100,23 @@ class Site():
         if not self.host.startswith("http://"):
             self.host = "http://" + self.host
 
-        if args.store_queries:
-            self.store_queries(args.key, args.query_file)
+        if args.letor:
+            if args.store_queries:
+                self.store_letor_queries(args.key, args.query_file)
+            if args.store_doclist:
+                self.store_letor_doclist(args.key, args.run_file)
+        else:
+            if args.store_queries:
+                self.store_queries(args.key, args.query_file)
+            if args.store_doclist:
+                self.store_doclist(args.key, args.run_file, args.docs_dir)
+
+        if args.simulate_clicks:
+            self.simulate_clicks(args.key, args.qrel_file, args.wait_min, args.wait_max, args.letor)
+
         if args.delete_queries:
             self.delete_queries(args.key)
-        if args.store_doclist:
-            self.store_doclist(args.key, args.run_file, args.docs_dir)
-        if args.simulate_clicks:
-            self.simulate_clicks(args.key, args.qrel_file, args.wait_min, args.wait_max)
+        
 
     def store_queries(self, key, query_file):
         tree = et.parse(query_file)
@@ -125,6 +136,22 @@ class Site():
             print r.text
             r.raise_for_status()
 
+    def store_letor_queries(self, key, letor_file):
+        current_qid = None 
+        queries = {"queries": []}
+        for line in open(letor_file, "r"):
+            qid = line[:line.find("#")].split()[1].split(":")[1]
+            if qid != current_qid:
+                queries["queries"].append({
+                    "qstr": qid,
+                    "site_qid": hashlib.sha1(qid).hexdigest(),
+                })
+        url = "/".join([self.host, QUERYENDPOINT, key])
+        r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
+        if r.status_code != requests.codes.ok:
+            print r.text
+            r.raise_for_status()
+            
     def delete_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.delete(url, headers=HEADERS)
@@ -171,6 +198,57 @@ class Site():
             time.sleep(random.random())
         put_doclist(doclist, current_qid)
 
+
+    def store_letor_doc(self, key, docid, site_docid):
+        tries = 0
+        while True:
+            doc = {
+                "site_docid": site_docid,
+                "title": docid,
+                "content": {"text": docid},
+                }
+            url = "/".join([self.host, DOCENDPOINT, key, site_docid])
+            r = requests.put(url, data=json.dumps(doc), headers=HEADERS)
+            if r.status_code == requests.codes.too_many_requests and tries < 15:
+                time.sleep(1 + tries)
+                tries += 1
+            elif r.status_code != requests.codes.ok:
+                print r.text
+                r.raise_for_status()
+            else:
+                break
+        
+
+    def store_letor_doclist(self, key, letor_file):
+        def put_doclist(doclist, current_qid):
+            site_qid = hashlib.sha1(current_qid).hexdigest()
+            doclist["site_qid"] = site_qid
+            url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
+            r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
+            if r.status_code != requests.codes.ok:
+                print r.text
+                r.raise_for_status()
+        doclist = {"doclist": []}
+        current_qid = None
+        for line in open(letor_file, "r"):
+            firstsplit = line[line.find("#"):]
+            _,_,docid,_,_,inc,_,_,prob = firstsplit.split()
+            secondsplit = line[:line.find("#")].split()
+            qid = secondsplit[1].split(":")[1]
+            featureDict = {}
+            for pair in secondsplit[2:]:
+                featid, feature = pair.split(":")
+                featureDict[int(featid)] = float(feature)
+            if current_qid != None and current_qid != qid:
+                put_doclist(doclist, current_qid)
+                doclist = {"doclist": []}
+            site_docid = hashlib.sha1(docid).hexdigest()
+            self.store_letor_doc(key, docid, site_docid)
+            doclist["doclist"].append({"site_docid": site_docid, "relevance_signals": featureDict.items()})
+            current_qid = qid
+        put_doclist(doclist, current_qid)
+
+
     def get_ranking(self, key, qid):
         site_qid = hashlib.sha1(qid).hexdigest()
         url = "/".join([self.host, RANKIGNENDPOINT, key, site_qid])
@@ -198,14 +276,29 @@ class Site():
             print r.text
             r.raise_for_status()
 
-    def get_labels(self, qrel_file):
+    def get_labels(self, path_file, letor=False):
         labels = {}
-        for line in open(qrel_file, "r"):
-            qid, _, docid, label = line.split()
-            if not qid in labels:
-                labels[qid] = {}
-            site_docid = hashlib.sha1(docid).hexdigest()
-            labels[qid][site_docid] = int(label)
+        if letor:
+            #LETOR file
+            current_qid = None
+            for line in open(path_file, "r"):
+                splitIndex = line.find("#")
+                docid = line[splitIndex:].split()[2]
+                secondsplit = line[:splitIndex].split()
+                label = secondsplit[0]
+                qid = secondsplit[1].split(":")[1]
+                if not qid in labels:
+                    labels[qid] = {}
+                site_docid = hashlib.sha1(docid).hexdigest()
+                labels[qid][site_docid] = int(label)
+        else:
+            # QREL file
+            for line in open(path_file, "r"):
+                qid, _, docid, label = line.split()
+                if not qid in labels:
+                    labels[qid] = {}
+                site_docid = hashlib.sha1(docid).hexdigest()
+                labels[qid][site_docid] = int(label)
         return labels
 
     def get_clicks(self, ranking, labels):
@@ -239,8 +332,8 @@ class Site():
             ndcgs.append(self.evaluate_ranking(rankings[qid], labels[qid]))
         return mean(ndcgs)
 
-    def simulate_clicks(self, key, qrel_file, wait_min, wait_max):
-        labels = self.get_labels(qrel_file)
+    def simulate_clicks(self, key, qrel_file, wait_min, wait_max, letor=False):
+        labels = self.get_labels(qrel_file, letor)
         rankings = {}
         while True:
             qid = random.choice(labels.keys())
