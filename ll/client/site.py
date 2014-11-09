@@ -50,8 +50,9 @@ class Site():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Site Client"
         parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host', default='http://127.0.0.1',
-                        help='Host to listen on.')
+        parser.add_argument('--host', dest='host',
+                            default='http://living-labs.net',
+                            help='Host to connect to.')
         parser.add_argument('--port', dest='port', default=5000, type=int,
                             help='Port to connect to.')
         parser.add_argument('-k', '--key', type=str, required=True,

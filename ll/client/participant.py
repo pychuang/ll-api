@@ -23,7 +23,6 @@ import time
 import datetime
 import random
 import os
-import hashlib
 
 
 QUERYENDPOINT = "participant/query"
