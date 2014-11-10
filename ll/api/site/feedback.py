@@ -127,7 +127,5 @@ class Feedback(ApiResource):
                         for d in feedback["doclist"]]
             }
 
-        return feedback
-
 api.add_resource(Feedback, '/api/site/feedback/<key>/<sid>',
                  endpoint="site/feedback")
