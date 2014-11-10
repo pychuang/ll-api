@@ -27,12 +27,12 @@ class ApiResource(Resource):
     def abort(self, status, message, tb=None):
         if tb is None:
             abort(status,
-                  message=str(message).strip().strip("."),
+                  message=str(message).strip().strip(".") + ".",
                   status=status,
                   documentaton=core.config.config["URL_DOC"])
         else:
             abort(status,
-                  message=str(message).strip().strip("."),
+                  message=str(message).strip().strip(".") + ".",
                   status=status,
                   documentaton=core.config.config["URL_DOC"],
                   traceback=[l for l in tb.split("\n") if l])
@@ -40,7 +40,7 @@ class ApiResource(Resource):
     def check_fields(self, o, fields):
         notfound = [f for f in fields if f not in o]
         if notfound:
-            self.abort(400, "Please specify field(s): '%s'" %
+            self.abort(400, "Please specify field(s): '%s'." %
                        ", ".join(notfound))
 
     def trycall(self, function, *args, **kwargs):
@@ -56,19 +56,19 @@ class ApiResource(Resource):
     def get_site_id(self, key):
         user = self.trycall(core.user.get_user, key)
         if not user:
-            self.abort(403, "No such key")
+            self.abort(403, "No such key.")
         if not user["is_site"]:
             self.abort(403, "Not a site. Please use the participant "
-                       "API instead")
+                       "API instead.")
         return user["site_id"]
 
     def validate_participant(self, key):
         user = self.trycall(core.user.get_user, key)
         if not user:
-            self.abort(403, "No such key")
+            self.abort(403, "No such key.")
         if not user["is_participant"]:
             self.abort(403, "Not a participant. Please use the site "
-                       "API instead")
+                       "API instead.")
         if not user["is_verified"]:
             self.abort(403, "Not verified (yet). Please send the signed "
                        "registration form.")
