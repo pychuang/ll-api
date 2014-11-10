@@ -16,7 +16,6 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import hashlib
 import xml.etree.ElementTree as et
 import argparse
 import requests
@@ -127,7 +126,7 @@ class Site():
             qstr = query.text
             queries["queries"].append({
                 "qstr": qstr,
-                "site_qid": hashlib.sha1(qid).hexdigest(),
+                "site_qid": qid,
             })
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
@@ -143,7 +142,7 @@ class Site():
             if qid != current_qid:
                 queries["queries"].append({
                     "qstr": qid,
-                    "site_qid": hashlib.sha1(qid).hexdigest(),
+                    "site_qid": qid,
                 })
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
@@ -176,7 +175,7 @@ class Site():
 
     def store_doclist(self, key, run_file, docdir):
         def put_doclist(doclist, current_qid):
-            site_qid = hashlib.sha1(current_qid).hexdigest()
+            site_qid = current_qid
             doclist["site_qid"] = site_qid
             url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
             r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
@@ -190,7 +189,7 @@ class Site():
             if current_qid is not None and current_qid != qid:
                 put_doclist(doclist, current_qid)
                 doclist = {"doclist": []}
-            site_docid = hashlib.sha1(docid).hexdigest()
+            site_docid = docid
             self.store_doc(key, docid, site_docid, docdir)
             doclist["doclist"].append({"site_docid": site_docid})
             current_qid = qid
@@ -218,7 +217,7 @@ class Site():
 
     def store_letor_doclist(self, key, letor_file):
         def put_doclist(doclist, current_qid):
-            site_qid = hashlib.sha1(current_qid).hexdigest()
+            site_qid = current_qid
             doclist["site_qid"] = site_qid
             url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
             r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
@@ -239,7 +238,7 @@ class Site():
             if current_qid is not None and current_qid != qid:
                 put_doclist(doclist, current_qid)
                 doclist = {"doclist": []}
-            site_docid = hashlib.sha1(docid).hexdigest()
+            site_docid = docid
             self.store_letor_doc(key, docid, site_docid)
             doclist["doclist"].append({"site_docid": site_docid,
                                        "relevance_signals": featureDict.items()})
@@ -247,7 +246,7 @@ class Site():
         put_doclist(doclist, current_qid)
 
     def get_ranking(self, key, qid):
-        site_qid = hashlib.sha1(qid).hexdigest()
+        site_qid = qid
         url = "/".join([self.host, RANKIGNENDPOINT, key, site_qid])
         r = requests.get(url, headers=HEADERS)
         if r.status_code != requests.codes.ok:
@@ -257,7 +256,7 @@ class Site():
         return json["sid"], json["doclist"]
 
     def store_feedback(self, key, qid, sid, ranking, clicks):
-        site_qid = hashlib.sha1(qid).hexdigest()
+        site_qid = qid
         doclist = {"sid": sid,
                    "site_qid": site_qid,
                    "type": "clicks",
@@ -285,7 +284,7 @@ class Site():
                 qid = secondsplit[1].split(":")[1]
                 if qid not in labels:
                     labels[qid] = {}
-                site_docid = hashlib.sha1(docid).hexdigest()
+                site_docid = docid
                 labels[qid][site_docid] = int(label)
         else:
             # QREL file
@@ -293,7 +292,7 @@ class Site():
                 qid, _, docid, label = line.split()
                 if qid not in labels:
                     labels[qid] = {}
-                site_docid = hashlib.sha1(docid).hexdigest()
+                site_docid = docid
                 labels[qid][site_docid] = int(label)
         return labels
 
@@ -301,7 +300,11 @@ class Site():
         clicks = [0] * len(ranking)
         for pos, doc in enumerate(ranking):
             site_docid = doc["site_docid"]
-            label = labels[site_docid]
+            label = 0
+            if site_docid in labels:
+                label = labels[site_docid]
+            if label > max(labels.keys()):
+                label = max(labels.keys())
             rand = random.random()
             if rand < PCLICK[label]:
                 clicks[pos] = 1
@@ -316,7 +319,9 @@ class Site():
             for pos, label in enumerate(orderedlabels):
                 dcg += (2. ** label - 1.) / log2(2. + pos)
             return dcg
-        orderedlabels = [labels[doc["site_docid"]] for doc in ranking]
+        orderedlabels = [labels[doc["site_docid"]]
+                         if doc["site_docid"] in labels
+                         else 0 for doc in ranking]
         idcg = get_dcg(sorted(orderedlabels, reverse=True))
         if idcg == 0.0:
             return 0.0
