@@ -303,8 +303,8 @@ class Site():
             label = 0
             if site_docid in labels:
                 label = labels[site_docid]
-            if label > max(labels.keys()):
-                label = max(labels.keys())
+            if label > max(PCLICK.keys()):
+                label = max(PCLICK.keys())
             rand = random.random()
             if rand < PCLICK[label]:
                 clicks[pos] = 1
