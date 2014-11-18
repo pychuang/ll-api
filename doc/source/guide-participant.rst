@@ -82,7 +82,11 @@ Interleaving
 	between your ranking and the sites ranking. But also, it reduces the risk
 	of showing bad rankings to users.
 
-
+Simulations
+	Besides real clicks from real users, we provide simulated clicks. While 
+	these defy the whole purpose of the living lab setup, they do provide a 
+	more constant stream than real clicks do. This may be useful for debugging
+	purposes. On the dashboard, simulations are marked with a robot symbol.
 
 .. _method:
 
