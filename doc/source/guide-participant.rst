@@ -1,3 +1,7 @@
+.. |new| raw:: html
+
+   <span class="label label-success">New</span>
+
 .. _guide:
 
 Guide for CLEF Participants
@@ -18,8 +22,9 @@ Participating in the lab involves following these steps:
 #.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
 #.	Sign up:
 
-	#.	`Register <http://living-labs.net:5001/user/register/>`_ starting 3 November 2014.
-	#.	Sign and send the agreement form. You will receive a link to this form.
+	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ |new|
+	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_
+	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
 #.	Implement your method as a client that can talk to the API. Examples are provided. See :ref:`method` below.
@@ -29,9 +34,26 @@ Participating in the lab involves following these steps:
 	#. When the test phase starts, download test queries and submit your test runs. Again, the test phase will last for several weeks but there is no need (nor the possibility) to update runs.
 
 #.	Write up your findings. Publication details will become available.
-#.	Come to and present your work at `CLEF 2014 in Toulouse <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
+#.	Come to and present your work at `CLEF 2014 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail these two steps.
+
+
+Schedule |new|
+--------
+
+===============	===============================================================================================================
+Date 			Description
+===============	===============================================================================================================
+1 Nov, 2014		Training period begins
+1-15 Apr, 2015		Uploading test runs
+15 Apr, 2015		Testing period begins
+30 May, 2015		Testing period ends
+1 Jun, 2015		Results released
+15 Jun, 2015		Working notes papers due
+15 Jul, 2015		Proceedings completed
+7-11 Sep, 2015		Full-day lab session at at `CLEF 2014 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
+===============	===============================================================================================================
 
 
 .. _key:
@@ -82,7 +104,7 @@ Interleaving
 	between your ranking and the sites ranking. But also, it reduces the risk
 	of showing bad rankings to users.
 
-Simulations
+Simulations |new|
 	Besides real clicks from real users, we provide simulated clicks. While 
 	these defy the whole purpose of the living lab setup, they do provide a 
 	more constant stream than real clicks do. This may be useful for debugging
