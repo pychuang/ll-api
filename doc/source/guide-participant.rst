@@ -247,7 +247,8 @@ Please let us know if you have any problems.
 
 -	`File an issue <https://bitbucket.org/living-labs/ll-api/issues/new>`_ if 
 	you think something is wrong with the API.
--	Ask questions to `Anne Schuth <mailto:anne.schuth@uva.nl>`_
+-	Ask questions `in this chat room <https://www.hipchat.com/gmkO1RdK1>`_
+-	Write an email to `Anne Schuth <mailto:anne.schuth@uva.nl>`_
 -	Sign up for the `mailinglist <https://groups.google.com/forum/#!forum/living-labs>`_
 
 If you report issues or ask questions, please provide as many details as you can!
