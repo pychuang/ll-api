@@ -51,7 +51,7 @@ def reset_feedback(userid=None, site_id=None, sid=None, qid=None):
     db.feedback.remove(q)
 
 
-def get_feedback(userid=None, site_id=None, sid=None, qid=None):
+def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     q = {}
     if userid:
         q["userid"] = userid
@@ -59,8 +59,10 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None):
         q["site_id"] = site_id
     if sid:
         q["sid"] = sid
-    if qid:
+    if qid and qid.lower() != "all":
         q["qid"] = qid
+    if runid:
+        q["runid"] = runid
     readyfeedback = []
     for feedback in db.feedback.find(q):
         if feedback.get("doclist") is not None:
