@@ -66,7 +66,34 @@ class Feedback(ApiResource):
                          ]},
                          ...
                 }
-        """ 
+
+
+        In case Team Draft Interleaving was performed at the site, this is
+        encoded as follows.
+
+        :content:
+            .. sourcecode:: javascript
+
+                {
+                    "qid": "S-q1",
+                    "runid": "baseline",
+                    "type": "tdi",
+                    "doclist": [
+                        {
+                            "docid": "S-d1",
+                            "clicked": true,
+                            "team": "site",
+                        },
+                        {
+                            "docid": "S-d4",
+                            "clicked": true,
+                            "team": "participant",
+                        },
+                        ]
+                }
+        """
+
+
         self.validate_participant(key)
         feedbacks = self.trycall(core.feedback.get_feedback,
                                  userid=key,
