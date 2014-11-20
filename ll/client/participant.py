@@ -37,11 +37,9 @@ class Participant():
         path = os.path.dirname(os.path.realpath(__file__))
         description = "Living Labs Challenge's Participant Client"
         parser = argparse.ArgumentParser(description=description)
-
         parser.add_argument('--host', dest='host',
                             default='http://living-labs.net',
                             help='Host to listen on.')
-
         parser.add_argument('--port', dest='port', default=5000, type=int,
                             help='Port to connect to.')
         parser.add_argument('-k', '--key', type=str, required=True,
@@ -154,7 +152,6 @@ class Participant():
                                         sorted(clicks.items(),
                                                key=lambda x: x[1],
                                                reverse=True)]
-                print
                 print clicks
         self.runid += 1
         self.store_runs(key, runs)
@@ -200,7 +197,6 @@ class Participant():
         self.store_runs(key, runs)
 
     def get_feedbacks(self, key):
-        start = time.time()
         feedbacks = {}
         for elem in self.get_feedback(key, "all")['feedback']:
             qid = elem["qid"]
@@ -211,8 +207,8 @@ class Participant():
         for qid, doclists in feedbacks.items():
             for doclist in doclists:
                 print qid, " ".join([doc["docid"]
-                             for doc in doclist
-                             if doc["clicked"]])
+                                     for doc in doclist
+                                     if doc["clicked"]])
 
 if __name__ == '__main__':
     participant = Participant()
