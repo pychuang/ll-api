@@ -251,7 +251,8 @@ To run a site client and upload queries and documents, you can do the following:
    $ ./bin/client-site --key SITEKEY -q -d
 
 This will take TREC queries/runs/document (see :code:`-h` for file locations and
-how to change them) as a basis.
+how to change them) as a basis. Alternatively, with the :code:`--letor` switch, 
+this client will accept Learning to Rank (Letor) data.
 
 Then, to simulate interactions, run the following:
 
@@ -260,7 +261,8 @@ Then, to simulate interactions, run the following:
    $ ./bin/client-site --key SITEKEY -s
    
 Again, this will take TREC data (qrels) to simulate clicks using a simple
-cascade click model.
+cascade click model. Or, again, with the :code:`--letor` switch, a Learning to
+Rank (Letor) data set.
 
 Note that you may need to specify the host/port where the API is running (see
 :code:`-h` for details on how to do that).
@@ -276,6 +278,17 @@ statistics, one should use the :ref:`Dashboard <dashboard>`.
 
 If you want to run multiple sites, you should create multiple keys and start
 multiple instances that talk to the same API.
+
+For your convenience, you can download learning to rank (Letor) data sets here:
+
+- **GOV**: http://research.microsoft.com/en-us/um/beijing/projects/letor/LETOR3.0/Gov.rar (you'll need files in QueryLevelNorm)
+- **OHSUMED**: http://research.microsoft.com/en-us/um/beijing/projects/letor/LETOR3.0/OHSUMED.zip
+- **MQ2007**: http://research.microsoft.com/en-us/um/beijing/projects/letor/LETOR4.0/Data/MQ2007.rar (files for supervised learning)
+- **MQ2008**: http://research.microsoft.com/en-us/um/beijing/projects/letor/LETOR4.0/Data/MQ2008.rar (files for supervised learning)
+- **Yahoo!**: http://webscope.sandbox.yahoo.com/catalog.php?datatype=c
+- **MSLR-WEB10K**: http://research.microsoft.com/en-us/um/beijing/projects/mslr/data/MSLR-WEB10K.zip
+- **MSLR-WEB30K**: http://research.microsoft.com/en-us/um/beijing/projects/mslr/data/MSLR-WEB30K.zip
+- **Yandex Internet Mathematics 2009**: http://imat2009.yandex.ru/academic/mathematic/2009/en/datasets (query identifier need to be parsed out of comment into qid feature)
 
 
 Run a Participant
