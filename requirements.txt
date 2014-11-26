@@ -8,3 +8,4 @@ pymongo>=2.7
 requests>=1.2.3
 sphinx-bootstrap-theme>=0.4.0
 sphinxcontrib-httpdomain>=1.2.1
+aniso8601>=0.83
