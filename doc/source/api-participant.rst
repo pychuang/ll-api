@@ -27,6 +27,12 @@ Our API is located at this location: http://living-labs.net:5000/api/.
 	any problems.
 
 
+
+.. note:: We may sometimes restart our API. You may notice this because the API
+	is down for a few seconds (up to a few minutes). Please implement your 
+	client in such a way that this will not cause problems (i.e., add a retry
+	loop with a small sleep to all the API calls).
+
 Query
 -----
 From each site that a participant signed up for (see 
