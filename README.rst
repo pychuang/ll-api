@@ -31,7 +31,7 @@ If you use this code, please refer to `this paper <http://www.anneschuth.nl/wp-c
 	}
        
 
-Contributers
+Contributors
 ------------
 
 The following people have contributed to this code: 
