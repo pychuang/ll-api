@@ -8,7 +8,8 @@ Guide for CLEF Participants
 ===========================
 
 .. note:: This guide is being updated as it is being used. Please tell us 
-			what you think is missing. |new|
+			what you think is missing. Our contact details are at the bottom 
+			of this page |new|
 
 This guide is meant to be a practical guide to participating in the CLEF Living
 Lab.
@@ -36,11 +37,12 @@ Participating in the lab involves following these steps:
 #.	Write up your findings. Publication details will become available.
 #.	Come to and present your work at `CLEF 2014 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
-We hope that all steps but 3. and 4. are self explanatory. Below we detail these two steps.
+We hope that all steps but 3. and 4. are self explanatory. Below we detail 
+these two steps in Sections :ref:`method` and :ref:`running` respectively.
 
 
 Schedule |new|
---------
+--------------
 
 ===============	===============================================================================================================
 Date 			Description
@@ -110,6 +112,38 @@ Simulations |new|
 	more constant stream than real clicks do. This may be useful for debugging
 	purposes. On the dashboard, simulations are marked with a robot symbol.
 
+Features Instead of Queries and Documents  |new|
+	The Web Search (see below) provides features instead of
+	actual queries and documents.
+
+.. _scenarios:
+
+Usage Scenarios |new|
+---------------------
+
+The first edition of the lab focuses on three use-cases and one specific notion 
+of what a living lab is, with a view to expanding to other use-cases and other 
+interpretations of living labs in subsequent years. Use-cases for the first lab 
+are:
+
+Product Search
+	On an e-commerce site.
+	
+Local Domain Search
+	On the `University of Amsterdam <http://uva.nl>`_’s website.
+
+Web Search
+	Through `Seznam <http://seznam.cz>`_, a major commercial web search engine.
+
+All three are ad-hoc search tasks and are closely related in terms of their 
+general setup. Using a shared API but considering three very different use-cases
+allows us to study how well techniques generalize across domains.
+
+The Web Search scenario will slightly  deviate from the other scenarios in that
+no actual queries or documents are made available. Instead features are
+provided, as in a typical Learning to Rank scenario.
+
+
 .. _method:
 
 Implement a Client
@@ -135,7 +169,8 @@ Examples that implement the above steps are included in the code repository
 which can be found here: http://git.living-labs.net/ll-api/
 
 What follows is a *very minimal* example of the above steps. But it should get
-you up and running. 
+you up and running. While we used Python, there is no such requirement for you.
+You are free to use any client that communicate with our API.
 
 Note that this really is a very basic example that is purely exploitative. 
 It sorts documents only by their click counts. While this may be a reasonable
@@ -234,6 +269,20 @@ Obtain Feedback and Update Runs
 				print r.text
 				r.raise_for_status()
 			time.sleep(random.random())
+
+.. _running:
+
+Running a Client
+----------------
+
+Once you implemented your ranking algorithm to compete in the LL4IR in the form
+of a client that communicates with our API, you can run your during the whole
+training period. After that, you will have the change to download the test 
+queries for which you can then upload your runs. For this, you will have 24 
+hours after downloading the test queries. After these 24 hours, the API
+will start evaluating your runs using live data. And at that point, there 
+will be no way for participants to update their rankings anymore.
+
 
 .. _help:
 
