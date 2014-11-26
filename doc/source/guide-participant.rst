@@ -311,3 +311,15 @@ If you report issues or ask questions, please provide as many details as you can
 If you are contacting the organizers, it is fine to share a full
 HTTP request to the API including your API-key. However, please do not share
 this key publicly.
+
+Citation
+--------
+If you use the API, please refer to `this paper <http://www.anneschuth.nl/wp-content/uploads/2014/08/cikm2014-lleval.pdf>`_: ::
+
+	@inproceedings{Balog2014Head,
+		title = {Head First: Living Labs for Ad-hoc Search Evaluation},
+		author = {K. Balog, L. Kelly, A. Schuth},
+		url = {http://www.anneschuth.nl/wp-content/uploads/2014/08/cikm2014-lleval.pdf},
+		year = {2014},
+		booktitle = {CIKM'14},
+	}

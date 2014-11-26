@@ -20,7 +20,7 @@ For more information, consult:
 
 Citation
 --------
-If you use this code, please refer to this paper: ::
+If you use this code, please refer to `this paper <http://www.anneschuth.nl/wp-content/uploads/2014/08/cikm2014-lleval.pdf>`_: ::
 
 	@inproceedings{Balog2014Head,
 		title = {Head First: Living Labs for Ad-hoc Search Evaluation},
