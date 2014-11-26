@@ -7,8 +7,8 @@
 Guide for CLEF Participants
 ===========================
 
-.. note:: This guide is work in progress. We plan to have it ready soon. The
-	information on this page is correct, just not complete yet.
+.. note:: This guide is being updated as it is being used. Please tell us 
+			what you think is missing. |new|
 
 This guide is meant to be a practical guide to participating in the CLEF Living
 Lab.
