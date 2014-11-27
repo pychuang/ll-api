@@ -41,8 +41,14 @@ class Feedback(ApiResource):
         back into our API. As soon as all this happens, the feedback will
         become available here.
 
+        You may specify "all" as the query identifier to obtain
+        feedback for all queries.
+
         Note that you may receive multiple feedbacks for a single query as
-        it may have been shown to a user more than once.
+        it may have been shown to a user more than once. And even if you
+        specify a runid, then the rankings for this runid may have been
+        presented to users multiple times.
+
 
         :param key: your API key
         :param qid: the query identifier, can be "all"
@@ -93,11 +99,10 @@ class Feedback(ApiResource):
                 }
         """
 
-
         self.validate_participant(key)
         feedbacks = self.trycall(core.feedback.get_feedback,
                                  userid=key,
-                                 qid=qid, 
+                                 qid=qid,
                                  runid=runid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
