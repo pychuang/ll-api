@@ -24,7 +24,7 @@ doclist_fields = {
     "title": fields.String(),
 }
 
-doclist_fields_szn = {
+doclist_fields_relevance_signals = {
     "site_docid": fields.String(),
     "title": fields.String(),
     "relevance_signals": fields.List(fields.List(fields.Float)),
@@ -149,13 +149,16 @@ class DocList(ApiResource):
                             ]
                 }
 
+
+        Some sites may define "relevance_signals" for each document in this
+        list.
         """
         site_id = self.get_site_id(key)
         doclist = self.trycall(core.doc.get_doclist, site_id=site_id,
                                site_qid=site_qid)
         return {
             "site_qid": site_qid,
-            "doclist": [marshal(d, doclist_fields_szn)
+            "doclist": [marshal(d, doclist_fields_relevance_signals)
                 if "relevance_signals" in d else marshal(d, doclist_fields)
                 for d in doclist]
             }
@@ -167,7 +170,7 @@ class DocList(ApiResource):
         The doclist defines the set documents that are returnable for a query.
         The documents in the list are expected to be uploaded before you update
         this list.
-        Deleting individual documents is possible but not neccesary. It is the
+        Deleting individual documents is possible but not necessary. It is the
         doclist that matters.
 
         :param key: your API key
@@ -197,7 +200,7 @@ class DocList(ApiResource):
                                documents["doclist"])
         return {
             "site_qid": site_qid,
-            "doclist": [marshal(d, doclist_fields_szn)
+            "doclist": [marshal(d, doclist_fields_relevance_signals)
                 if "relevance_signals" in d else marshal(d, doclist_fields)
                 for d in doclist]
             }

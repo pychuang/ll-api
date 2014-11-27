@@ -23,7 +23,7 @@ doclist_fields = {
     "title": fields.String(),
 }
 
-doclist_fields_szn = {
+doclist_fields_relevance_signals = {
     "docid": fields.String(attribute="_id"),
     "title": fields.String(),
     "relevance_signals": fields.List(fields.List(fields.Float)),
@@ -100,9 +100,12 @@ class DocList(ApiResource):
                 {
                     "qid": "S-q22",
                     "doclist": [
-                        {"docid": "S-d3", "relevance_signals": {1:.6, 4:.83}},
-                        {"docid": "S-d5", "relevance_signals": {3:.45, 4:.83}},
-                        {"docid": "S-d10", "relevance_signals": {1:.1, 4:.25}},
+                        {   "docid": "S-d3",
+                            "relevance_signals": [[1,.6], [4,.83]]},
+                        {   "docid": "S-d5",
+                            "relevance_signals": [[3..45], [4,.83]]},
+                        {   "docid": "S-d10",
+                            "relevance_signals": [[1,.1], [4,.25]]},
                         ...
                             ]
                 }
@@ -111,7 +114,7 @@ class DocList(ApiResource):
         doclist = self.trycall(core.doc.get_doclist, qid=qid, key=key)
         return {
             "qid": qid,
-            "doclist": [marshal(d, doclist_fields_szn)
+            "doclist": [marshal(d, doclist_fields_relevance_signals)
                 if "relevance_signals" in d else marshal(d, doclist_fields)
                 for d in doclist]
             }
