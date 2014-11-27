@@ -73,6 +73,10 @@ class Doc(ApiResource):
         Make sure to first update the doclist. In fact, deleting a documents is
         not required after updating the doclist.
 
+        Note, documents are not really deleted. Rather, a "deleted" flag is
+        set. This is done to avoid asigning a new internal docid when the 
+        document would be uploaded again.
+
         :param key: your API key
         :param site_docid: the sites document identifier
         :status 200: the document is deleted
