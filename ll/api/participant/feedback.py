@@ -52,7 +52,7 @@ class Feedback(ApiResource):
 
         :param key: your API key
         :param qid: the query identifier, can be "all"
-        :param runid: optionally, the runid
+        :param runid: *optional*, the runid
         :status 403: invalid key
         :status 404: query does not exist
         :status 400: bad request
