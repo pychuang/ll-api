@@ -23,10 +23,10 @@ import random
 import os
 
 
-QUERYENDPOINT = "participant/query"
-DOCENDPOINT = "participant/doc"
-DOCLISTENDPOINT = "participant/doclist"
-RUNENDPOINT = "participant/run"
+QUERYENDPOINT    = "participant/query"
+DOCENDPOINT      = "participant/doc"
+DOCLISTENDPOINT  = "participant/doclist"
+RUNENDPOINT      = "participant/run"
 FEEDBACKENDPOINT = "participant/feedback"
 
 HEADERS = {'content-type': 'application/json'}
@@ -104,8 +104,12 @@ class Participant():
             r.raise_for_status()
         return r.json()
 
-    def get_feedback(self, key, qid):
-        url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
+    # if qid == "all" returns feedback for all queries
+    def get_feedback(self, key, qid, runid=None):
+        urlList = [self.host, FEEDBACKENDPOINT, key, qid]
+        if runid:
+            urlList.append(str(runid))
+        url = "/".join(urlList)
         r = requests.get(url, headers=HEADERS)
         time.sleep(random.random())
         if r.status_code != requests.codes.ok:
@@ -137,9 +141,9 @@ class Participant():
 
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
-            if qid in feedbacks and feedbacks[qid]['feedback']:
+            if qid in feedbacks and feedbacks[qid]:
                 clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
-                for feedback in feedbacks[qid]['feedback']:
+                for feedback in feedbacks[qid]:
                     for doc in feedback["doclist"]:
                         if doc["clicked"] and doc["docid"] in clicks:
                             clicks[doc["docid"]] += 1
@@ -153,21 +157,33 @@ class Participant():
         self.store_runs(key, runs)
         return runs
 
+    def update_runid(self, old_runid):
+        try:
+            while int(old_runid) >= self.runid:
+                self.runid += 1
+        except ValueError:
+            pass
+
     def simulate_runs(self, key, wait_min, wait_max):
         queries = self.get_queries(key)
         runs = {}
         for query in queries["queries"]:
             qid = query["qid"]
             runs[qid] = self.get_doclist(key, qid)
+        feedbacks = {}
+        feedback_update = self.get_feedback(key, "all")
+        for elem in feedback_update['feedback']:
+            self.update_runid(elem["runid"])
         while True:
-            feedbacks = {}
-            for query in queries["queries"]:
-                qid = query["qid"]
-                # TODO: update doclist
-                feedbacks[qid] = self.get_feedback(key, qid)
-                time.sleep(random.random())
+            for elem in feedback_update['feedback']:
+                qid = elem["qid"]
+                if qid in feedbacks:
+                    feedbacks[qid].append(elem)
+                else:
+                    feedbacks[qid] = [elem]
             runs = self.update_runs(key, runs, feedbacks)
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
+            feedback_update = self.get_feedback(key, "all", self.runid)
 
     def store_run(self, key, run_file):
         runs = {}
@@ -181,13 +197,17 @@ class Participant():
         self.store_runs(key, runs)
 
     def get_feedbacks(self, key):
-        queries = self.get_queries(key)
-        for query in queries["queries"]:
-            qid = query["qid"]
-            feedbacks = self.get_feedback(key, qid)
-            for feedback in feedbacks['feedback']:
+        feedbacks = {}
+        for elem in self.get_feedback(key, "all")['feedback']:
+            qid = elem["qid"]
+            if qid in feedbacks:
+                feedbacks[qid].append(elem["doclist"])
+            else:
+                feedbacks[qid] = [elem["doclist"]]
+        for qid, doclists in feedbacks.items():
+            for doclist in doclists:
                 print qid, " ".join([doc["docid"]
-                                     for doc in feedback["doclist"]
+                                     for doc in doclist
                                      if doc["clicked"]])
 
 if __name__ == '__main__':

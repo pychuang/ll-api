@@ -32,7 +32,7 @@ feedback_fields = {
 
 
 class Feedback(ApiResource):
-    def get(self, key, qid):
+    def get(self, key, qid, runid=None):
         """
         Obtain feedback for a query. Only feedback for runs you submitted
         will be returned. So, first submit a run, wait a while to give a user
@@ -45,7 +45,8 @@ class Feedback(ApiResource):
         it may have been shown to a user more than once.
 
         :param key: your API key
-        :param qid: the query identifier
+        :param qid: the query identifier, can be "all"
+        :param runid: optionally, the runid
         :status 403: invalid key
         :status 404: query does not exist
         :status 400: bad request
@@ -92,14 +93,16 @@ class Feedback(ApiResource):
                 }
         """
 
+
         self.validate_participant(key)
         feedbacks = self.trycall(core.feedback.get_feedback,
                                  userid=key,
-                                 qid=qid)
+                                 qid=qid, 
+                                 runid=runid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
 
-    def delete(self, key, qid):
+    def delete(self, key, qid, runid=None):
         """
         Remove feedback for a query. Only your own feedback will be removed.
 
@@ -113,5 +116,6 @@ class Feedback(ApiResource):
         self.trycall(core.feedback.reset_feedback,
                      userid=key, qid=qid)
 
-api.add_resource(Feedback, '/api/participant/feedback/<key>/<qid>',
+api.add_resource(Feedback, '/api/participant/feedback/<key>/<qid>/<runid>',
+                           '/api/participant/feedback/<key>/<qid>',
                  endpoint="participant/feedback")
