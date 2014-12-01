@@ -66,4 +66,4 @@ if __name__ == '__main__':
 
     db.init_db(args.mongodb_db, user=args.mongodb_user,
                password=args.mongodb_pw)
-    app.run(host=args.host, port=args.port)
+    app.run(host=args.host, port=args.port, threaded=True)
