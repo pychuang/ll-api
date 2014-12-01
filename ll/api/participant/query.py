@@ -21,6 +21,7 @@ from .. import ApiResource
 query_fields = {
     "qid": fields.String(attribute="_id"),
     "qstr": fields.String,
+    "type": fields.String(default="train"),
     "creation_time": fields.DateTime(),
 }
 
@@ -31,15 +32,33 @@ class Query(ApiResource):
         If you update the sites you agree too through the dashboard, then
         the query set will reflect this.
 
+        Each query is marked with its type. A query can be a train or test
+        query. Test queries are supposed to *not* be evaluated online. So,
+        participants will (should) not expect any feedback for them. The
+        default query type is "train".
+
         :param key: your API key
         :status 200: valid key
         :status 403: invalid key
         :return:
             .. sourcecode:: javascript
 
-                {   "S-q2" : "jaguar",
-                    "S-q2" : "apple",
-                    ... }
+
+        {
+            "queries": [
+                {
+                    "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
+                    "qid": "S-q1",
+                    "qstr": "jaguar",
+                    "type": "train"
+                },
+                {
+                    "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
+                    "qid": "S-q2",
+                    "qstr": "apple",
+                    "type": "test"
+                }, ...}
+
 
         .. note:: We kindly ask you to not enter any of the provided queries
             into the search engines for testing purposes (unless, of course
