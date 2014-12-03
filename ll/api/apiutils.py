@@ -37,11 +37,26 @@ class ApiResource(Resource):
                   documentaton=core.config.config["URL_DOC"],
                   traceback=[l for l in tb.split("\n") if l])
 
-    def check_fields(self, o, fields):
-        notfound = [f for f in fields if f not in o]
+    def check_fields(self, o, required_fields, optional_fields=None,
+                     strict=False):
+        if optional_fields is None:
+            optional_fields = {}
+
+        notfound = [f for f in required_fields if f not in o]
         if notfound:
             self.abort(400, "Please specify field(s): '%s'." %
                        ", ".join(notfound))
+        if strict:
+            allowedfields = required_fields.keys() + optional_fields.keys()
+            notallowed = [f for f in o if f not in allowedfields]
+            if notallowed:
+                self.abort(400, "Please don't use field(s): '%s'." %
+                           ", ".join(notallowed))
+
+        for f in optional_fields:
+            if f not in o:
+                o[f] = optional_fields[f]
+        return o
 
     def trycall(self, function, *args, **kwargs):
         try:

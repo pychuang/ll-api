@@ -21,7 +21,7 @@ import user
 from db import db
 
 
-def add_query(site_id, site_qid, qstr):
+def add_query(site_id, site_qid, qstr, query_type):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query:
         query["qstr"] = qstr
@@ -32,7 +32,8 @@ def add_query(site_id, site_qid, qstr):
         "_id": site.next_qid(site_id),
         "site_id": site_id,
         "site_qid": site_qid,
-        "qstr": qstr,
+        "site_qid": site_qid,
+        "type": query_type,
         "creation_time": datetime.datetime.now(),
     }
     db.query.insert(query)

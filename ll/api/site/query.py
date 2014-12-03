@@ -22,6 +22,7 @@ from .. import ApiResource
 query_fields = {
     "site_qid": fields.String(),
     "qstr": fields.String(),
+    "type": fields.String(default="train"),
     "creation_time": fields.DateTime(),
 }
 
@@ -42,11 +43,13 @@ class Query(ApiResource):
                         {
                             "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
                             "qstr": "jaguar",
+                            "type": "train",
                             "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75"
                         },
                         {
                             "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
                             "qstr": "apple",
+                            "type": "test",
                             "site_qid": "30c6677b833454ad2df762d3c98d2409"
                         }
                     ]
@@ -59,8 +62,15 @@ class Query(ApiResource):
 
     def put(self, key):
         """
-        Update the query set. This can only be done before the challenge
-        started.
+        Update (or intialize) the query set. This can only be done before the
+        challenge started.
+
+        Per query, you can mark its type: whether the query is supposed to be
+        a train or test query. Test queries are supposed to *not* be evaluated
+        online. So, participants will (should) not expect any feedback for
+        them. In fact, we may return an error when you try to return feedback
+        for a test query. The default query type is "train", which is also used
+        when the type is omitted.
 
         :param key: your API key
 
@@ -72,10 +82,12 @@ class Query(ApiResource):
                     "queries": [
                         {
                             "qstr": "jaguar",
+                            "type": "train",
                             "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75"
                         },
                         {
                             "qstr": "apple",
+                            "type": "train",
                             "site_qid": "30c6677b833454ad2df762d3c98d2409"
                         }
                     ]
@@ -92,9 +104,12 @@ class Query(ApiResource):
         self.check_fields(queries, ["queries"])
         self.trycall(core.query.delete_query, site_id=site_id)
         for q in queries["queries"]:
-            self.check_fields(q, ["site_qid", "qstr"])
-            self.trycall(core.query.add_query, site_id, q["site_qid"],
-                         q["qstr"])
+            q_checked = self.check_fields(q, ["site_qid", "qstr"],
+                                          {"type": "train"})
+            self.trycall(core.query.add_query, site_id,
+                         q_checked["site_qid"],
+                         q_checked["qstr"],
+                         q_checked["type"])
         queries = self.trycall(core.query.get_query, site_id=site_id)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 
