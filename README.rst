@@ -56,3 +56,7 @@ GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
+
+Acknowledgements
+----------------
+The development of Lerot is partially supported by the EU FP7 project LiMoSINe (http://www.limosine-project.eu).
