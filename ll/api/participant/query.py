@@ -43,21 +43,22 @@ class Query(ApiResource):
         :return:
             .. sourcecode:: javascript
 
-
-        {
-            "queries": [
                 {
-                    "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
-                    "qid": "S-q1",
-                    "qstr": "jaguar",
-                    "type": "train"
-                },
-                {
-                    "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
-                    "qid": "S-q2",
-                    "qstr": "apple",
-                    "type": "test"
-                }, ...}
+                    "queries": [
+                        {
+                            "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
+                            "qid": "S-q1",
+                            "qstr": "jaguar",
+                            "type": "train"
+                        },
+                        {
+                            "creation_time": "Mon, 10 Nov 2014 17:42:24 -0000",
+                            "qid": "S-q2",
+                            "qstr": "apple",
+                            "type": "test"
+                        }
+                    ]
+                }
 
 
         .. note:: We kindly ask you to not enter any of the provided queries
