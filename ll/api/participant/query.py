@@ -32,8 +32,8 @@ class Query(ApiResource):
         If you update the sites you agree too through the dashboard, then
         the query set will reflect this.
 
-        Each query is marked with its type. A query can be a train or test
-        query. Test queries are supposed to *not* be evaluated online. So,
+        Each query is marked with its type. A query can be a train, test or
+        eval query. Eval queries are supposed to *not* be evaluated online. So,
         participants will (should) not expect any feedback for them. The
         default query type is "train".
 

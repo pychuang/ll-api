@@ -62,15 +62,16 @@ class Query(ApiResource):
 
     def put(self, key):
         """
-        Update (or intialize) the query set. This can only be done before the
+        Update (or initialize) the query set. This can only be done before the
         challenge started.
 
         Per query, you can mark its type: whether the query is supposed to be
-        a train or test query. Test queries are supposed to *not* be evaluated
-        online. So, participants will (should) not expect any feedback for
-        them. In fact, we may return an error when you try to return feedback
-        for a test query. The default query type is "train", which is also used
-        when the type is omitted.
+        a train, test or eval query. Test queries are supposed to *not* be
+        evaluated online. So, participants will (should) not expect any
+        feedback for queries other than train queries (during the training
+        phase). In fact, we may return an error when you try to
+        return feedback for another query. The default query type is "train",
+        which is thus also used when the type is omitted.
 
         :param key: your API key
 
