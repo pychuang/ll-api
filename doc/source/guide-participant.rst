@@ -35,7 +35,7 @@ Participating in the lab involves following these steps:
 	#. When the test phase starts, download test queries and submit your test runs. Again, the test phase will last for several weeks but there is no need (nor the possibility) to update runs.
 
 #.	Write up your findings. Publication details will become available.
-#.	Come to and present your work at `CLEF 2014 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
+#.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail 
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
@@ -54,7 +54,7 @@ Date 			Description
 1 Jun, 2015		Results released
 15 Jun, 2015		Working notes papers due
 15 Jul, 2015		Proceedings completed
-7-11 Sep, 2015		Full-day lab session at at `CLEF 2014 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
+7-11 Sep, 2015		Full-day lab session at at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
 ===============	===============================================================================================================
 
 
