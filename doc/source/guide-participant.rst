@@ -23,8 +23,8 @@ Participating in the lab involves following these steps:
 #.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
 #.	Sign up:
 
-	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ |new|
-	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_
+	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_. 
+	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.|new|
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
@@ -41,13 +41,13 @@ We hope that all steps but 3. and 4. are self explanatory. Below we detail
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
 
 
-Schedule |new|
---------------
+Schedule
+--------
 
 ===============	===============================================================================================================
 Date 			Description
 ===============	===============================================================================================================
-1 Nov, 2014		Training period begins
+1 Nov, 2014		Training period begins (Note that you can join any time after this date!)  |new|
 1-15 Apr, 2015		Uploading test runs
 15 Apr, 2015		Testing period begins
 30 May, 2015		Testing period ends
@@ -106,7 +106,7 @@ Interleaving
 	between your ranking and the sites ranking. But also, it reduces the risk
 	of showing bad rankings to users.
 
-Simulations |new|
+Simulations 
 	Besides real clicks from real users, we provide simulated clicks. While 
 	these defy the whole purpose of the living lab setup, they do provide a 
 	more constant stream than real clicks do. This may be useful for debugging
