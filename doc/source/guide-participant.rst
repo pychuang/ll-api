@@ -24,7 +24,7 @@ Participating in the lab involves following these steps:
 #.	Sign up:
 
 	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_. 
-	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.|new|
+	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins. |new|
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
