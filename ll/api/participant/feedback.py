@@ -21,6 +21,7 @@ from .. import ApiResource
 doc_fields = {
     "docid": fields.String(),
     "clicked": fields.Boolean(default=False),
+    "team": fields.String(default="participant"),
 }
 
 feedback_fields = {
