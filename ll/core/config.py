@@ -19,7 +19,7 @@ config = {
     "PASSWORD_LENGHT": 8,
     "EMAIL_FROM": 'challenge@living-labs.net',
     "SEND_EMAIL": False,
-    "URL_WEB": "http://living-labs.net",
+    "URL_WEB": "http://doc.living-labs.net/en/latest/guide-participant.html",
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001",
     "URL_DOC": "http://doc.living-labs.net",

@@ -32,7 +32,7 @@ def send_email(user, txt, subject):
         msgtxt += txt
         msgtxt += "\n\n"
         msgtxt += "Some relevant urls:\n"
-        msgtxt += "Website: %s\n" % config["URL_WEB"]
+        msgtxt += "Guide for CLEF participants: %s\n" % config["URL_WEB"]
         msgtxt += "API: %s\n" % config["URL_API"]
         msgtxt += "Dashboard: %s\n" % config["URL_DASHBOARD"]
         msgtxt += "Documentation: %s\n" % config["URL_DOC"]
@@ -111,10 +111,11 @@ def send_verification_email(user):
 
 
 def send_form_email(user):
-    txt = "You've registered for the CLEF Living Lab. "
-    txt += "We are almost ready to start the lab. "
-    txt += "But before we can do so, we need you to fill out, scan, and email the application form at "
+    txt = "You've registered for the CLEF Living Lab for IR Evaluation (LL4IR)."
+    txt += "The lab has started, clicks are flowing in."
+    txt += "Before you can start using them,we need you to fill out, scan, and email the application form at "
     txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
+    txt += "Then, please follow this guide: %s\n" % config["URL_WEB"]
     return send_email(user, txt, "Please Sign the Application Form")
 
 
