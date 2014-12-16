@@ -112,9 +112,9 @@ def send_verification_email(user):
 
 def send_form_email(user):
     txt = "A while ago, you registered for the CLEF Living Lab for IR Evaluation (LL4IR). "
-    txt += "The lab has started and clicks are flowing in steadily."
+    txt += "The lab has started and clicks are flowing in steadily. "
     txt += "Before you can start using these clicks, we need you to fill out, scan, and email the application form at "
-    txt += "this location as a reply to this email: %s\n " % config["URL_REGISTRATION_FORM"]
+    txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
     txt += "Then, please follow this guide: %s\n\n" % config["URL_WEB"]
     txt += "These are your Living Labs account details:\n"
     txt += "API key: %s\n" % user["_id"]
