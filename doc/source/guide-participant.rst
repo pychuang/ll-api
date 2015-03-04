@@ -50,10 +50,11 @@ Date 			Description
 1 Nov, 2014		Training period begins (Note that you can join any time after this date!)  |new|
 1-15 Apr, 2015		Uploading test runs
 15 Apr, 2015		Testing period begins
-30 May, 2015		Testing period ends
-1 Jun, 2015		Results released
-15 Jun, 2015		Working notes papers due
-15 Jul, 2015		Proceedings completed
+15 May, 2015		Testing period ends
+17 May, 2015		Results released
+31 May, 2015		Working notes papers due
+30 Jun, 2015		Notification of acceptance
+15 Jul, 2015		Camera-ready working notes papers due
 7-11 Sep, 2015		Full-day lab session at at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
 ===============	===============================================================================================================
 
