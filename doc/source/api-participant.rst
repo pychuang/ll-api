@@ -58,6 +58,8 @@ After the train phase, new queries (and doclists) will be made available.
    :include-empty-docstring:
 
 
+.. _api-participants_doclist:
+
 Doclist
 -------
 For each query, there is a fixed set of documents available. These documents
