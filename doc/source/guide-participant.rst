@@ -319,8 +319,14 @@ If you use the API, please refer to `this paper <http://www.anneschuth.nl/wp-con
 
 	@inproceedings{Balog2014Head,
 		title = {Head First: Living Labs for Ad-hoc Search Evaluation},
-		author = {K. Balog, L. Kelly, A. Schuth},
-		url = {http://www.anneschuth.nl/wp-content/uploads/2014/08/cikm2014-lleval.pdf},
+		author = {Balog, Krisztian and Kelly, Liadh and Schuth, Anne},
+		booktitle = {Proceedings of the 23rd ACM International Conference on Conference on Information and Knowledge Management},
+		series = {CIKM '14},
+		pages = {1815--1818},
+	    publisher = {ACM},
 		year = {2014},
-		booktitle = {CIKM'14},
+		url = {http://www.anneschuth.nl/wp-content/uploads/2014/08/cikm2014-lleval.pdf},
+    	doi = {10.1145/2661829.2661962}
 	}
+
+
