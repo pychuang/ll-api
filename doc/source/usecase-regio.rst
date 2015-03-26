@@ -1,12 +1,9 @@
-.. _usecases:
+.. _usecase-regio:
 
-Use-cases
-=========
+Use-case: Product search
+========================
 
-This page provides additional information for the specific use-cases.
-
-Product search
---------------
+This page provides additional information for the product search use-case.
 
 Documents correspond to products in an `online toy store <http://www.regiojatek.hu/>`_.
 The amount of text available for individual products is limited (and is in Hungarian),

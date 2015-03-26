@@ -128,7 +128,8 @@ interpretations of living labs in subsequent years. Use-cases for the first lab
 are:
 
 Product Search
-	On an e-commerce site.
+	On the `REGIO JÁTÉK <http://www.regiojatek.hu/>`_ e-commerce site.
+	More detailed information is available on a separate page: :ref:`usecase-regio`. |new|
 	
 Local Domain Search
 	On the `University of Amsterdam <http://uva.nl>`_’s website.
