@@ -15,11 +15,10 @@
  #}
    {% extends "base.html" %}
    {% block header %}
-    	Site {{ site.name }}
+    	My Stats for Site {{ site.name }}
    {% endblock %}
    {% block content %}
-      <p>Below are general statistics. For  statistics just for you, see <a href="/my/{{ site._id}}">My {{site.name}}</a>.</p>
-   
+   <p>Below are the statistics just for you. For general statistics see <a href="/site/{{ site._id}}">{{site.name}}</a>.</p>
     <table class="table table-striped table-hover ">
     
     <tbody>
@@ -49,18 +48,18 @@
 	      <td><a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
-		  <td>#impressions</td>      
-	      <td>{{ stats.impression }} {% if stats.query > 0 %}({{ (stats.impression/stats.query)|round(2) }} impressions per query){% endif %}</td>
+		  <td><b>#rankings by you</b> (#runs * #queries)</td>      
+	      <td><b>{{ stats.run }}</b></td>
 	      <td></td>
       </tr>
 	  <tr>
-		  <td>#clicks</td>      
-	      <td>{{ stats.click }} {% if stats.impression > 0 %}({{ (stats.click/stats.impression)|round(2) }} clicks per impression){% endif %}</td>
+		  <td><b>#impressions for you</b></td>      
+	      <td><b>{{ stats.impression }} {% if stats.query > 0 %}({{ (stats.impression/stats.query)|round(2) }} impressions per query){% endif %}</b></td>
 	      <td></td>
       </tr>
 	  <tr>
-		  <td>Additional terms and conditions</td>      
-	      <td>{{ site.terms }} </td>
+		  <td><b>#clicks for you</b></td>      
+	      <td><b>{{ stats.click }} {% if stats.impression > 0 %}({{ (stats.click/stats.impression)|round(2) }} clicks per impression){% endif %}</b></td>
 	      <td></td>
       </tr>
   	</tr>

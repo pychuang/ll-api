@@ -18,5 +18,48 @@
     	My
    {% endblock %}
    {% block content %}
-	This page will soon list information about your own runs.
+	
+	{% if sites %}
+	{% if user.is_participant %}
+    <p>These are the sites you have signed up for. You will need to 
+    <a href="{{ url_for('user.sites') }}">sign up</a> for each site individually
+    to obtain their data.</p>
+    
+	<p>Clicking on the <span class="glyphicon glyphicon-circle-arrow-right"></span> will 
+	give more information such as queries, documents and some basic statistics for you.</p>
+	{% endif %}
+    <table class="table table-striped table-hover ">
+    <thead>
+    <tr>
+    	<th>Short name</th>
+    	<th>Name</th>
+    	<th>Url</th>
+    	<th></th>    	
+    </tr>
+    </thead>
+    <tbody>
+    {% for site in sites %}
+    {% if site.enabled %}
+    <tr>
+      <td>{{ site._id }}{% if site.is_robot %}<img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/>{% endif %} 
+      </td>
+      <td>{{ site.name }}</td>
+      <td>{{ site.url|urlize }}</td>
+      <td><a href="/my/{{ site._id}}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+      </td>
+  	</tr>
+    {% endif %}
+    {% endfor %}
+  	</tbody>
+	</table>
+	Sites marked with a <img src="/static/icon_robot.svg" style="height: 14px; position: relative;top: -3px;left: 2px;"/> are simulations. 
+	{% else %}
+	<div class="alert alert-warning">
+    You have not yet signed up for any sites. You will need to individually
+    <a href="{{ url_for('user.sites') }}">sign up</a> for each site to obtain 
+    their data.
+    </div>
+	{% endif %}	
+	
+	
    {% endblock %}

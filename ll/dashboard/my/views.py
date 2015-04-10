@@ -23,5 +23,38 @@ mod = Blueprint('my', __name__, url_prefix='/my')
 @mod.route('/')
 @requires_login
 def my():
-    return render_template("my/my.html", user=g.user)
+    if g.user["is_participant"]:
+        sites = [s for s in core.site.get_sites()
+                 if g.user["is_admin"] or
+                 s["_id"] in core.user.get_sites(g.user["_id"])]
+    else:
+        sites = core.site.get_sites()
+    return render_template("my/my.html", user=g.user, sites=sites)
+
+@mod.route('/<site_id>')
+@requires_login
+def site(site_id):
+    site = core.site.get_site(site_id)
+    feedbacks = core.db.db.feedback.find({"site_id": site_id, "user_id": g.user["_id"]})
+    clicks = 0
+    for feedback in feedbacks:
+        if not "doclist" in feedback:
+            continue
+        clicks += len([d for d in feedback["doclist"]
+                       if "clicked" in d and d["clicked"]])
+
+    stats = {
+             "run": core.db.db.run.find({"site_id": site_id, "user_id": g.user["_id"]}).count(),
+             "query": core.db.db.query.find({"site_id": site_id}).count(),
+             "doc": core.db.db.doc.find({"site_id": site_id}).count(),
+             "impression": feedbacks.count(),
+             "click": clicks,
+    }
+
+    
+    
+    return render_template("my/site.html",
+                           user=g.user,
+                           site=site,
+                           stats=stats)
 
