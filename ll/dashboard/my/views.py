@@ -35,7 +35,7 @@ def my():
 @requires_login
 def site(site_id):
     site = core.site.get_site(site_id)
-    feedbacks = core.db.db.feedback.find({"site_id": site_id, "user_id": g.user["_id"]})
+    feedbacks = core.db.db.feedback.find({"site_id": site_id, "userid": g.user["_id"]})
     clicks = 0
     for feedback in feedbacks:
         if not "doclist" in feedback:
@@ -44,7 +44,7 @@ def site(site_id):
                        if "clicked" in d and d["clicked"]])
 
     stats = {
-             "run": core.db.db.run.find({"site_id": site_id, "user_id": g.user["_id"]}).count(),
+             "run": core.db.db.run.find({"site_id": site_id, "userid": g.user["_id"]}).count(),
              "query": core.db.db.query.find({"site_id": site_id}).count(),
              "doc": core.db.db.doc.find({"site_id": site_id}).count(),
              "impression": feedbacks.count(),
