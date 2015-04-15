@@ -47,7 +47,9 @@ class ApiResource(Resource):
             self.abort(400, "Please specify field(s): '%s'." %
                        ", ".join(notfound))
         if strict:
-            allowedfields = required_fields.keys() + optional_fields.keys()
+            allowedfields = required_fields
+            if optional_fields is not None:
+                allowedfields += optional_fields.keys()
             notallowed = [f for f in o if f not in allowedfields]
             if notallowed:
                 self.abort(400, "Please don't use field(s): '%s'." %
