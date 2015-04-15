@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ["query", "doc", "ranking", "feedback"]
+__all__ = ["query", "doc", "ranking", "feedback", "historical"]
 from .. import core
 from .. import app
 from . import *

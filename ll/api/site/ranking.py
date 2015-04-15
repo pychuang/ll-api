@@ -53,6 +53,12 @@ class Ranking(ApiResource):
         return user feedback :http:put:`/api/site/feedback/(key)/(sid)` as soon
         as it is available.
 
+        .. note::
+
+            Note the session id (sid) which will need to be stored on the sites
+            end and should be returned as part of the feedback.
+
+
         :param key: your API key
         :param site_qid: the site's query identifier
         :status 403: invalid key

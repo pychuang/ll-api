@@ -36,7 +36,37 @@ def add_feedback(site_id, sid, feedback):
         existing_feedback[k] = feedback[k]
     existing_feedback["modified_time"] = datetime.datetime.now()
     db.feedback.save(existing_feedback)
+    return existing_feedback
+
+
+def add_historical_feedback(site_id, site_qid, feedback):
+    query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
+    if query is None:
+        raise LookupError("Query not found: site_qid = '%s'." % site_qid)
+
+    for doc in feedback["doclist"]:
+        doc_found = db.doc.find_one({"site_id": site_id,
+                                     "site_docid": doc["site_docid"]
+                                     })
+        if not doc_found:
+            raise LookupError("Document not found: site_docid = '%s'. Please"
+                              "only provide historical feedback for documents"
+                              "that are allowed for a query."
+                              % doc["site_docid"])
+        doc["docid"] = doc_found["_id"]
+
+
+    feedback = {
+        "site_id": site_id,
+        "site_qid": site_qid,
+        "qid": query["_id"],
+        "creation_time": datetime.datetime.now(),
+        "modified_time": datetime.datetime.now(),
+    }
+
+    db.historical.save(feedback)
     return feedback
+
 
 def reset_feedback(userid=None, site_id=None, sid=None, qid=None):
     q = {}

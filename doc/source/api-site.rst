@@ -71,3 +71,11 @@ Feedback
    :endpoints: site/feedback
    :undoc-static:
    :include-empty-docstring:
+
+Historical Feedback
+--------
+.. autoflask:: ll.api.site:app
+   :endpoints: site/historical
+   :undoc-static:
+   :include-empty-docstring:
+ 
