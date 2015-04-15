@@ -28,8 +28,7 @@ doclist_fields = {
 class Feedback(ApiResource):
     def put(self, key, sid):
         """
-        Store user feedback for a session obtained through
-        :http:get:`/api/site/ranking/(key)/(site_qid)`.
+        Store user feedback for a session obtained through :http:get:`/api/site/ranking/(key)/(site_qid)`.
         The feedback can be stored multiple times for the same session if more
         feedback comes available.
         In that case, the old feedback will be overwritten, it is not additive.
@@ -88,8 +87,7 @@ class Feedback(ApiResource):
                         ]
                 }
 
-        Historical feedback can be added through
-        :http:get:`/api/site/historical/(key)/(site_qid)`.
+        Historical feedback can be added through :http:get:`/api/site/historical/(key)/(site_qid)`.
 
         :status 200: stored the feedback
         :status 403: invalid key

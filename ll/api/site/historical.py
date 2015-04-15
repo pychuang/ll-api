@@ -29,8 +29,7 @@ class Historical(ApiResource):
     def put(self, key, site_qid):
         """
         Store historical user feedback for a query. This is different from live
-        feedback, that can be stored through:
-        :http:get:`/api/site/feedback/(key)/(sid)`.
+        feedback, that can be stored through :http:get:`/api/site/feedback/(key)/(sid)`.
 
         The feedback can be stored multiple times for the same query, the old
         version will be overwritten, it is not additive.
@@ -67,7 +66,7 @@ class Historical(ApiResource):
         """
         site_id = self.get_site_id(key)
         json = request.get_json(force=True)
-        self.check_fields(json, ["doclist", "type"])
+        self.check_fields(json, ["doclist", "type"], strict=True)
         feedback = self.trycall(core.feedback.add_historical_feedback, 
                                 site_id, site_qid, json)
         return {
