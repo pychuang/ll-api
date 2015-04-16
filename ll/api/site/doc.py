@@ -22,12 +22,14 @@ from .. import ApiResource, ContentField
 doclist_fields = {
     "site_docid": fields.String(),
     "title": fields.String(),
+    "docid": fields.String(attribute="_id"),
 }
 
 doclist_fields_relevance_signals = {
     "site_docid": fields.String(),
     "title": fields.String(),
     "relevance_signals": fields.List(fields.List(fields.Float)),
+    "docid": fields.String(attribute="_id"),
 }
 
 doc_fields = {
@@ -35,6 +37,7 @@ doc_fields = {
     "creation_time": fields.DateTime(),
     "content": ContentField(),
     "title": fields.String(),
+    "docid": fields.String(attribute="_id"),
 }
 
 

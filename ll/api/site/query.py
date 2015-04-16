@@ -24,6 +24,7 @@ query_fields = {
     "qstr": fields.String(),
     "type": fields.String(default="train"),
     "creation_time": fields.DateTime(),
+    "qid": fields.String(attribute="_id"),
 }
 
 
