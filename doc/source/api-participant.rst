@@ -10,7 +10,11 @@ We provide a basic API for participants of the CLEF Living Labs  to perform
 several actions such as obtaining a key, queries, documents and feedback. The
 API can also be used to update runs. Everything is implemented as HTTP request,
 and we use the request types GET, HEAD and PUT. We try to throw appropriate 4XX
-errors where possible.
+errors where possible. Furthermore, the content the API returns when a error is
+thrown should help locate the issue. Please let us know when error messages are
+not helpful and need clarification.
+
+
 Note that participants are free to implement their own client to communicate
 with this API. However, example clients are provided by the organization.
 

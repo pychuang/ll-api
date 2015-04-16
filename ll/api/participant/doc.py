@@ -42,6 +42,13 @@ class Doc(ApiResource):
         """
         Retrieve a single document.
 
+        .. note:: Note that documents may change over time,
+            currently reflected by a changing creation_time (documents are
+            currently overwritten when they change, hence the changing creation
+            time). Documents can even be deleted, requesting a deleted document
+            results in a 404.
+
+
         :param key: your API key
         :param docid: the document identifier
         :status 403: invalid key
@@ -70,8 +77,9 @@ class DocList(ApiResource):
         Retrieve the document list for a query.
 
         This doclist defines the set documents that are returnable for a query.
-        You are free to update this list when the set of documents changes over
-        time.
+
+        .. note:: This document list may change over time.
+
 
         :param key: your API key
         :param qid: the query identifier
