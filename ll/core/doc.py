@@ -122,3 +122,21 @@ def get_doc(site_id=None, site_docid=None, docid=None, key=None):
     if docid:
         q["_id"] = docid
     return db.doc.find_one(q)
+
+
+def get_docs(site_id=None, site_docid=None, docid=None, key=None):
+    q = {"deleted": {"$ne": True}}
+    if key:
+        sites = user.get_sites(key)
+        if not sites:
+            raise Exception("First signup for sites.")
+        q["$or"] = [{"site_id": s} for s in sites]
+    if site_id:
+        if key and site_id not in sites:
+            raise Exception("First signup for site %s." % site_id)
+        q["site_id"] = site_id
+    if site_docid:
+        q["site_docid"] = site_docid
+    if docid and docid.lower() != "all":
+        q["_id"] = docid
+    return db.doc.find(q)

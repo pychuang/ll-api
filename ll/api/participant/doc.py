@@ -21,12 +21,14 @@ from .. import ApiResource, ContentField
 doclist_fields = {
     "docid": fields.String(attribute="_id"),
     "title": fields.String(),
+    "site_id": fields.String(),
 }
 
 doclist_fields_relevance_signals = {
     "docid": fields.String(attribute="_id"),
     "title": fields.String(),
     "relevance_signals": fields.List(fields.List(fields.Float)),
+    "site_id": fields.String(),
 }
 
 doc_fields = {
@@ -34,6 +36,7 @@ doc_fields = {
     "creation_time": fields.DateTime(),
     "content": ContentField(),
     "title": fields.String(),
+    "site_id": fields.String(),
 }
 
 
@@ -62,13 +65,48 @@ class Doc(ApiResource):
                                  ...}
                      "creation_time": "Sun, 27 Apr 2014 23:40:29 -0000",
                      "docid": "S-d1",
-                     "title": "Document Title"
+                     "title": "Document Title",
+                     "site_id": "S"
                 }
 
         """
         self.validate_participant(key)
         doc = self.trycall(core.doc.get_doc, docid=docid, key=key)
         return marshal(doc, doc_fields)
+
+
+class Docs(ApiResource):
+    def get(self, key):
+        """
+        Retrieve all documents.
+
+        .. note:: Note that documents may change over time,
+            currently reflected by a changing creation_time (documents are
+            currently overwritten when they change, hence the changing creation
+            time).
+
+
+        :param key: your API key
+        :status 403: invalid key
+        :return:
+            .. sourcecode:: javascript
+
+                {"docs": [
+                    {
+                     "content": {"description": "Lorem ipsum dolor sit amet",
+                                 "short_description" : "Lorem ipsum",
+                                 ...}
+                     "creation_time": "Sun, 27 Apr 2014 23:40:29 -0000",
+                     "docid": "S-d1",
+                     "title": "Document Title",
+                     "site_id": "S"
+                    }, ...]
+                }
+
+        """
+        self.validate_participant(key)
+        docs = self.trycall(core.doc.get_docs, key=key)
+        return {"docs": [marshal(doc, doc_fields) for doc in docs]}
 
 
 class DocList(ApiResource):
@@ -129,5 +167,7 @@ class DocList(ApiResource):
 
 api.add_resource(Doc, '/api/participant/doc/<key>/<docid>',
                  endpoint="participant/doc")
+api.add_resource(Docs, '/api/participant/docs/<key>',
+                 endpoint="participant/docs")
 api.add_resource(DocList, '/api/participant/doclist/<key>/<qid>',
                  endpoint="participant/doclist")

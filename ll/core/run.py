@@ -27,7 +27,7 @@ def get_ranking(site_id, site_qid):
         raise LookupError("Query not found: site_qid = '%s'. Only rankings "
                           "for existing queries can be expected." % site_qid)
     if "runs" not in query or not query["runs"]:
-        raise LookupError("No runs available for query: site_qid = '%s'. "
+        raise LookupError("No rankings available for query: site_qid = '%s'. "
                           "Participants will have to submit runs first. "
                           "Sites should be able to handle such errors."
                           % site_qid)

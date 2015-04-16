@@ -92,7 +92,7 @@ When a use case does not define relevance signals for each query document pair
 then this is where the content of documents is made available.
 
 .. autoflask:: ll.api.participant:app
-   :endpoints: participant/doc
+   :endpoints: participant/doc, participant/docs
    :undoc-static:
    :include-empty-docstring:
 

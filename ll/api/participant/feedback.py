@@ -83,6 +83,8 @@ class Feedback(ApiResource):
             .. sourcecode:: javascript
 
                 {
+                "feedback":    [
+                    {
                     "qid": "S-q1",
                     "runid": "baseline",
                     "type": "tdi",
@@ -98,6 +100,7 @@ class Feedback(ApiResource):
                             "team": "participant",
                         },
                         ]
+                    }, ...]
                 }
         """
 
