@@ -49,19 +49,19 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
 
 def get_query(site_id=None, qid=None, key=None):
     q = {"deleted": {"$ne": True}}
-    if key:
+    if key is not None:
         sites = user.get_sites(key)
         if not sites:
             raise Exception("First signup for sites.")
         q["$or"] = [{"site_id": s} for s in sites]
     if site_id:
-        if key and site_id not in sites:
+        if key is not None and site_id not in sites:
             raise Exception("First signup for site %s." % site_id)
         q["site_id"] = site_id
-    if qid:
+    if qid is not None:
         q["_id"] = qid
 
-    return [q for q in db.query.find(q) if "doclist" in q]
+    return [query for query in db.query.find(q)]  # if "doclist" in query]
 
 
 def delete_query(site_id=None, qid=None):
