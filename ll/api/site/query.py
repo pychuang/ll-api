@@ -45,13 +45,15 @@ class Query(ApiResource):
                             "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
                             "qstr": "jaguar",
                             "type": "train",
-                            "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75"
+                            "site_qid": "48474c1ab6d3541d2f881a9d4b3bed75",
+                            "qid": "S-q1",
                         },
                         {
                             "creation_time": "Sun, 27 Apr 2014 13:46:00 -0000",
                             "qstr": "apple",
                             "type": "test",
                             "site_qid": "30c6677b833454ad2df762d3c98d2409"
+                            "qid": "S-q2",
                         }
                     ]
                 }
@@ -73,6 +75,10 @@ class Query(ApiResource):
         phase). In fact, we may return an error when you try to
         return feedback for another query. The default query type is "train",
         which is thus also used when the type is omitted.
+
+        Optionally, the "qid" (i.e., not the site_qid) can also be added to
+        each query. If this is not done, the query is assigned an automatic
+        qid.
 
         :param key: your API key
 
@@ -104,14 +110,21 @@ class Query(ApiResource):
         site_id = self.get_site_id(key)
         queries = request.get_json(force=True)
         self.check_fields(queries, ["queries"])
-        self.trycall(core.query.delete_query, site_id=site_id)
+        #self.trycall(core.query.delete_query, site_id=site_id)
         for q in queries["queries"]:
             q_checked = self.check_fields(q, ["site_qid", "qstr"],
                                           {"type": "train"})
-            self.trycall(core.query.add_query, site_id,
-                         q_checked["site_qid"],
-                         q_checked["qstr"],
-                         q_checked["type"])
+            if "qid" in q_checked:
+                self.trycall(core.query.add_query, site_id,
+                             q_checked["site_qid"],
+                             q_checked["qstr"],
+                             q_checked["type"])
+            else:
+                self.trycall(core.query.add_query, site_id,
+                             q_checked["site_qid"],
+                             q_checked["qstr"],
+                             q_checked["type"],
+                             qid=q_checked["qid"])
         queries = self.trycall(core.query.get_query, site_id=site_id)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 

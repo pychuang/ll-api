@@ -21,21 +21,26 @@ import user
 from db import db
 
 
-def add_query(site_id, site_qid, qstr, query_type):
+def add_query(site_id, site_qid, qstr, query_type, qid=None):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query:
         query["qstr"] = qstr
+        query["type"] = query_type
         query["creation_time"] = datetime.datetime.now()
+        if qid is not None:
+            query["_id"] = qid
         db.query.save(query)
-        return query
-    query = {
-        "_id": site.next_qid(site_id),
-        "site_id": site_id,
-        "site_qid": site_qid,
-        "site_qid": site_qid,
-        "type": query_type,
-        "creation_time": datetime.datetime.now(),
-    }
+    else:
+        query = {
+            "_id": site.next_qid(site_id),
+            "site_id": site_id,
+            "site_qid": site_qid,
+            "type": query_type,
+            "creation_time": datetime.datetime.now(),
+        }
+        if qid is not None:
+            query["_id"] = qid
+
     db.query.insert(query)
     return query
 
