@@ -36,6 +36,7 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
             "_id": site.next_qid(site_id),
             "site_id": site_id,
             "site_qid": site_qid,
+            "qstr": qstr,
             "type": query_type,
             "creation_time": datetime.datetime.now(),
             "deleted": False,
