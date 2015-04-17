@@ -27,6 +27,7 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
         query["qstr"] = qstr
         query["type"] = query_type
         query["creation_time"] = datetime.datetime.now()
+        query["deleted"] = False
         if qid is not None:
             query["_id"] = qid
         db.query.save(query)
@@ -37,6 +38,7 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
             "site_qid": site_qid,
             "type": query_type,
             "creation_time": datetime.datetime.now(),
+            "deleted": False,
         }
         if qid is not None:
             query["_id"] = qid
@@ -46,7 +48,7 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
 
 
 def get_query(site_id=None, qid=None, key=None):
-    q = {}
+    q = {"deleted": {"$ne": True}}
     if key:
         sites = user.get_sites(key)
         if not sites:
@@ -68,4 +70,11 @@ def delete_query(site_id=None, qid=None):
         q["site_id"] = site_id
     if qid:
         q["_id"] = qid
-    return db.query.remove(q)
+
+    existing_query = db.query.find_one(q)
+
+    if existing_query:
+        existing_query["deleted"] = True
+        db.query.save(existing_query)
+        return True
+    return False
