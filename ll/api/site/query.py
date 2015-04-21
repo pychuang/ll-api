@@ -110,7 +110,6 @@ class Query(ApiResource):
         site_id = self.get_site_id(key)
         queries = request.get_json(force=True)
         self.check_fields(queries, ["queries"])
-        #self.trycall(core.query.delete_query, site_id=site_id)
         for q in queries["queries"]:
             q_checked = self.check_fields(q, ["site_qid", "qstr"],
                                           {"type": "train"})
@@ -118,13 +117,13 @@ class Query(ApiResource):
                 self.trycall(core.query.add_query, site_id,
                              q_checked["site_qid"],
                              q_checked["qstr"],
-                             q_checked["type"])
+                             q_checked["type"],
+                             qid=q_checked["qid"])
             else:
                 self.trycall(core.query.add_query, site_id,
                              q_checked["site_qid"],
                              q_checked["qstr"],
-                             q_checked["type"],
-                             qid=q_checked["qid"])
+                             q_checked["type"])
         queries = self.trycall(core.query.get_query, site_id=site_id)
         return {"queries": [marshal(q, query_fields) for q in queries]}
 

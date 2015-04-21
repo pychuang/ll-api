@@ -43,8 +43,7 @@ def add_query(site_id, site_qid, qstr, query_type, qid=None):
         }
         if qid is not None:
             query["_id"] = qid
-
-    db.query.insert(query)
+        db.query.insert(query)
     return query
 
 
