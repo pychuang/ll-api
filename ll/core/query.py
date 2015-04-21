@@ -24,7 +24,8 @@ from db import db
 def add_query(site_id, site_qid, qstr, query_type, qid=None):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if qid is not None and not qid.startswith("%s-q" % site_id):
-        raise Exception("Queries should start with the site_id.")
+        raise Exception("qid's should start with the site_id, i.e., %s-q100. "
+                        "This qid violates that rule: %s" % (site_id, qid))
     if query:
         query["qstr"] = qstr
         query["type"] = query_type
