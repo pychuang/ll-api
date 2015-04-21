@@ -17,7 +17,7 @@ Furthermore, if you do install the API/dashboard/.. on your own machine,
 debugging your code will become much easier.
 
 In case you have any comments or questions, please do not
-hesitate to file an issue here: http://git.living-labs.net/ll-api/issues.
+hesitate to file an issue here: https://bitbucket.org/living-labs/ll-api/issues.
 Or, you can contact the main developer directly at anne.schuth@uva.nl.
 
 For more information on the CLEF Lab, see http://living-labs.net/clef-lab/.

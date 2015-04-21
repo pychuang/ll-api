@@ -23,7 +23,7 @@ config = {
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001",
     "URL_DOC": "http://doc.living-labs.net",
-    "URL_GIT": "http://git.living-labs.net",
+    "URL_GIT": "https://bitbucket.org/living-labs/ll-api/",
     "URL_REGISTRATION_FORM": "http://living-labs.net/wp-content/uploads/2014/06/LLC14-Application-form.pdf",
     "EMAIL_ORGANIZERS": ["krisztian.balog@uis.no",
                          "liadh.kelly@scss.tcd.ie",

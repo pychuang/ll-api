@@ -168,7 +168,7 @@ the following logical steps:
 #.	Potentially update your run and repeat from 5.
 
 Examples that implement the above steps are included in the code repository
-which can be found here: http://git.living-labs.net/ll-api/
+which can be found here: https://bitbucket.org/living-labs/ll-api/
 
 What follows is a *very minimal* example of the above steps. But it should get
 you up and running. While we used Python, there is no such requirement for you.
