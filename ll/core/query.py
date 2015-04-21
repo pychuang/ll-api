@@ -23,6 +23,8 @@ from db import db
 
 def add_query(site_id, site_qid, qstr, query_type, qid=None):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
+    if qid is not None and not qid.startswith("%s-q" % site_id):
+        raise Exception("Queries should start with the site_id.")
     if query:
         query["qstr"] = qstr
         query["type"] = query_type
@@ -61,7 +63,7 @@ def get_query(site_id=None, qid=None, key=None):
     if qid is not None:
         q["_id"] = qid
 
-    return [query for query in db.query.find(q)]  # if "doclist" in query]
+    return [query for query in db.query.find(q)] 
 
 
 def delete_query(site_id=None, qid=None):
