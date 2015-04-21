@@ -63,7 +63,8 @@ class Query(ApiResource):
         """
         self.validate_participant(key)
         queries = self.trycall(core.query.get_query, key=key)
-        return {"queries": [marshal(q, query_fields) for q in queries]}
+        return {"queries": [marshal(q, query_fields) for q in queries
+                            if "doclist" in q]}
 
 api.add_resource(Query, '/api/participant/query/<key>',
                  endpoint="participant/query")
