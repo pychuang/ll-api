@@ -35,7 +35,7 @@ def get_ranking(site_id, site_qid):
     run = db.run.find_one({"runid": runid,
                            "site_qid": site_qid,
                            "userid": userid}
-                          ).hint("runid_1_site_qid_1_userid_1")
+                          )
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
