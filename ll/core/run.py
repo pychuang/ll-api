@@ -33,9 +33,12 @@ def get_ranking(site_id, site_qid):
                           % site_qid)
     userid, runid = random.choice(query["runs"].items())
     runs = db.run.find({"runid": runid,
-                           "site_qid": site_qid,
-                           "userid": userid}
-                          )
+                        "site_qid": site_qid,
+                        "userid": userid
+                        }).hint([("runid", pymongo.ASCENDING),
+                                 ("site_qid", pymongo.ASCENDING),
+                                 ("userid", pymongo.ASCENDING)
+                                 ])
     run = runs[0]
     sid = site.next_sid(site_id)
     feedback = {
