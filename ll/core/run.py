@@ -34,7 +34,8 @@ def get_ranking(site_id, site_qid):
     userid, runid = random.choice(query["runs"].items())
     run = db.run.find_one({"runid": runid,
                            "site_qid": site_qid,
-                           "userid": userid})
+                           "userid": userid}
+                          ).hint("runid_1_site_qid_1_userid_1")
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
@@ -57,17 +58,9 @@ def add_run(key, qid, runid, doclist):
     sites = user.get_sites(key)
     if q["site_id"] not in sites:
         raise LookupError("First sign up for site %s." % q["site_id"])
-    #existingrun = db.run.find_ond({"runid": runid, "qid": qid})
-    #if existingrun:
-    #    raise Exception("Run with this runid for this query already exists. "
-    #                    "runid = '%s', qid = '%s'" % (runid, qid))
-
-    #qdoclist = q["doclist"]
+    if len(doclist) == 0:
+        raise ValueError("The doclist should contain documents.")
     for doc in doclist:
-        #if doc["docid"] not in qdoclist:
-        #    raise LookupError("Document not in doclist for this query. "
-        #                      "You may have to update the doclist. "
-        #                      "docid = '%s', qid = '%s'" % (doc["docid"], qid))
         doc_found = db.doc.find_one({"_id": doc["docid"]})
         if not doc_found:
             raise LookupError("Document not found: docid = '%s'. Only submit "
