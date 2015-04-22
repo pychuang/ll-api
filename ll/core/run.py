@@ -35,7 +35,9 @@ def get_ranking(site_id, site_qid):
     run = db.run.find_one({"runid": runid,
                            "site_qid": site_qid,
                            "userid": userid}
-                          )
+                          ).hint([("runid", pymongo.DESCENDING),
+                                  ("site_qid", pymongo.DESCENDING),
+                                  ("userid", pymongo.DESCENDING)])
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
