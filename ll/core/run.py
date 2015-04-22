@@ -31,15 +31,19 @@ def get_ranking(site_id, site_qid):
                           "Participants will have to submit runs first. "
                           "Sites should be able to handle such errors."
                           % site_qid)
-    userid, runid = random.choice(query["runs"].items())
-    runs = db.run.find({"runid": runid,
-                        "site_qid": site_qid,
-                        "userid": userid
-                        }).hint([("runid", pymongo.ASCENDING),
-                                 ("site_qid", pymongo.ASCENDING),
-                                 ("userid", pymongo.ASCENDING)
-                                 ])
-    run = runs[0]
+    allruns = query["runs"].items()
+    random.shuffle(allruns)
+    for userid, runid in allruns:
+        runs = db.run.find({"runid": runid,
+                            "site_qid": site_qid,
+                            "userid": userid
+                            }).hint([("runid", pymongo.ASCENDING),
+                                     ("site_qid", pymongo.ASCENDING),
+                                     ("userid", pymongo.ASCENDING)
+                                     ])
+        run = runs[0]
+        if len(run["doclist"]) > 0:
+            break
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
