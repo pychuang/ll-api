@@ -29,6 +29,10 @@
       <td>{{ query.site_qid }}</td>
     </tr>
     <tr>
+      <td>Type</td>
+      <td>{{ query.type if query.type != None else 'train' }}</td>
+    </tr>
+    <tr>
       <td>Querystring</td>
       <td>{{ query.qstr }}</td>
     </tr>
