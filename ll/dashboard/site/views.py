@@ -38,11 +38,11 @@ def site(site_id):
     site = core.site.get_site(site_id)
     feedbacks = core.db.db.feedback.find({"site_id": site_id})
     clicks = 0
-    for feedback in feedbacks:
-        if not "doclist" in feedback:
-            continue
-        clicks += len([d for d in feedback["doclist"]
-                       if "clicked" in d and d["clicked"]])
+    #for feedback in feedbacks:
+    #    if not "doclist" in feedback:
+    #        continue
+    #    clicks += len([d for d in feedback["doclist"]
+    #                   if "clicked" in d and d["clicked"]])
 
     stats = {
              "query": core.db.db.query.find({"site_id": site_id}).count(),
