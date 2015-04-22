@@ -32,12 +32,13 @@ def get_ranking(site_id, site_qid):
                           "Sites should be able to handle such errors."
                           % site_qid)
     userid, runid = random.choice(query["runs"].items())
-    run = db.run.find_one({"runid": runid,
+    runs = db.run.find({"runid": runid,
                            "site_qid": site_qid,
                            "userid": userid}
                           ).hint([("runid", pymongo.DESCENDING),
                                   ("site_qid", pymongo.DESCENDING),
                                   ("userid", pymongo.DESCENDING)])
+    run = runs[0]
     sid = site.next_sid(site_id)
     feedback = {
         "_id": sid,
