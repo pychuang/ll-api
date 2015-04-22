@@ -23,6 +23,7 @@
     <tr>
     	<th>Qid</th>
     	<th>Site_qid</th>
+    	<th>Type</th>
     	<th>Querystring</th>
     	<th>Creation time</th>
     	<th></th>
@@ -33,6 +34,7 @@
     <tr>
       <td>{{ query._id }}</td>
       <td>{{ query.site_qid }}</td>
+      <td>{{ query.type if query.type != None else 'train' }}</td>
       <td>{{ query.qstr }}</td>
       <td>{{ query.creation_time }}</td>
  	  <td><a href="/site/{{ site._id}}/query/{{ query._id }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
