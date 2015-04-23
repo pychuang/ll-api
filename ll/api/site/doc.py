@@ -139,7 +139,7 @@ class DocList(ApiResource):
         :param key: your API key
         :param site_qid: the site's query identifier
         :status 403: invalid key
-        :status 404: query does not exist
+        :status 404: query does not exist or does not have a doclist attached
         :status 400: bad request
         :return:
             .. sourcecode:: javascript

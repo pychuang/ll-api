@@ -28,9 +28,9 @@ def add_doclist(site_id, site_qid, doclist):
     for doc in doclist:
         doc_found = get_doc(site_id=site_id, site_docid=doc["site_docid"])
         if not doc_found:
-            raise LookupError("Document not found: site_docid = '%s'. Add"
-                              "documents before adding a doclist."
-                              % doc["site_docid"])
+            raise ValueError("Document not found: site_docid = '%s'. Add "
+                             "documents before adding a doclist."
+                             % doc["site_docid"])
         if "relevance_signals" in doc:
             # szn extension: store relevance signals for this doclist item
             store_doclist.append({
