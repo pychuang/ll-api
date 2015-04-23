@@ -55,14 +55,11 @@ def add_historical_feedback(site_id, site_qid, feedback):
                               % doc["site_docid"])
         doc["docid"] = doc_found["_id"]
 
-
-    feedback = {
-        "site_id": site_id,
-        "site_qid": site_qid,
-        "qid": query["_id"],
-        "creation_time": datetime.datetime.now(),
-        "modified_time": datetime.datetime.now(),
-    }
+    feedback["site_id"] = site_id
+    feedback["site_qid"] = site_qid
+    feedback["qid"] = query["_id"]
+    feedback["creation_time"] = datetime.datetime.now()
+    feedback["modified_time"] = datetime.datetime.now()
 
     db.historical.save(feedback)
     return feedback
