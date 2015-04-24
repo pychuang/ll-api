@@ -45,7 +45,7 @@
       <td>{{ query.doclist|length }} ({% for d in query.doclist %} <a href="/site/{{ site._id }}/doc/{{ d }}">{{ d }}</a>, {% endfor %})</td>
     </tr>
     <tr>
-      <td>#docs this query has in the doclist</td>
+      <td>Historical feedback</td>
       <td>{{ historical.doclist|length }} ({% for d in historical.doclist %} <a href="/site/{{ site._id }}/doc/{{ d.docid }}">{{ d.docid }}</a>: {{d.clicked}}, {% endfor %})</td>
     </tr>
   	</tbody>
