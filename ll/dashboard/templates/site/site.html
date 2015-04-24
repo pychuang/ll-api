@@ -49,7 +49,6 @@
 	  <tr>
 		  <td>#docs</td>      
 	      <td>
-	      	<a href="http://www.living-labs.net:5000/api/participant/doclist/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a>
 	      	<a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
 	      </td>
 	      <td>{{ stats.doc }} {% if stats.query > 0 %}({{ (stats.doc/stats.query)|round(2) }} documents per query){% endif %}</td>
