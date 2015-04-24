@@ -25,11 +25,25 @@ doclist_fields = {
 }
 
 
+doc_fields = {
+    "docid": fields.String(),
+    "clicked": fields.Float(),
+}
+
+feedback_fields = {
+    "site_qid": fields.String(),
+    "qid": fields.String(),
+    "modified_time": fields.DateTime(),
+    "type": fields.String(),
+    "doclist": fields.Nested(doc_fields),
+}
+
+
 class Historical(ApiResource):
     def put(self, key, site_qid):
         """
         Store historical user feedback for a query. This is different from live
-        feedback, that can be stored through :http:get:`/api/site/feedback/(key)/(sid)`.
+        feedback, that can be stored through :http:put:`/api/site/feedback/(key)/(sid)`.
 
         The feedback can be stored multiple times for the same query, the old
         version will be overwritten, it is not additive.
@@ -67,7 +81,7 @@ class Historical(ApiResource):
         site_id = self.get_site_id(key)
         json = request.get_json(force=True)
         self.check_fields(json, ["doclist", "type"], strict=True)
-        feedback = self.trycall(core.feedback.add_historical_feedback, 
+        feedback = self.trycall(core.feedback.add_historical_feedback,
                                 site_id, site_qid, json)
         return {
             "site_qid": feedback["site_qid"],
@@ -75,6 +89,41 @@ class Historical(ApiResource):
             "doclist": [marshal(d, doclist_fields)
                         for d in feedback["doclist"]]
             }
+
+    def get(self, key, site_qid):
+        """
+        Retrieve historical user feedback for a query. This is different from
+        live feedback, that can be retrieved
+        through :http:get:`/api/site/feedback/(key)/(sid)`.
+
+        :param key: your API key
+        :param site_qid: the sites query identifier, or "all"
+        :reqheader Content-Type: application/json
+        :status 403: invalid key
+        :status 404: query does not exist
+        :return:
+            .. sourcecode:: javascript
+
+                {
+                    "type": "ctr",
+                    "doclist": [
+                        {
+                            "site_docid": "b5ee9b2e327493c4fdb24296a94a"
+                            "clicked": 0.7,
+                        },
+                        {
+                            "site_docid": "4922d3c4fdb24296a90a20bdd20e"
+                            "clicked": 0.4,
+                        },
+                        ]
+                }
+
+        """
+        site_id = self.get_site_id(key)
+        feedbacks = self.trycall(core.feedback.get_historical_feedback,
+                                 site_id=site_id, site_qid=site_qid)
+        return {"feedback": [marshal(feedback, feedback_fields)
+                             for feedback in feedbacks]}
 
 api.add_resource(Historical, '/api/site/historical/<key>/<site_qid>',
                  endpoint="site/historical")
