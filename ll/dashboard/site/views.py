@@ -75,7 +75,8 @@ def query_detail(site_id, qid):
     return render_template("site/query_detail.html",
                            user=g.user,
                            site=site,
-                           historical=historicals[0] if historicals else None,
+                           historical=None if historicals is None
+                                        else historicals[0],
                            query=core.db.db.query.find_one({"site_id": site_id,
                                                             "_id": qid}))
 
