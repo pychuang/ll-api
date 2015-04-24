@@ -70,13 +70,15 @@ def query(site_id):
 @requires_login
 def query_detail(site_id, qid):
     site = core.site.get_site(site_id)
-    historicals = core.feedback.get_historical_feedback(qid=qid,
-                                                        site_id=site_id)
+    try:
+        historical = core.feedback.get_historical_feedback(qid=qid,
+                                                           site_id=site_id)[0]
+    except:
+        historical = None
     return render_template("site/query_detail.html",
                            user=g.user,
                            site=site,
-                           historical=None if historicals is None
-                                        else historicals[0],
+                           historical=historical,
                            query=core.db.db.query.find_one({"site_id": site_id,
                                                             "_id": qid}))
 
