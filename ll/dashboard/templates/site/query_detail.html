@@ -22,31 +22,41 @@
     <tbody>
     <tr>
       <td>Qid</td>
-      <td>{{ query._id }}</td>
+      <td><a href="http://www.living-labs.net:5000/api/participant/query/{{user._id}}"><span class="glyphicon glyphicon-flash"></span></a></td>
+      <td>
+      	{{ query._id }} 
+      </td>
     </tr>
     <tr>
       <td>Site_qid</td>
+      <td></td>
       <td>{{ query.site_qid }}</td>
     </tr>
     <tr>
       <td>Type</td>
+      <td></td>
       <td>{{ query.type if query.type != None else 'train' }}</td>
     </tr>
     <tr>
       <td>Querystring</td>
+      <td></td>
       <td>{{ query.qstr }}</td>
     </tr>
     <tr>
       <td>Creation time</td>
+      <td></td>
       <td>{{ query.creation_time }}</td>
     </tr>
     <tr>
       <td>#docs this query has in the doclist</td>
+      <td><a href="http://www.living-labs.net:5000/api/participant/historical/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a></td>
       <td>{{ query.doclist|length }} ({% for d in query.doclist %} <a href="/site/{{ site._id }}/doc/{{ d }}">{{ d }}</a>, {% endfor %})</td>
     </tr>
     <tr>
       <td>Historical feedback</td>
-      <td>{{ historical.doclist|length }} ({% for d in historical.doclist %} <a href="/site/{{ site._id }}/doc/{{ d.docid }}">{{ d.docid }}</a>: {{d.clicked}}, {% endfor %})</td>
+      <td><a href="http://www.living-labs.net:5000/api/participant/historical/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a></td>
+      <td>{{ historical.doclist|length }} ({% for d in historical.doclist %} <a href="/site/{{ site._id }}/doc/{{ d.docid }}">{{ d.docid }}</a>: {{d.clicked}}, {% endfor %})
+      </td>
     </tr>
   	</tbody>
 	</table> 
