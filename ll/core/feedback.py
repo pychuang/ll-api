@@ -97,11 +97,8 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     return readyfeedback
 
 
-def get_historical_feedback(userid=None, site_id=None,
-                            qid=None, site_qid=None):
+def get_historical_feedback(site_id=None, qid=None, site_qid=None):
     q = {}
-    if userid:
-        q["userid"] = userid
     if site_id:
         q["site_id"] = site_id
     if site_qid:

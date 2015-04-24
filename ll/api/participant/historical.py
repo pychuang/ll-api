@@ -66,7 +66,6 @@ class Historical(ApiResource):
 
         self.validate_participant(key)
         feedbacks = self.trycall(core.feedback.get_historical_feedback,
-                                 userid=key,
                                  qid=qid)
         return {"feedback": [marshal(feedback, feedback_fields)
                              for feedback in feedbacks]}
