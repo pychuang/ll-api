@@ -49,7 +49,7 @@
     </tr>
     <tr>
       <td>#docs this query has in the doclist</td>
-      <td><a href="http://www.living-labs.net:5000/api/participant/historical/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a></td>
+      <td><a href="http://www.living-labs.net:5000/api/participant/doclist/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a></td>
       <td>{{ query.doclist|length }} ({% for d in query.doclist %} <a href="/site/{{ site._id }}/doc/{{ d }}">{{ d }}</a>, {% endfor %})</td>
     </tr>
     <tr>

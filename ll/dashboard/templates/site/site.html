@@ -25,43 +25,49 @@
     <tbody>
       <tr>
 	      <td>Short name</td>
-	      <td>{{ site._id }}</td>
 	      <td></td>
+	      <td>{{ site._id }}</td>
       </tr>
       <tr>
 	      <td>Name</td>
-	      <td>{{ site.name }}</td>
 	      <td></td>
+	      <td>{{ site.name }}</td>
       </tr>
 	  <tr>
 		  <td>Url</td>      
-	      <td>{{ site.url|urlize }}</td>
 	      <td></td>
+	      <td>{{ site.url|urlize }}</td>
       </tr>
 	  <tr>
 		  <td>#queries</td>      
+	      <td>
+	            <a href="http://www.living-labs.net:5000/api/participant/query/{{user._id}}"><span class="glyphicon glyphicon-flash"></span></a>
+	      		<a href="/site/{{ site._id}}/query"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+	      </td>
 	      <td>{{ stats.query }}</td>
-	      <td><a href="/site/{{ site._id}}/query"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
 		  <td>#docs</td>      
+	      <td>
+	      	<a href="http://www.living-labs.net:5000/api/participant/doclist/{{user._id}}/{{ query._id }}"><span class="glyphicon glyphicon-flash"></span></a>
+	      	<a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+	      </td>
 	      <td>{{ stats.doc }} {% if stats.query > 0 %}({{ (stats.doc/stats.query)|round(2) }} documents per query){% endif %}</td>
-	      <td><a href="/site/{{ site._id}}/doc"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
       </tr>
 	  <tr>
 		  <td>#impressions</td>      
-	      <td>{{ stats.impression }} {% if stats.query > 0 %}({{ (stats.impression/stats.query)|round(2) }} impressions per query){% endif %}</td>
 	      <td></td>
+	      <td>{{ stats.impression }} {% if stats.query > 0 %}({{ (stats.impression/stats.query)|round(2) }} impressions per query){% endif %}</td>
       </tr>
 	  <!--tr>
 		  <td>#clicks</td>      
-	      <td>{{ stats.click }} {% if stats.impression > 0 %}({{ (stats.click/stats.impression)|round(2) }} clicks per impression){% endif %}</td>
 	      <td></td>
+	      <td>{{ stats.click }} {% if stats.impression > 0 %}({{ (stats.click/stats.impression)|round(2) }} clicks per impression){% endif %}</td>
       </tr-->
 	  <tr>
 		  <td>Additional terms and conditions</td>      
-	      <td>{{ site.terms }} </td>
 	      <td></td>
+	      <td>{{ site.terms }} </td>
       </tr>
   	</tr>
   	</tbody>

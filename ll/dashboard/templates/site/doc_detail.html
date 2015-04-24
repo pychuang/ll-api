@@ -22,26 +22,32 @@
     <tbody>
     <tr>
       <td>Docid</td>
+      <td><a href="http://www.living-labs.net:5000/api/participant/doc/{{user._id}}/{{ doc._id }}"><span class="glyphicon glyphicon-flash"></span></a></td>
       <td>{{ doc._id }}</td>
     </tr>
     <tr>
       <td>Site_docid</td>
+      <td></td>
       <td>{{ doc.site_docid }}</td>
     </tr>
     <tr>
       <td>Title</td>
+      <td></td>
       <td>{{ doc.title }}</td>
     </tr>
     <tr>
       <td>Creation time</td>
+      <td></td>
       <td>{{ doc.creation_time }}</td>
     </tr>
     <tr>
       <td>#queries this document appears in a doclist for</td>
+      <td></td>
       <td>{{ stats.queries|length }} ({% for q in stats.queries %} <a href="/site/{{ site._id }}/query/{{ q._id}}">{{ q._id}}</a>, {% endfor %})</td>
     </tr
     <tr>
       <td>Content</td>
+      <td></td>
 	  <td>{{ doc.content }}</td>
   	</tr>
   	</tbody>
