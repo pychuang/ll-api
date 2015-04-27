@@ -63,6 +63,8 @@ def add_run(key, qid, runid, doclist):
     q = db.query.find_one({"_id": qid})
     if not q:
         raise LookupError("Query does not exist: qid = '%s'" % qid)
+    if q["type"] == "test" and "runs" in q and key in q["runs"]:
+        raise ValueError("For test queries you can only upload a run once.")
     sites = user.get_sites(key)
     if q["site_id"] not in sites:
         raise LookupError("First sign up for site %s." % q["site_id"])
