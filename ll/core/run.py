@@ -14,6 +14,7 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from db import db
+from config import config
 import random
 import pymongo
 import datetime
@@ -63,7 +64,11 @@ def add_run(key, qid, runid, doclist):
     q = db.query.find_one({"_id": qid})
     if not q:
         raise LookupError("Query does not exist: qid = '%s'" % qid)
-    if "type" in q and q["type"] == "test" and "runs" in q and key in q["runs"]:
+    if datetime.date.today() > config["TEST_DATE"] \
+            and "type" in q  \
+            and q["type"] == "test" \
+            and "runs" in q \
+            and key in q["runs"]:
         raise ValueError("For test queries you can only upload a run once.")
     sites = user.get_sites(key)
     if q["site_id"] not in sites:

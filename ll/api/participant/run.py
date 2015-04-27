@@ -69,7 +69,8 @@ class Run(ApiResource):
         only for the participants own bookkeeping. It could be any string,
         you may want to use a timestamp. Or the version of your ranker.
 
-        For test queries, runs can only be uploaded once.
+        For test queries, a run can only be uploaded once after the test period
+        starts.
 
         :param key: your API key
         :param qid: the query identifier

@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 
 config = {
     "KEY_LENGTH": 32,
@@ -28,4 +29,5 @@ config = {
     "EMAIL_ORGANIZERS": ["krisztian.balog@uis.no",
                          "liadh.kelly@scss.tcd.ie",
                          "anne.schuth@uva.nl"],
+    "TEST_DATE": datetime.date(2015, 5, 1),
 }
