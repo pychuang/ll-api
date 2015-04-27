@@ -102,3 +102,50 @@ An example product record is shown below::
 	}
 
 
+Feedback
+~~~~~~~~
+
+Feedback is uploaded to the API in every 5 minutes.  
+Feedback is binary: whether a product in the ranking got clicked (at all) or not.
+Note that the feedback for a given query may change over time, as additional products may get clicked.
+
+
+Historical feedback
+~~~~~~~~~~~~~~~~~~~
+
+Aggregated click-through rate (CTR) is available for all queries via the 
+historical feedback endpoint.  
+CTR is computed based on a sufficiently long period (several months) from the 
+past, i.e., these values will not change during the campaign. 
+Products below a certain threshold (click count) are excluded.
+
+An excerpt is displayed below:: 
+
+	{
+		"feedback": [
+			{
+				"doclist": [
+					{
+						"clicked": "0.053", 
+						"docid": "R-d1112"
+					}, 
+					{
+						"clicked": "0.044", 
+						"docid": "R-d473"
+					}, 
+					{
+						"clicked": "0.032", 
+						"docid": "R-d3689"
+					}, 
+					{
+						"clicked": "0.03", 
+						"docid": "R-d3916"
+					}, 
+					{
+						"clicked": "0.028", 
+						"docid": "R-d442"
+					}, 
+				
+					,,,
+	}
+
