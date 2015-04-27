@@ -15,6 +15,7 @@
 
 import datetime
 from db import db
+from config import config
 import doc
 
 
@@ -91,7 +92,12 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     if runid:
         q["runid"] = runid
     readyfeedback = []
+    test_check = datetime.date.today() < config["TEST_DATE"]
     for feedback in db.feedback.find(q):
+        if test_check:
+            query = db.query.find_one({"_id": feedback["qid"]})
+            if "type" in query and query["type"] == "test":
+                continue
         if feedback.get("doclist") is not None:
             readyfeedback.append(feedback)
     return readyfeedback
@@ -101,7 +107,7 @@ def get_historical_feedback(site_id=None, qid=None, site_qid=None):
     q = {}
     if site_id:
         q["site_id"] = site_id
-    if site_qid:
+    if site_qid and site_qid.lower() != "all":
         q["site_qid"] = site_qid
     if qid and qid.lower() != "all":
         q["qid"] = qid
