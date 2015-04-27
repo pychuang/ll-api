@@ -48,8 +48,8 @@ Schedule
 Date 			Description
 ===============	===============================================================================================================
 1 Nov, 2014		Training period begins (Note that you can join any time after this date!)  |new|
-1-15 Apr, 2015		Uploading test runs
-15 Apr, 2015		Testing period begins
+27-30 Apr, 2015		Uploading test runs
+1 May, 2015		Testing period begins
 15 May, 2015		Testing period ends
 17 May, 2015		Results released
 31 May, 2015		Working notes papers due
@@ -122,7 +122,7 @@ Features Instead of Queries and Documents  |new|
 Usage Scenarios |new|
 ---------------------
 
-The first edition of the lab focuses on three use-cases and one specific notion 
+The first edition of the lab focuses on two use-cases and one specific notion 
 of what a living lab is, with a view to expanding to other use-cases and other 
 interpretations of living labs in subsequent years. Use-cases for the first lab 
 are:
@@ -131,9 +131,6 @@ Product Search
 	On the `REGIO JÁTÉK <http://www.regiojatek.hu/>`_ e-commerce site.
 	More detailed information is available on a separate page: :ref:`usecase-regio`. |new|
 	
-Local Domain Search
-	On the `University of Amsterdam <http://uva.nl>`_’s website.
-
 Web Search
 	Through `Seznam <http://seznam.cz>`_, a major commercial web search engine.
 
