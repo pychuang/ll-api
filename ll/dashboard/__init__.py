@@ -65,3 +65,6 @@ from participant.views import mod as participantModule
 app.register_blueprint(participantModule)
 from my.views import mod as myModule
 app.register_blueprint(myModule)
+from admin.views import mod as adminModule
+app.register_blueprint(adminModule)
+
