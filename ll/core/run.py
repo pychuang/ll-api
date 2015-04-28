@@ -85,6 +85,7 @@ def add_run(key, qid, runid, doclist):
         "userid": key,
         "qid": qid,
         "site_qid": q["site_qid"],
+        "site_id": q["site_id"],
         "runid": runid,
         "doclist": doclist,
         "creation_time": datetime.datetime.now(),
