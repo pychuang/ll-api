@@ -53,7 +53,7 @@ def admin():
                        "active": len([s for s in sites if s["enabled"]])},
              "queries": len(queries),
              "per_site": {site["_id"]: {"participants": len(site_participants[site["_id"]]) if site["_id"] in site_participants else 0,
-                                        "queries": len(site_queries[site["_id"]]) if site["_id"] in site_queries else 0
+                                        "queries": site_queries[site["_id"]] if site["_id"] in site_queries else 0
                                     } for site in sites
                           }
              }
