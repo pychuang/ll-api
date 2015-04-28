@@ -22,15 +22,27 @@
     	<tbody>
       	<tr>
 	      <td>#participants</td>
-	      <td>{{ stats.participants }}</td>
+	      <td>{{ stats.participants.all }}</td>
       	</tr>
       	<tr>
 	      <td>#verified participants</td>
-	      <td>{{ stats.participants_verified }}</td>
+	      <td>{{ stats.participants.verified }}</td>
       	</tr>
       	<tr>
 	      <td>#active participants</td>
-	      <td>{{ stats.participants_verified }}</td>
+	      <td>{{ stats.participants.active }}</td>
+      	</tr>
+      	<tr>
+	      <td>#sites</td>
+	      <td>{{ stats.sites.all }}</td>
+      	</tr>
+      	<tr>
+	      <td>#enables sites</td>
+	      <td>{{ stats.sites.active }}</td>
+      	</tr>
+      	<tr>
+	      <td>#sites with runs</td>
+	      <td>{{ stats.sites.runs }}</td>
       	</tr>
       	</tbody>
   	</table>

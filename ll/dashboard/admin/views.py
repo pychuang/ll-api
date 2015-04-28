@@ -27,8 +27,25 @@ def admin():
         flash(u'You need to be admin for this page.', 'alert-warning')
         return redirect("/")
     participants = core.user.get_participants()
-    stats = {"participants_verified":  len([u for u in participants
-                                            if u["is_verified"]]),
-             "participants":  len(participants)
+    queries = core.query.get_query()
+    sites = core.site.get_sites()
+    active_participants = set()
+    active_participants_site = {}
+    for query in queries:
+        if not active_participants_site[query["site_id"]]:
+            active_participants_site[query["site_id"]] = set()
+        if "runs" in query:
+            for u in query["runs"]:
+                active_participants.add(u)
+                active_participants_site[query["site_id"]].add(u)
+
+    stats = {"participants": {"verified":  len([u for u in participants
+                                                if u["is_verified"]]),
+                              "all":  len(participants),
+                              "active":  len(active_participants)
+                              },
+             "sites": {"runs": len(active_participants_site),
+                       "all": sites.count(),
+                       "active": len([s for s in sites if s["enabled"]])}
              }
     return render_template("admin/admin.html", user=g.user, stats=stats)
