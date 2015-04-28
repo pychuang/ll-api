@@ -28,24 +28,33 @@ def admin():
         return redirect("/")
     participants = core.user.get_participants()
     queries = core.query.get_query()
-    sites = core.site.get_sites()
+    sites = [s for s in core.site.get_sites()]
     active_participants = set()
-    active_participants_site = {}
+    site_participants = {}
+    site_queries = {}
     for query in queries:
-        if not query["site_id"] in active_participants_site:
-            active_participants_site[query["site_id"]] = set()
+        if not query["site_id"] in site_participants:
+            site_participants[query["site_id"]] = set()
+        if not query["site_id"] in site_queries:
+            site_queries[query["site_id"]] = 0
         if "runs" in query:
+            site_queries[query["site_id"]] += 1
             for u in query["runs"]:
                 active_participants.add(u)
-                active_participants_site[query["site_id"]].add(u)
+                site_participants[query["site_id"]].add(u)
 
     stats = {"participants": {"verified":  len([u for u in participants
                                                 if u["is_verified"]]),
                               "all":  len(participants),
                               "active":  len(active_participants)
                               },
-             "sites": {"runs": len(active_participants_site),
-                       "all": sites.count(),
-                       "active": len([s for s in sites if s["enabled"]])}
+             "sites": {"runs": len(site_participants),
+                       "all": len(sites),
+                       "active": len([s for s in sites if s["enabled"]])},
+             "queries": len(queries),
+             "per_site": {site["_id"]: {"participants": len(site_participants[site["_id"]]) if site["_id"] in site_participants else 0,
+                                        "queries": len(site_queries[site["_id"]]) if site["_id"] in site_queries else 0
+                                    } for site in sites
+                          }
              }
     return render_template("admin/admin.html", user=g.user, stats=stats)

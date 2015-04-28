@@ -29,7 +29,7 @@
 	      <td>{{ stats.participants.verified }}</td>
       	</tr>
       	<tr>
-	      <td>#active participants</td>
+	      <td>#participants with runs</td>
 	      <td>{{ stats.participants.active }}</td>
       	</tr>
       	<tr>
@@ -37,13 +37,29 @@
 	      <td>{{ stats.sites.all }}</td>
       	</tr>
       	<tr>
-	      <td>#enables sites</td>
+	      <td>#enabled sites</td>
 	      <td>{{ stats.sites.active }}</td>
       	</tr>
       	<tr>
 	      <td>#sites with runs</td>
 	      <td>{{ stats.sites.runs }}</td>
       	</tr>
+      	<tr>
+	      <td>#queries</td>
+	      <td>{{ stats.queries }}</td>
+      	</tr>
+      	{% for site in stats.per_site %}
+      	<tr>
+	      <td><b>{{site}}</b> </td>
+	      <td>#queries</td>
+	      <td>{{ stats.per_site[site].queries }}</td>
+      	</tr>      	
+      	<tr>
+	      <td><b>{{site}}</b> </td>
+	      <td>#participants with runs</td>
+	      <td>{{ stats.per_site[site].participants }}</td>
+      	</tr>      	
+      	{% endfor %}
       	</tbody>
   	</table>
    {% endblock %}
