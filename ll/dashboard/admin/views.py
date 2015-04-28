@@ -32,7 +32,7 @@ def admin():
     active_participants = set()
     active_participants_site = {}
     for query in queries:
-        if query["site_id"] not in active_participants_site:
+        if not query["site_id"] in active_participants_site:
             active_participants_site[query["site_id"]] = set()
         if "runs" in query:
             for u in query["runs"]:
