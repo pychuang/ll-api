@@ -34,14 +34,20 @@ def admin():
     site_queries = {}
     for query in queries:
         if not query["site_id"] in site_participants:
-            site_participants[query["site_id"]] = set()
+            site_participants[query["site_id"]] = [set(), set()]
         if not query["site_id"] in site_queries:
-            site_queries[query["site_id"]] = 0
+            site_queries[query["site_id"]] = [0, 0]
         if "runs" in query:
-            site_queries[query["site_id"]] += 1
+            if "type" in query and query["type"] == "test":
+                site_queries[query["site_id"]][1] += 1
+            else:
+                site_queries[query["site_id"]][0] += 1
             for u in query["runs"]:
                 active_participants.add(u)
-                site_participants[query["site_id"]].add(u)
+                if "type" in query and query["type"] == "test":
+                    site_participants[query["site_id"]][1].add(u)
+                else:
+                    site_participants[query["site_id"]][0].add(u)
 
     stats = {"participants": {"verified":  len([u for u in participants
                                                 if u["is_verified"]]),
@@ -52,8 +58,8 @@ def admin():
                        "all": len(sites),
                        "active": len([s for s in sites if s["enabled"]])},
              "queries": len(queries),
-             "per_site": {site["_id"]: {"participants": len(site_participants[site["_id"]]) if site["_id"] in site_participants else 0,
-                                        "queries": site_queries[site["_id"]] if site["_id"] in site_queries else 0
+             "per_site": {site["_id"]: {"participants": {"train": len(site_participants[site["_id"]][0]), "test":len(site_participants[site["_id"]][1])} if site["_id"] in site_participants else {"train":0, "test":0},
+                                        "queries": {"train": site_queries[site["_id"]][0], "test":site_queries[site["_id"]][1]} if site["_id"] in site_queries else {"train":0, "test":0}
                                     } for site in sites
                           }
              }

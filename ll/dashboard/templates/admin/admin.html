@@ -51,13 +51,23 @@
       	{% for site in stats.per_site %}
       	<tr>
 	      <td><b>{{site}}</b> </td>
-	      <td>#queries</td>
-	      <td>{{ stats.per_site[site].queries }}</td>
+	      <td>#queries train</td>
+	      <td>{{ stats.per_site[site].queries.train }}</td>
       	</tr>      	
       	<tr>
-	      <td><b>{{site}}</b> </td>
-	      <td>#participants with runs</td>
-	      <td>{{ stats.per_site[site].participants }}</td>
+	      <td></td>
+	      <td>#queries test</td>
+	      <td>{{ stats.per_site[site].queries.test }}</td>
+      	</tr>      	
+      	<tr>
+	      <td></td>
+	      <td>#participants with train runs</td>
+	      <td>{{ stats.per_site[site].participants.train }}</td>
+      	</tr>      	
+      	<tr>
+	      <td></td>
+	      <td>#participants with test runs</td>
+	      <td>{{ stats.per_site[site].participants.test }}</td>
       	</tr>      	
       	{% endfor %}
       	</tbody>
