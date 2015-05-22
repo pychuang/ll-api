@@ -116,6 +116,29 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     return readyfeedback
 
 
+def get_comparison(userid):
+    def get_outcome(feedback):
+        participant_wins = 0
+        site_wins = 0
+        for d in feedback["doclist"]:
+            if "clicked" in d and d["clicked"] is True:
+                if d["team"] == "participant":
+                    participant_wins += 1
+                elif d["team"] == "site":
+                    site_wins += 1
+        return 1 if participant_wins > site_wins else -1 \
+            if participant_wins < site_wins else 0
+
+    outcome = 0
+    nroutcomes = 0
+    for feedback in get_feedback(userid=userid):
+        if not feedback["type"] == "tdi":
+            continue
+        outcome += get_outcome(feedback)
+        nroutcomes += 1
+    return float(outcome) / nroutcomes
+
+
 def get_historical_feedback(site_id=None, qid=None, site_qid=None):
     q = {}
     if site_id:

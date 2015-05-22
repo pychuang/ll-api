@@ -64,3 +64,18 @@ def admin():
                           }
              }
     return render_template("admin/admin.html", user=g.user, stats=stats)
+
+
+@mod.route('/outcome')
+@requires_login
+def outcome():
+    if not g.user["is_admin"]:
+        flash(u'You need to be admin for this page.', 'alert-warning')
+        return redirect("/")
+    participants = core.user.get_participants()
+    outcomes = {}
+    for participant in participants:
+        userid = participant["_id"]
+        outcomes[userid] = {"outcome": core.feedback.get_comparison(userid),
+                            "user": participant}
+    return render_template("admin/outcome.html", user=g.user, outcomes=outcomes)
