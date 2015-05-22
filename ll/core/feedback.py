@@ -136,7 +136,9 @@ def get_comparison(userid):
             continue
         outcome += get_outcome(feedback)
         nroutcomes += 1
-    return float(outcome) / nroutcomes
+    if nroutcomes > 0:
+        return float(outcome) / nroutcomes
+    return 0
 
 
 def get_historical_feedback(site_id=None, qid=None, site_qid=None):
