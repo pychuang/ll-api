@@ -64,7 +64,7 @@ def get_query(site_id=None, qid=None, key=None):
     if qid is not None:
         q["_id"] = qid
 
-    return [query for query in db.query.find(q)] 
+    return [query for query in db.query.find(q)]
 
 
 def delete_query(site_id=None, qid=None):

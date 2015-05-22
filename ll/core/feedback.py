@@ -93,10 +93,23 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
         q["runid"] = runid
     readyfeedback = []
     test_check = datetime.date.today() < config["TEST_DATE"]
-    for feedback in db.feedback.find(q):
+
+    if "qid" in q and "site_id" in q and "userid" in q:
+        feedbacks = db.feedback.find(q).hint([("qid", pymongo.ASCENDING),
+                                              ("site_id", pymongo.ASCENDING),
+                                              ("userid", pymongo.ASCENDING)
+                                              ])
+    elif "site_id" in q and "userid" in q:
+        feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
+                                              ("userid", pymongo.ASCENDING)
+                                              ])
+    else:
+        feedbacks = db.feedback.find(q)
+
+    for feedback in feedbacks:
         if test_check:
             query = db.query.find_one({"_id": feedback["qid"]})
-            if "type" in query and query["type"] == "test":
+            if query and "type" in query and query["type"] == "test":
                 continue
         if feedback.get("doclist") is not None:
             readyfeedback.append(feedback)
