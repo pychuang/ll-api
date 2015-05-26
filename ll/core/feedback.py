@@ -160,7 +160,7 @@ def get_comparison(userid, site_id, qtype='test'):
     if nr_wins + nr_losses > 0:
         agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
     else:
-        agg_outcome = None
+        agg_outcome = 0
 
     return agg_outcome, nr_wins, nr_losses, nr_ties, nr_wins + nr_losses + nr_ties
 
