@@ -146,12 +146,18 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
                               if "type" in q and q["type"] != "test"])
 
     readyfeedback = []
-    for feedback in feedbacks:
+    test_start = config["TEST_DATE"]
+    test_stop = config["TEST_DATE_END"]
+    for f in feedbacks:
         if qtype is not None:
-            if feedback["qid"] in qtype_qids:
-                readyfeedback.append(feedback)
+            if f["qid"] in qtype_qids:
+                if qtype == "test":
+                    if test_start < f["modified_time"] < test_stop:
+                        readyfeedback.append(f)
+                else:
+                    readyfeedback.append(f)
         else:
-            readyfeedback.append(feedback)
+            readyfeedback.append(f)
     return readyfeedback
 
 

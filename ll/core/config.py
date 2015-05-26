@@ -30,4 +30,5 @@ config = {
                          "liadh.kelly@scss.tcd.ie",
                          "anne.schuth@uva.nl"],
     "TEST_DATE": datetime.date(2015, 5, 1),
+    "TEST_DATE_END": datetime.date(2015, 5, 16),
 }
