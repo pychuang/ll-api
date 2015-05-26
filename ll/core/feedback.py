@@ -166,8 +166,8 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
     if site_id is not None:
         site_ids = [site_id]
     else:
-        sites = user.get_sites(userid)
-        if not sites:
+        site_ids = user.get_sites(userid)
+        if not site_ids:
             raise Exception("First signup for sites.")
 
     outcomes = {}
