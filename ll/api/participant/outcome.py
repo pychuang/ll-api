@@ -75,6 +75,6 @@ class Outcome(ApiResource):
                              for site_id in outcomes]}
 
 
-api.add_resource(Outcome, '/api/participant/feedback/<key>/<qid>',
-                           '/api/participant/feedback/<key>/',
+api.add_resource(Outcome, '/api/participant/outcome/<key>/<qid>',
+                           '/api/participant/outcome/<key>',
                  endpoint="participant/outcome")
