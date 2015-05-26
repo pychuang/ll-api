@@ -73,13 +73,12 @@ def outcome(site_id):
         flash(u'You need to be admin for this page.', 'alert-warning')
         return redirect("/")
     participants = core.user.get_participants()
-    outcomes = {}
+    outcomes = []
     for participant in participants:
         if not participant["is_verified"]:
-            continue 
-        userid = participant["_id"]
-        outcomes[userid] = {"outcome": core.feedback.get_comparison(userid,
-                                                                    site_id),
-                            "user": participant}
+            continue
+        outcomes.append({"outcome": core.feedback.get_comparison(participant["_id"],
+                                                                 site_id),
+                         "user": participant})
     return render_template("admin/outcome.html", user=g.user,
                            outcomes=outcomes, site_id=site_id)
