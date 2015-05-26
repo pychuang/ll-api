@@ -19,17 +19,44 @@
    {% endblock %}
    {% block content %}
    	<table class="table table-striped table-hover ">
+  	  <thead>
+      	<tr>
+      		<th span='3'></td>
+      		<th span='4'>Test</td>
+      		<th span='4'>Train</td>
+      	</tr>
+      	<tr>
+      		<th>Teamname</td>
+      		<th>Email</td>
+      		<th>Joined</td>
+      		<th>Outcome</td>
+      		<th>#Wins</td>
+      		<th>#Losses</td>
+      		<th>#Ties</td>
+      		<th>#Comparisons</td>
+      		<th>Outcome</td>
+      		<th>#Wins</td>
+      		<th>#Losses</td>
+      		<th>#Ties</td>
+      		<th>#Comparisons</td>
+      	</tr>
+	    </thead>
     	<tbody>
-      	<th>
-      		<td>Team</td>
-      		<td>Test Outcome</td>
-      		<td>Train Outcome</td>
-      	</th>
       	{% for outcome in outcomes %}
       	<tr>
-	      <td>{{outcome.user.teamname}}</td>
-	      <td>{{'%0.4f' % outcome.outcome.test[0]}} / {{outcome.outcome.test[1]}}</td>
-	      <td>{{'%0.4f' % outcome.outcome.train[0]}} / {{outcome.outcome.train[1]}}</td>
+	      <td>{{ outcome.user.teamname }}</td>
+	      <td>{{ outcome.user.email|urlize }}</td>
+	      <td>{{ outcome.user.creation_time.strftime('%Y-%m-%d') }}</td>
+	      <td>{{'%0.4f' % outcome.outcome.test[0]}}</td>
+	      <td>{{outcome.outcome.test[1]}}</td>
+	      <td>{{outcome.outcome.test[2]}}</td>
+	      <td>{{outcome.outcome.test[3]}}</td>
+	      <td>{{outcome.outcome.test[4]}}</td>
+	      <td>{{'%0.4f' % outcome.outcome.train[0]}}</td>
+	      <td>{{outcome.outcome.train[1]}}</td>
+	      <td>{{outcome.outcome.train[2]}}</td>
+	      <td>{{outcome.outcome.train[3]}}</td>
+	      <td>{{outcome.outcome.train[4]}}</td>
       	</tr>     	
       	{% endfor %}
       	</tbody>

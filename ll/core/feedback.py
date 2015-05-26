@@ -145,14 +145,24 @@ def get_comparison(userid, site_id, qtype='test'):
         return 1 if participant_wins > site_wins else -1 \
             if participant_wins < site_wins else 0
 
-    outcome = 0
-    nroutcomes = 0
+    nr_wins = 0
+    nr_losses = 0
+    nr_ties = 0
     for feedback in get_test_feedback(userid, site_id, qtype=qtype):
-        outcome += get_outcome(feedback)
-        nroutcomes += 1
-    if nroutcomes > 0:
-        return float(outcome) / nroutcomes, nroutcomes
-    return 0, nroutcomes
+        outcome = get_outcome(feedback)
+        if outcome > 0:
+            nr_wins += 1
+        elif outcome < 0:
+            nr_losses += 1
+        else:
+            nr_ties += 1
+
+    if nr_wins + nr_losses > 0:
+        agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
+    else:
+        agg_outcome = None
+
+    return agg_outcome, nr_wins, nr_losses, nr_ties, nr_wins + nr_losses + nr_ties
 
 
 def get_historical_feedback(site_id=None, qid=None, site_qid=None):
