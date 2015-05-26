@@ -147,7 +147,13 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
 
     readyfeedback = []
     test_start = config["TEST_DATE"]
+    test_start = datetime.datetime(test_start.year,
+                                   test_start.month,
+                                   test_start.day)
     test_stop = config["TEST_DATE_END"]
+    test_stop = datetime.datetime(test_stop.year,
+                                  test_stop.month,
+                                  test_stop.day)
     for f in feedbacks:
         if qtype is not None:
             if f["qid"] in qtype_qids:
