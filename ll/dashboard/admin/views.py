@@ -75,6 +75,8 @@ def outcome(site_id):
     participants = core.user.get_participants()
     outcomes = {}
     for participant in participants:
+        if not participant["is_verified"]:
+            continue 
         userid = participant["_id"]
         outcomes[userid] = {"outcome": core.feedback.get_comparison(userid,
                                                                     site_id),
