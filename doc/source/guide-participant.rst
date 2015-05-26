@@ -51,7 +51,7 @@ Date 			Description
 27-30 Apr, 2015		Uploading test runs
 1 May, 2015		Testing period begins
 15 May, 2015		Testing period ends
-17 May, 2015		Results released
+17 May, 2015		:ref:`Results released <ll4ir-results>` |new|
 31 May, 2015		Working notes papers due
 30 Jun, 2015		Notification of acceptance
 15 Jul, 2015		Camera-ready working notes papers due
