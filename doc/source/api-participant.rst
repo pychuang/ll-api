@@ -115,6 +115,15 @@ Feedback
    :endpoints: participant/feedback
    :undoc-static:
    :include-empty-docstring:
+   
+ 
+Outcome
+--------
+.. autoflask:: ll.api.participant:app
+   :endpoints: participant/outcome
+   :undoc-static:
+   :include-empty-docstring: 
+  
 
 Historical Feedback
 --------

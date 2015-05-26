@@ -16,7 +16,7 @@
 import datetime, pymongo
 from db import db
 from config import config
-import doc, query
+import doc, query, user
 
 
 def add_feedback(site_id, sid, feedback):
@@ -111,28 +111,46 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
             query = db.query.find_one({"_id": feedback["qid"]})
             if query and "type" in query and query["type"] == "test":
                 continue
-        #if feedback.get("doclist") is not None:
         readyfeedback.append(feedback)
     return readyfeedback
 
 
-def get_test_feedback(userid, site_id, qtype='test'):
+def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
     q = {"doclist": {"$exists": True}}
-    q["userid"] = userid
-    q["site_id"] = site_id
-    feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
-                                          ("userid", pymongo.ASCENDING)
-                                          ])
-    qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
-                     if "type" in q and q["type"] == qtype])
+    if userid:
+        q["userid"] = userid
+    if site_id:
+        q["site_id"] = site_id
+
+    if qid and qid.lower() != "all":
+        q["qid"] = qid
+
+    if "qid" in q and "site_id" in q and "userid" in q:
+        feedbacks = db.feedback.find(q).hint([("qid", pymongo.ASCENDING),
+                                              ("site_id", pymongo.ASCENDING),
+                                              ("userid", pymongo.ASCENDING)
+                                              ])
+    elif "site_id" in q and "userid" in q:
+        feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
+                                              ("userid", pymongo.ASCENDING)
+                                              ])
+    else:
+        feedbacks = db.feedback.find(q)
+
+    if qtype is not None:
+        qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
+                          if "type" in q and q["type"] == qtype])
     readyfeedback = []
     for feedback in feedbacks:
-        if feedback["qid"] in qtype_qids:
+        if qtype is not None:
+            if feedback["qid"] in qtype_qids:
+                readyfeedback.append(feedback)
+        else:
             readyfeedback.append(feedback)
     return readyfeedback
 
 
-def get_comparison(userid, site_id, qtype='test'):
+def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
     def get_outcome(feedback):
         participant_wins = 0
         site_wins = 0
@@ -145,24 +163,41 @@ def get_comparison(userid, site_id, qtype='test'):
         return 1 if participant_wins > site_wins else -1 \
             if participant_wins < site_wins else 0
 
-    nr_wins = 0
-    nr_losses = 0
-    nr_ties = 0
-    for feedback in get_test_feedback(userid, site_id, qtype=qtype):
-        outcome = get_outcome(feedback)
-        if outcome > 0:
-            nr_wins += 1
-        elif outcome < 0:
-            nr_losses += 1
-        else:
-            nr_ties += 1
-
-    if nr_wins + nr_losses > 0:
-        agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
+    if site_id is not None:
+        site_ids = [site_id]
     else:
-        agg_outcome = 0
+        sites = user.get_sites(userid)
+        if not sites:
+            raise Exception("First signup for sites.")
 
-    return agg_outcome, nr_wins, nr_losses, nr_ties, nr_wins + nr_losses + nr_ties
+    outcomes = {}
+    for site_id in site_ids:
+        nr_wins = 0
+        nr_losses = 0
+        nr_ties = 0
+        for feedback in get_test_feedback(userid=userid, site_id=site_id,
+                                          qtype=qtype, qid=qid):
+            outcome = get_outcome(feedback)
+            if outcome > 0:
+                nr_wins += 1
+            elif outcome < 0:
+                nr_losses += 1
+            else:
+                nr_ties += 1
+
+        if nr_wins + nr_losses > 0:
+            agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
+        else:
+            agg_outcome = 0
+
+        outcomes[site_id] = {"qid": qid,
+                             "site_id": site_id,
+                             "outcome": agg_outcome,
+                             "wins": nr_wins,
+                             "losses": nr_losses,
+                             "ties": nr_ties,
+                             "impressions": nr_wins + nr_losses + nr_ties}
+    return outcomes
 
 
 def get_historical_feedback(site_id=None, qid=None, site_qid=None):
