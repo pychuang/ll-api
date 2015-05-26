@@ -83,8 +83,8 @@ def outcome(site_id):
         outcome_train = core.feedback.get_comparison(userid=participant["_id"],
                                                      site_id=site_id,
                                                      qtype='train')
-        outcomes.append((outcome_test, {"outcome": {"test": outcome_test[site_id],
-                                                    "train": outcome_train[site_id]},
+        outcomes.append((outcome_test, {"outcome": {"test": outcome_test[0],
+                                                    "train": outcome_train[0]},
                                         "user": participant}))
     outcomes = [o for _, o in sorted(outcomes, reverse=True)]
     return render_template("admin/outcome.html", user=g.user,

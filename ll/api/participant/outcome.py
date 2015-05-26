@@ -73,8 +73,8 @@ class Outcome(ApiResource):
                                 key,
                                 qid=qid)
 
-        return {"outcomes": [marshal(outcomes[site_id], outcome_fields)
-                             for site_id in outcomes]}
+        return {"outcomes": [marshal(outcome, outcome_fields)
+                             for outcome in outcomes]}
 
 
 api.add_resource(Outcome, '/api/participant/outcome/<key>/<qid>',

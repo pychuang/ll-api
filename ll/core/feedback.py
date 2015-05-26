@@ -183,7 +183,7 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
     if qid is None:
         qid = "all"
 
-    outcomes = {}
+    outcomes = []
     for site_id in site_ids:
         for qtype in qtypes:
             nr_wins = 0
@@ -204,14 +204,14 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
             else:
                 agg_outcome = 0
 
-            outcomes[site_id] = {"qid": qid,
+            outcomes.append({"qid": qid,
                                  "type": qtype,
                                  "site_id": site_id,
                                  "outcome": agg_outcome,
                                  "wins": nr_wins,
                                  "losses": nr_losses,
                                  "ties": nr_ties,
-                                 "impressions": nr_wins + nr_losses + nr_ties}
+                                 "impressions": nr_wins + nr_losses + nr_ties})
     return outcomes
 
 
