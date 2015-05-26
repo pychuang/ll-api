@@ -16,7 +16,7 @@
 import datetime
 from db import db
 from config import config
-import doc
+import doc, query
 
 
 def add_feedback(site_id, sid, feedback):
@@ -80,7 +80,7 @@ def reset_feedback(userid=None, site_id=None, sid=None, qid=None):
 
 
 def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
-    q = {}
+    q = {"doclist": {"$exists": True}}
     if userid:
         q["userid"] = userid
     if site_id:
@@ -91,8 +91,6 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
         q["qid"] = qid
     if runid:
         q["runid"] = runid
-    readyfeedback = []
-    test_check = datetime.date.today() < config["TEST_DATE"]
 
     if "qid" in q and "site_id" in q and "userid" in q:
         feedbacks = db.feedback.find(q).hint([("qid", pymongo.ASCENDING),
@@ -106,17 +104,34 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     else:
         feedbacks = db.feedback.find(q)
 
+    test_check = datetime.date.today() < config["TEST_DATE"]
+    readyfeedback = []
     for feedback in feedbacks:
         if test_check:
             query = db.query.find_one({"_id": feedback["qid"]})
             if query and "type" in query and query["type"] == "test":
                 continue
-        if feedback.get("doclist") is not None:
+        #if feedback.get("doclist") is not None:
+        readyfeedback.append(feedback)
+    return readyfeedback
+
+
+def get_test_feedback(userid, site_id):
+    q = {"doclist": {"$exists": True}}
+    q["userid"] = userid
+    q["site_id"] = site_id
+    feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
+                                          ("userid", pymongo.ASCENDING)
+                                          ])
+    test_qids = set([q["_id"] for q in query.get_query(site_id=site_id)])
+    readyfeedback = []
+    for feedback in feedbacks:
+        if feedback["qid"] in test_qids:
             readyfeedback.append(feedback)
     return readyfeedback
 
 
-def get_comparison(userid):
+def get_comparison(userid, site_id):
     def get_outcome(feedback):
         participant_wins = 0
         site_wins = 0
@@ -131,7 +146,7 @@ def get_comparison(userid):
 
     outcome = 0
     nroutcomes = 0
-    for feedback in get_feedback(userid=userid):
+    for feedback in get_test_feedback(userid, site_id):
         if not feedback["type"] == "tdi":
             continue
         outcome += get_outcome(feedback)
