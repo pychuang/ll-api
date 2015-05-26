@@ -185,12 +185,12 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
 
     outcomes = []
     for site_id in site_ids:
-        for qtype in qtypes:
+        for query_type in qtypes:
             nr_wins = 0
             nr_losses = 0
             nr_ties = 0
             for feedback in get_test_feedback(userid=userid, site_id=site_id,
-                                              qtype=qtype, qid=qid):
+                                              qtype=query_type, qid=qid):
                 outcome = get_outcome(feedback)
                 if outcome > 0:
                     nr_wins += 1
@@ -205,9 +205,9 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
                 agg_outcome = 0
 
             impressions = nr_wins + nr_losses + nr_ties
-            if impressions > 0:
+            if impressions > 0 or qtype is not None:
                 outcomes.append({"qid": qid,
-                                 "type": qtype,
+                                 "type": query_type,
                                  "site_id": site_id,
                                  "outcome": agg_outcome,
                                  "wins": nr_wins,
