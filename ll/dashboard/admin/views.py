@@ -66,9 +66,9 @@ def admin():
     return render_template("admin/admin.html", user=g.user, stats=stats)
 
 
-@mod.route('/outcome')
+@mod.route('/outcome/<site_id>')
 @requires_login
-def outcome():
+def outcome(site_id):
     if not g.user["is_admin"]:
         flash(u'You need to be admin for this page.', 'alert-warning')
         return redirect("/")
@@ -76,6 +76,8 @@ def outcome():
     outcomes = {}
     for participant in participants:
         userid = participant["_id"]
-        outcomes[userid] = {"outcome": core.feedback.get_comparison(userid),
+        outcomes[userid] = {"outcome": core.feedback.get_comparison(userid,
+                                                                    site_id),
                             "user": participant}
-    return render_template("admin/outcome.html", user=g.user, outcomes=outcomes)
+    return render_template("admin/outcome.html", user=g.user,
+                           outcomes=outcomes, site_id=site_id)
