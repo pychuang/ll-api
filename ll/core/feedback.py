@@ -143,7 +143,7 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
                               if "type" in q and q["type"] == "test"])
         else:
             qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
-                              if "type" in q and q["type"] != "test"])
+                              if ("type" in q and q["type"] != "test") or "type" not in q])
 
     readyfeedback = []
     test_start = config["TEST_DATE"]
