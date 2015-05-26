@@ -38,11 +38,14 @@ class Outcome(ApiResource):
         You may omit or specify "all" as the query identifier to obtain
         feedback for all queries.
 
-        Note that you may receive multiple feedbacks for a single query as
-        it may have been shown to a user more than once. And even if you
-        specify a runid, then the rankings for this runid may have been
-        presented to users multiple times.
+        Outcome will be aggregate per site and for test and train queries. If
+        specify a query, you will only obtain output for this query. Otherwise
+        output is aggregated over all queries.
 
+        The "outcome" is computed as: #wins / (#wins + #losses).
+        Where a win is defined as the participant having more clicks on
+        documents assigned to it by Team Draft Interleaving than clicks
+        on documents assigned to the site.
 
         :param key: your API key
         :param qid: *optional*, the query identifier, can be "all"
