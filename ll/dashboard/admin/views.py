@@ -77,10 +77,13 @@ def outcome(site_id):
     for participant in participants:
         if not participant["is_verified"]:
             continue
-        outcome = core.feedback.get_comparison(participant["_id"],
-                                               site_id)
-        outcomes.append((outcome, {"outcome": outcome,
-                                   "user": participant}))
+        outcome_test = core.feedback.get_comparison(participant["_id"],
+                                                    site_id,  qtype='test')
+        outcome_train = core.feedback.get_comparison(participant["_id"],
+                                                     site_id,  qtype='train')
+        outcomes.append((outcome_test, {"outcome": {"test": outcome_test,
+                                                    "train": outcome_train},
+                                        "user": participant}))
     outcomes = [o for _, o in sorted(outcomes, reverse=True)]
     return render_template("admin/outcome.html", user=g.user,
                            outcomes=outcomes, site_id=site_id)

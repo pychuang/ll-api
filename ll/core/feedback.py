@@ -116,25 +116,23 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     return readyfeedback
 
 
-def get_test_feedback(userid, site_id, test_only=True):
+def get_test_feedback(userid, site_id, qtype='test'):
     q = {"doclist": {"$exists": True}}
     q["userid"] = userid
     q["site_id"] = site_id
     feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
                                           ("userid", pymongo.ASCENDING)
                                           ])
-    test_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
-                     if "type" in q and q["type"] == "test"])
+    qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
+                     if "type" in q and q["type"] == qtype])
     readyfeedback = []
     for feedback in feedbacks:
-        if test_only and feedback["qid"] in test_qids:
-            readyfeedback.append(feedback)
-        elif not test_only:
+        if feedback["qid"] in qtype_qids:
             readyfeedback.append(feedback)
     return readyfeedback
 
 
-def get_comparison(userid, site_id):
+def get_comparison(userid, site_id, qtype='test'):
     def get_outcome(feedback):
         participant_wins = 0
         site_wins = 0
@@ -149,9 +147,7 @@ def get_comparison(userid, site_id):
 
     outcome = 0
     nroutcomes = 0
-    for feedback in get_test_feedback(userid, site_id):
-        #if not feedback["type"] == "tdi":
-        #    continue
+    for feedback in get_test_feedback(userid, site_id, qtype=qtype):
         outcome += get_outcome(feedback)
         nroutcomes += 1
     if nroutcomes > 0:

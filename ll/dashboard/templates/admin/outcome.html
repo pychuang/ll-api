@@ -20,10 +20,16 @@
    {% block content %}
    	<table class="table table-striped table-hover ">
     	<tbody>
+      	<th>
+      		<td>Team</td>
+      		<td>Test Outcome</td>
+      		<td>Train Outcome</td>
+      	</th>
       	{% for outcome in outcomes %}
       	<tr>
 	      <td>{{outcome.user.teamname}}</td>
-	      <td>{{outcome.outcome[0]}} / {{outcome.outcome[1]}}</td>
+	      <td>{{'%0.4f' % outcome.outcome.test[0]}} / {{outcome.outcome.test[1]}}</td>
+	      <td>{{'%0.4f' % outcome.outcome.train[0]}} / {{outcome.outcome.train[1]}}</td>
       	</tr>     	
       	{% endfor %}
       	</tbody>
