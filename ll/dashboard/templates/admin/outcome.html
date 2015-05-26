@@ -23,7 +23,7 @@
       	{% for outcome in outcomes %}
       	<tr>
 	      <td>{{outcome.user.teamname}}</td>
-	      <td>{{outcome.outcome}}</td>
+	      <td>{{outcome.outcome[0]}} / {{outcome.outcome[1]}}</td>
       	</tr>     	
       	{% endfor %}
       	</tbody>
