@@ -21,6 +21,7 @@ from .. import ApiResource
 
 outcome_fields = {"site_id": fields.String(),
                   "qid": fields.String(),
+                  "type": fields.String(),
                   "outcome": fields.Float(),
                   "wins": fields.Integer(),
                   "losses": fields.Integer(),
@@ -55,6 +56,7 @@ class Outcome(ApiResource):
                     "outcomes": [
                         {"site_id": "S",
                          "qid": "S-q1",
+                         "type": "test",
                          "outcome": 0.4,
                          "wins": 2
                          "losses": 3

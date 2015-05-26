@@ -138,8 +138,13 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
         feedbacks = db.feedback.find(q)
 
     if qtype is not None:
-        qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
-                          if "type" in q and q["type"] == qtype])
+        if qtype == "test":
+            qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
+                              if "type" in q and q["type"] == "test"])
+        else:
+            qtype_qids = set([q["_id"] for q in query.get_query(site_id=site_id)
+                              if "type" in q and q["type"] != "test"])
+
     readyfeedback = []
     for feedback in feedbacks:
         if qtype is not None:
@@ -170,33 +175,43 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
         if not site_ids:
             raise Exception("First signup for sites.")
 
+    if qtype is not None:
+        qtypes = [qtype]
+    else:
+        qtypes = ["test", "train"]
+
+    if qid is None:
+        qid = "all"
+
     outcomes = {}
     for site_id in site_ids:
-        nr_wins = 0
-        nr_losses = 0
-        nr_ties = 0
-        for feedback in get_test_feedback(userid=userid, site_id=site_id,
-                                          qtype=qtype, qid=qid):
-            outcome = get_outcome(feedback)
-            if outcome > 0:
-                nr_wins += 1
-            elif outcome < 0:
-                nr_losses += 1
+        for qtype in qtypes:
+            nr_wins = 0
+            nr_losses = 0
+            nr_ties = 0
+            for feedback in get_test_feedback(userid=userid, site_id=site_id,
+                                              qtype=qtype, qid=qid):
+                outcome = get_outcome(feedback)
+                if outcome > 0:
+                    nr_wins += 1
+                elif outcome < 0:
+                    nr_losses += 1
+                else:
+                    nr_ties += 1
+
+            if nr_wins + nr_losses > 0:
+                agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
             else:
-                nr_ties += 1
+                agg_outcome = 0
 
-        if nr_wins + nr_losses > 0:
-            agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
-        else:
-            agg_outcome = 0
-
-        outcomes[site_id] = {"qid": qid,
-                             "site_id": site_id,
-                             "outcome": agg_outcome,
-                             "wins": nr_wins,
-                             "losses": nr_losses,
-                             "ties": nr_ties,
-                             "impressions": nr_wins + nr_losses + nr_ties}
+            outcomes[site_id] = {"qid": qid,
+                                 "type": qtype,
+                                 "site_id": site_id,
+                                 "outcome": agg_outcome,
+                                 "wins": nr_wins,
+                                 "losses": nr_losses,
+                                 "ties": nr_ties,
+                                 "impressions": nr_wins + nr_losses + nr_ties}
     return outcomes
 
 
