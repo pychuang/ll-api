@@ -147,13 +147,13 @@ def get_comparison(userid, site_id):
     outcome = 0
     nroutcomes = 0
     for feedback in get_test_feedback(userid, site_id):
-        if not feedback["type"] == "tdi":
-            continue
+        #if not feedback["type"] == "tdi":
+        #    continue
         outcome += get_outcome(feedback)
         nroutcomes += 1
     if nroutcomes > 0:
-        return float(outcome) / nroutcomes
-    return 0
+        return float(outcome) / nroutcomes, nroutcomes
+    return 0, nroutcomes
 
 
 def get_historical_feedback(site_id=None, qid=None, site_qid=None):
