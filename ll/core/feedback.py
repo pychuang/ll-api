@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
+import datetime, pymongo
 from db import db
 from config import config
 import doc, query
