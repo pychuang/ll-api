@@ -51,6 +51,9 @@ class Feedback(ApiResource):
         specify a runid, then the rankings for this runid may have been
         presented to users multiple times.
 
+        Clicks can be either just present (True) or timestamped (list of
+        timestamps).
+
 
         :param key: your API key
         :param qid: the query identifier, can be "all"
