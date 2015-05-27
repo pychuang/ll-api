@@ -172,10 +172,12 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
         participant_wins = 0
         site_wins = 0
         for d in feedback["doclist"]:
-            if "clicked" in d and d["clicked"] is True:
-                if d["team"] == "participant":
+            if "clicked" in d and (d["clicked"] is True or
+                                   (isinstance(d["clicked"], list) and
+                                    len(d["clicked"]) > 0)):
+                if "team" in d and d["team"] == "participant":
                     participant_wins += 1
-                elif d["team"] == "site":
+                elif "team" in d and d["team"] == "site":
                     site_wins += 1
         return 1 if participant_wins > site_wins else -1 \
             if participant_wins < site_wins else 0
