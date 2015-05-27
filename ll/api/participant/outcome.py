@@ -39,13 +39,16 @@ class Outcome(ApiResource):
         feedback for all queries.
 
         Outcome will be aggregate per site and for test and train queries. If
-        specify a query, you will only obtain output for this query. Otherwise
-        output is aggregated over all queries.
+        specify a query, you will only obtain the outcome for this query.
+        Otherwise outcomes are aggregated over all queries.
 
         The "outcome" is computed as: #wins / (#wins + #losses).
         Where a win is defined as the participant having more clicks on
         documents assigned to it by Team Draft Interleaving than clicks
         on documents assigned to the site.
+
+        Test queries are restricted to the test period. Train queries are not
+        restricted in time.
 
         :param key: your API key
         :param qid: *optional*, the query identifier, can be "all"
