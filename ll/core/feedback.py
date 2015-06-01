@@ -104,14 +104,18 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     else:
         feedbacks = db.feedback.find(q)
 
-    test_check = datetime.date.today() < config["TEST_DATE"]
     readyfeedback = []
+    qid_types = {}
     for feedback in feedbacks:
-        if test_check:
-            query = db.query.find_one({"_id": feedback["qid"]})
+        qid = feedback["qid"]
+        if qid not in qid_types:
+            query = db.query.find_one({"_id": qid})
             if query and "type" in query and query["type"] == "test":
-                continue
-        readyfeedback.append(feedback)
+                qid_types[qid] = "test"
+            else:
+                qid_types[qid] = "train"
+        if qid_types[qid] == "train":
+            readyfeedback.append(feedback)
     return readyfeedback
 
 
@@ -146,22 +150,10 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
                               if ("type" in q and q["type"] != "test") or "type" not in q])
 
     readyfeedback = []
-    test_start = config["TEST_DATE"]
-    test_start = datetime.datetime(test_start.year,
-                                   test_start.month,
-                                   test_start.day)
-    test_stop = config["TEST_DATE_END"]
-    test_stop = datetime.datetime(test_stop.year,
-                                  test_stop.month,
-                                  test_stop.day)
     for f in feedbacks:
         if qtype is not None:
             if f["qid"] in qtype_qids:
-                if qtype == "test":
-                    if test_start < f["modified_time"] < test_stop:
-                        readyfeedback.append(f)
-                else:
-                    readyfeedback.append(f)
+                readyfeedback.append(f)
         else:
             readyfeedback.append(f)
     return readyfeedback
@@ -182,6 +174,43 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
         return 1 if participant_wins > site_wins else -1 \
             if participant_wins < site_wins else 0
 
+    def get_outcomes(feedbacks, outcomes, test_period=None,
+                     return_outcome=False):
+        if test_period and datetime.datetime.now() < test_period["STOP"]:
+            return
+
+        nr_wins = 0
+        nr_losses = 0
+        nr_ties = 0
+        for f in feedbacks:
+            if test_period and not (test_period["START"] <
+                                    f["modified_time"] <
+                                    test_period["STOP"]):
+                continue
+
+            outcome = get_outcome(f)
+            if outcome > 0:
+                nr_wins += 1
+            elif outcome < 0:
+                nr_losses += 1
+            else:
+                nr_ties += 1
+
+        agg_outcome = float(nr_wins) / (nr_wins + nr_losses) if nr_wins + nr_losses > 0 else 0
+        impressions = nr_wins + nr_losses + nr_ties
+        if impressions > 0 or return_outcome:
+            outcome_struct = {"qid": qid,
+                              "type": qtype,
+                              "site_id": site_id,
+                              "outcome": agg_outcome,
+                              "wins": nr_wins,
+                              "losses": nr_losses,
+                              "ties": nr_ties,
+                              "impressions": impressions}
+            if test_period:
+                outcome_struct["test_period"] = test_period
+            outcomes.append(outcome_struct)
+
     if site_id is not None:
         site_ids = [site_id]
     else:
@@ -191,43 +220,27 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
 
     if qtype is not None:
         qtypes = [qtype]
+        return_outcome = True
     else:
         qtypes = ["test", "train"]
+        return_outcome = False
 
     if qid is None:
         qid = "all"
 
     outcomes = []
     for site_id in site_ids:
-        for query_type in qtypes:
-            nr_wins = 0
-            nr_losses = 0
-            nr_ties = 0
-            for feedback in get_test_feedback(userid=userid, site_id=site_id,
-                                              qtype=query_type, qid=qid):
-                outcome = get_outcome(feedback)
-                if outcome > 0:
-                    nr_wins += 1
-                elif outcome < 0:
-                    nr_losses += 1
-                else:
-                    nr_ties += 1
-
-            if nr_wins + nr_losses > 0:
-                agg_outcome = float(nr_wins) / (nr_wins + nr_losses)
+        for qtype in qtypes:
+            feedbacks = get_test_feedback(userid=userid, site_id=site_id,
+                                          qtype=qtype, qid=qid)
+            if qtype == "test":
+                for test_period in config["TEST_PERIODS"]:
+                    get_outcomes(feedbacks, outcomes,
+                                 test_period=test_period,
+                                 return_outcome=return_outcome)
             else:
-                agg_outcome = 0
-
-            impressions = nr_wins + nr_losses + nr_ties
-            if impressions > 0 or qtype is not None:
-                outcomes.append({"qid": qid,
-                                 "type": query_type,
-                                 "site_id": site_id,
-                                 "outcome": agg_outcome,
-                                 "wins": nr_wins,
-                                 "losses": nr_losses,
-                                 "ties": nr_ties,
-                                 "impressions": impressions})
+                get_outcomes(feedbacks, outcomes,
+                             return_outcome=return_outcome)
     return outcomes
 
 

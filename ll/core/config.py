@@ -19,7 +19,7 @@ config = {
     "KEY_LENGTH": 32,
     "PASSWORD_LENGHT": 8,
     "EMAIL_FROM": 'challenge@living-labs.net',
-    "SEND_EMAIL": False,
+    "SEND_EMAIL": True,
     "URL_WEB": "http://doc.living-labs.net/en/latest/guide-participant.html",
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001",
@@ -29,6 +29,14 @@ config = {
     "EMAIL_ORGANIZERS": ["krisztian.balog@uis.no",
                          "liadh.kelly@scss.tcd.ie",
                          "anne.schuth@uva.nl"],
-    "TEST_DATE": datetime.date(2015, 5, 1),
-    "TEST_DATE_END": datetime.date(2015, 5, 16),
+    "TEST_PERIODS": [
+                     {"NAME": "CLEF LL4IR Round #1",
+                      "START": datetime.datetime(2015, 5, 1),
+                      "END": datetime.datetime(2015, 5, 16),
+                      },
+                     {"NAME": "LL4IR Round #2",
+                      "START": datetime.datetime(2015, 6, 15),
+                      "END": datetime.datetime(2015, 7, 1),
+                      }
+                     ]
 }

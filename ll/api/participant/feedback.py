@@ -54,6 +54,7 @@ class Feedback(ApiResource):
         Clicks can be either just present (True) or timestamped (list of
         timestamps).
 
+        Feedback is never given for test queries.
 
         :param key: your API key
         :param qid: the query identifier, can be "all"

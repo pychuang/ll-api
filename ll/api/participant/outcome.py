@@ -47,8 +47,9 @@ class Outcome(ApiResource):
         documents assigned to it by Team Draft Interleaving than clicks
         on documents assigned to the site.
 
-        Test queries are restricted to the test period. Train queries are not
-        restricted in time. See http://living-labs.net/challenge/.
+        Outcome for test queries is restricted to the test period. Train
+        queries are not restricted in time. 
+        See http://living-labs.net/challenge/.
 
         :param key: your API key
         :param qid: *optional*, the query identifier, can be "all"
