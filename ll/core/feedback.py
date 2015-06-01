@@ -176,7 +176,7 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
 
     def get_outcomes(feedbacks, outcomes, test_period=None,
                      return_outcome=False):
-        if test_period and datetime.datetime.now() < test_period["STOP"]:
+        if test_period and datetime.datetime.now() < test_period["END"]:
             return
 
         nr_wins = 0
@@ -185,7 +185,7 @@ def get_comparison(userid=None, site_id=None, qtype=None, qid=None):
         for f in feedbacks:
             if test_period and not (test_period["START"] <
                                     f["modified_time"] <
-                                    test_period["STOP"]):
+                                    test_period["END"]):
                 continue
 
             outcome = get_outcome(f)
