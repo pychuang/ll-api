@@ -18,6 +18,10 @@ from .. import api
 from .. import core
 from .. import ApiResource
 
+test_period_fields = {'start': fields.DateTime(attribute="START"),
+                      'end': fields.DateTime(attribute="END"),
+                      'name': fields.String(attribute="NAME"),
+                      }
 
 outcome_fields = {"site_id": fields.String(),
                   "qid": fields.String(),
@@ -27,7 +31,7 @@ outcome_fields = {"site_id": fields.String(),
                   "losses": fields.Integer(),
                   "ties": fields.Integer(),
                   "impressions": fields.Integer(),
-                  "test_period": fields.String(),
+                  "test_period": fields.Neste(test_period_fields),
                   }
 
 
