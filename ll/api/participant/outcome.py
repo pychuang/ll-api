@@ -26,7 +26,8 @@ outcome_fields = {"site_id": fields.String(),
                   "wins": fields.Integer(),
                   "losses": fields.Integer(),
                   "ties": fields.Integer(),
-                  "impressions": fields.Integer()
+                  "impressions": fields.Integer(),
+                  "test_period": fields.String(),
                   }
 
 
