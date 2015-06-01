@@ -31,7 +31,7 @@ outcome_fields = {"site_id": fields.String(),
                   "losses": fields.Integer(),
                   "ties": fields.Integer(),
                   "impressions": fields.Integer(),
-                  "test_period": fields.Neste(test_period_fields),
+                  "test_period": fields.Nested(test_period_fields),
                   }
 
 
