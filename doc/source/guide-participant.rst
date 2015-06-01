@@ -4,15 +4,14 @@
 
 .. _guide:
 
-Guide for CLEF Participants
-===========================
+Guide for Participants
+======================
 
 .. note:: This guide is being updated as it is being used. Please tell us 
 			what you think is missing. Our contact details are at the bottom 
-			of this page |new|
+			of this page
 
-This guide is meant to be a practical guide to participating in the CLEF Living
-Lab.
+This guide is meant to be a practical guide to participating in the Living Lab.
 Since we deviate significantly from the typical TREC style evaluation setup
 that most participants are likely to be familiar with, we will focus primarily
 on those differences.
@@ -23,19 +22,20 @@ Participating in the lab involves following these steps:
 #.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
 #.	Sign up:
 
-	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_. 
-	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins. |new|
+	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ if you want to take part in CLEF
+	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
 #.	Implement your method as a client that can talk to the API. Examples are provided. See :ref:`method` below.
 #.	Run your client:
 
-	#. The client you implement should probably run continuously over several weeks and can potentially constantly update runs.
-	#. When the test phase starts, download test queries and submit your test runs. Again, the test phase will last for several weeks but there is no need (nor the possibility) to update runs.
+	#. The client you implement can use the train queries and historical clicks to learn
+	#. When a test period starts, download test queries and submit your test runs. Again, the test period will last for several weeks but there is no need (nor the possibility) to update runs.
 
-#.	Write up your findings. Publication details will become available.
-#.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
+#. If you take part in CLEF
+    #. Write up your findings.
+    #. Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail 
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
@@ -47,11 +47,11 @@ Schedule
 ===============	===============================================================================================================
 Date 			Description
 ===============	===============================================================================================================
-1 Nov, 2014		Training period begins (Note that you can join any time after this date!)  |new|
+1 Nov, 2014		Training queries released  (Note that you can join any time after this date!) 
 27-30 Apr, 2015		Uploading test runs
-1 May, 2015		Testing period begins
-15 May, 2015		Testing period ends
-17 May, 2015		:ref:`Results released <ll4ir-results>` |new|
+1 May, 2015		CLEF Testing period begins
+15 May, 2015		CLEF Testing period ends
+17 May, 2015		:ref:`CLEF Results released <ll4ir-results>` |new|
 7 Jun, 2015		Working notes papers due
 30 Jun, 2015		Notification of acceptance
 15 Jul, 2015		Camera-ready working notes papers due
@@ -78,6 +78,12 @@ Frequent queries and offline processing
 	is presented. The major advantage of this approach is that we do not
 	require participants to respond to a query within a few milliseconds.
 	The down side is that we only consider frequent (head) queries.
+	
+Train and Test Queries
+	Train queries are there for you to train your system on. Feedback is
+	provided for these queries. Test queries on the other hand, are there 
+	to evaluate your system. For these queries, you can not change your 
+	runs during a testing period.
 	
 No server required
 	Participants do not need to implement nor run a server for serving search
