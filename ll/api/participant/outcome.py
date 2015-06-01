@@ -68,17 +68,32 @@ class Outcome(ApiResource):
 
                 {
                     "outcomes": [
-                        {"site_id": "S",
-                         "qid": "S-q1",
-                         "type": "test",
-                         "outcome": 0.4,
-                         "wins": 2
-                         "losses": 3
-                         "ties": 5
-                         "impressions": 10
+                        {
+                            "type": "test",
+                            "test_period": {
+                                "start": "Fri, 01 May 2015 00:00:00 -0000"
+                                "end": "Sat, 16 May 2015 00:00:00 -0000",
+                                "name": "CLEF LL4IR Round #1",
+                            },
+                            "impressions": 10,
+                            "losses": 3,
+                            "ties": 5,
+                            "wins": 2
+                            "outcome": "0.4",
+                        },
+                        {
+                            "qid": "all",
+                            "site_id": "S",
+                            "type": "train",
+                            "test_period": null,
+                            "impressions": 10,
+                            "losses": 3,
+                            "ties": 5,
+                            "wins": 2
+                            "outcome": "0.4",
                         },
                         ...
-                        ]
+                    ]
                 }
 
         """
