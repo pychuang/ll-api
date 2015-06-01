@@ -69,8 +69,12 @@ class Run(ApiResource):
         only for the participants own bookkeeping. It could be any string,
         you may want to use a timestamp. Or the version of your ranker.
 
-        For test queries, a run can only be uploaded once after the test period
-        starts.
+        For test queries, a run can only be uploaded outside of test periods.
+        An exception to this rule is if you have never uploaded a run for a
+        test query. Then, it can be uploaded once during a test period. This
+        is to allow participants to join at any moment.
+        See test periods here: http://living-labs.net/challenge/.
+
 
         :param key: your API key
         :param qid: the query identifier

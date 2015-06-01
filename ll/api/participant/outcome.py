@@ -55,7 +55,7 @@ class Outcome(ApiResource):
         on documents assigned to the site.
 
         Outcome for test queries is restricted to the test period. Train
-        queries are not restricted in time. 
+        queries are not restricted in time.
         See http://living-labs.net/challenge/.
 
         :param key: your API key
