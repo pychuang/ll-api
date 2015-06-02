@@ -22,7 +22,7 @@ Participating in the lab involves following these steps:
 #.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
 #.	Sign up
 
-	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ if you want to take part in CLEF
+	#. 	If you  take part in CLEF `Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ 
 	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
@@ -34,7 +34,8 @@ Participating in the lab involves following these steps:
 	#.	When a test period starts, download test queries and submit your test runs. Again, the test period will last for several weeks but there is no need (nor the possibility) to update runs.
 
 #.	If you take part in CLEF
-    #.	Write up your findings.
+
+    #.	Write up your findings in a CLEF Working note paper (see schedule below)
     #.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail 
