@@ -120,7 +120,7 @@ Feedback
 .. _api-participants_outcome:
  
 Outcome
---------
+-------
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/outcome
    :undoc-static:
@@ -128,7 +128,7 @@ Outcome
   
 
 Historical Feedback
---------
+-------------------
 .. autoflask:: ll.api.participant:app
    :endpoints: participant/historical
    :undoc-static:

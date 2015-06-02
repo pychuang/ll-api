@@ -79,11 +79,13 @@ Frequent queries and offline processing
 	require participants to respond to a query within a few milliseconds.
 	The down side is that we only consider frequent (head) queries.
 	
-Train and Test Queries
+Train and Test Queries |new|
 	Train queries are there for you to train your system on. Feedback is
 	provided for these queries. Test queries on the other hand, are there 
 	to evaluate your system. For these queries, you can not change your 
-	runs during a testing period.
+	runs during a testing period and you will not obtain feedback for test
+	queries. Outcomes are computed per testing period for test queries. While
+	for train queries, outcomes are continuously updated.
 	
 No server required
 	Participants do not need to implement nor run a server for serving search
@@ -125,8 +127,8 @@ Features Instead of Queries and Documents  |new|
 
 .. _scenarios:
 
-Usage Scenarios |new|
----------------------
+Usage Scenarios
+---------------
 
 The first edition of the lab focuses on two use-cases and one specific notion 
 of what a living lab is, with a view to expanding to other use-cases and other 
