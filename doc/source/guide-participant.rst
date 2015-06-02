@@ -11,10 +11,10 @@ Guide for Participants
 			what you think is missing. Our contact details are at the bottom 
 			of this page
 
-This guide is meant to be a practical guide to participating in the Living Lab.
-Since we deviate significantly from the typical TREC style evaluation setup
-that most participants are likely to be familiar with, we will focus primarily
-on those differences.
+This guide is meant to be a practical guide to participating in the (CLEF) 
+Living Lab. Since we deviate significantly from the typical TREC style 
+evaluation setup that most participants are likely to be familiar with, we will
+focus primarily on those differences.
 
 
 Participating in the lab involves following these steps:
@@ -23,7 +23,7 @@ Participating in the lab involves following these steps:
 #.	Sign up
 
 	#. 	If you  take part in CLEF `Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ 
-	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.
+	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment.
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
@@ -31,7 +31,7 @@ Participating in the lab involves following these steps:
 #.	Run your client
 
 	#.	The client you implement can use the train queries and historical clicks to learn
-	#.	When a test period starts, download test queries and submit your test runs. Again, the test period will last for several weeks but there is no need (nor the possibility) to update runs.
+	#.	When a testing period starts, download test queries and submit your test runs. Again, the testing period will last for several weeks but there is no need (nor the possibility) to update runs.
 
 #.	If you take part in CLEF
 
@@ -81,13 +81,15 @@ Frequent queries and offline processing
 	require participants to respond to a query within a few milliseconds.
 	The down side is that we only consider frequent (head) queries.
 	
-Train and Test Queries |new|
+Train, Test Queries and Testing Periods |new|
 	Train queries are there for you to train your system on. Feedback is
 	provided for these queries. Test queries on the other hand, are there 
 	to evaluate your system. For these queries, you can not change your 
 	runs during a testing period and you will not obtain feedback for test
 	queries. Outcomes are computed per testing period for test queries. While
 	for train queries, outcomes are continuously updated.
+	There will `multiple testing period <http://living-labs.net/challenge/>`_ 
+	Only one of them is designated as official CLEF testing period.
 	
 No server required
 	Participants do not need to implement nor run a server for serving search
