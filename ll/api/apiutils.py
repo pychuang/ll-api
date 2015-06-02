@@ -43,7 +43,7 @@ class ApiResource(Resource):
                   message=str(message).strip().strip(".") + ".",
                   status=status,
                   documentaton=core.config.config["URL_DOC"],
-                  traceback=[replace_tb(l) for l in tb.split("\n") if l])
+                  traceback=[self.replace_tb(l) for l in tb.split("\n") if l])
 
     def check_fields(self, o, required_fields, optional_fields=None,
                      strict=False):
