@@ -35,8 +35,8 @@ Participating in the lab involves following these steps:
 
 #.	If you take part in CLEF
 
-    #.	Write up your findings in a CLEF Working note paper (see schedule below)
-    #.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
+	#.	Write up your findings in a CLEF Working note paper (see schedule below)
+	#.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail 
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
