@@ -14,6 +14,7 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 import traceback
+import re
 from flask.ext.restful import Resource, abort, fields
 from .. import core
 
@@ -24,6 +25,13 @@ class ContentField(fields.Raw):
 
 
 class ApiResource(Resource):
+    def replace_tb(self, line):
+        if "File" in line and ", line " in line:
+            m = re.search('(\s)File \\".*/ll/(^\\*)\\", line (\d+), in (.*)', line)
+            line = "%s%s/src/master/ll/%s?at=master#cl-%d, in %s" % (m.group(0), core.config.config["URL_GIT"],
+                                                                     m.group(1), m.group(2),  m.group(3))
+        return line
+
     def abort(self, status, message, tb=None):
         if tb is None:
             abort(status,
@@ -35,7 +43,7 @@ class ApiResource(Resource):
                   message=str(message).strip().strip(".") + ".",
                   status=status,
                   documentaton=core.config.config["URL_DOC"],
-                  traceback=[l for l in tb.split("\n") if l])
+                  traceback=[replace_tb(l) for l in tb.split("\n") if l])
 
     def check_fields(self, o, required_fields, optional_fields=None,
                      strict=False):
