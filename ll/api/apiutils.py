@@ -28,8 +28,10 @@ class ApiResource(Resource):
     def replace_tb(self, line):
         m = re.search('(\s)File ".*/ll/(.*)", line (\d+), in (.*)', line)
         if m:
-            line = "%s%s/src/master/ll/%s?at=master#cl-%s, in %s" % (m.group(1), core.config.config["URL_GIT"],
-                                                                     m.group(2), m.group(3),  m.group(4))
+            line = ["%sFile " % m.group(1),
+                    "%ssrc/master/ll/%s?at=master#cl-%s" % (core.config.config["URL_GIT"],
+                                                            m.group(2), m.group(3)),
+                    ", in %s" % m.group(4)]
         return line
 
     def abort(self, status, message, tb=None):
