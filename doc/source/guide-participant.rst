@@ -20,7 +20,7 @@ on those differences.
 Participating in the lab involves following these steps:
 
 #.	Read the `lab description <http://living-labs.net/clef-lab/>`_ and  :ref:`key` below. Make sure you're :ref:`help` when needed.
-#.	Sign up:
+#.	Sign up
 
 	#. 	`Register at CLEF <http://clef2015-labs-registration.dei.unipd.it/>`_ if you want to take part in CLEF
 	#.	`Register with the lab <http://living-labs.net:5001/user/register/>`_. You can do this at any moment until the test phase begins.
@@ -28,14 +28,14 @@ Participating in the lab involves following these steps:
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
 #.	Implement your method as a client that can talk to the API. Examples are provided. See :ref:`method` below.
-#.	Run your client:
+#.	Run your client
 
-	#. The client you implement can use the train queries and historical clicks to learn
-	#. When a test period starts, download test queries and submit your test runs. Again, the test period will last for several weeks but there is no need (nor the possibility) to update runs.
+	#.	The client you implement can use the train queries and historical clicks to learn
+	#.	When a test period starts, download test queries and submit your test runs. Again, the test period will last for several weeks but there is no need (nor the possibility) to update runs.
 
-#. If you take part in CLEF
-    #. Write up your findings.
-    #. Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
+#.	If you take part in CLEF
+    #.	Write up your findings.
+    #.	Come to and present your work at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_ in September 2015.
 
 We hope that all steps but 3. and 4. are self explanatory. Below we detail 
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
@@ -47,14 +47,15 @@ Schedule
 ===============	===============================================================================================================
 Date 			Description
 ===============	===============================================================================================================
-1 Nov, 2014		Training queries released  (Note that you can join any time after this date!) 
-27-30 Apr, 2015		Uploading test runs
+1 Nov, 2014		Training queries released  (note that you can join any time after this date!) 
+27-30 Apr, 2015		Uploading test runs for CLEF Testing period
 1 May, 2015		CLEF Testing period begins
 15 May, 2015		CLEF Testing period ends
 17 May, 2015		:ref:`CLEF Results released <ll4ir-results>` |new|
-7 Jun, 2015		Working notes papers due
-30 Jun, 2015		Notification of acceptance
-15 Jul, 2015		Camera-ready working notes papers due
+7 Jun, 2015		CLEF Working notes papers due
+15 Jun, 2015		`Additional Testing period begins <http://living-labs.net/challenge/>`_ |new|
+30 Jun, 2015		Notification of CLEF Working notes acceptance
+15 Jul, 2015		CLEF Camera-ready working notes papers due
 7-11 Sep, 2015		Full-day lab session at at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
 ===============	===============================================================================================================
 
