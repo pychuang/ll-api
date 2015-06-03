@@ -168,7 +168,7 @@ def get_trec(site_id):
     trec_runs = []
     trec_qrels = []
     queries = query.get_query(site_id)
-    participants = core.user.get_participants()
+    participants = user.get_participants()
     for test_period in config["TEST_PERIODS"]:
         if datetime.datetime.now() < test_period["END"]:
             continue
