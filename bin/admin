@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import traceback
 import confargparse
 import os
 import sys
@@ -29,6 +30,7 @@ def trycall(func, args, parser):
     try:
         func(args, parser)
     except Exception, e:
+        print traceback.format_exc()
         parser.error(str(e))
 
 

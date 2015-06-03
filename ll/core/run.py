@@ -25,7 +25,6 @@ import query
 import feedback
 
 
-
 def get_ranking(site_id, site_qid):
     query = db.query.find_one({"site_id": site_id, "site_qid": site_qid})
     if query is None:
@@ -190,6 +189,8 @@ def get_trec(site_id):
                     if testrundate < run["creation_time"] < test_period["END"]:
                         testrundate = run["creation_time"]
                         testrun = run
+                if not testrun:
+                    continue
                 participant_runs[qid] = testrun
                 feedbacks = feedback.get_test_feedback(site_id=site_id,
                                                        userid=userid,
