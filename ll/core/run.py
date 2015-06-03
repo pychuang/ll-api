@@ -200,6 +200,7 @@ def get_trec(site_id):
         for q in queries:
             if "type" not in q or not q["type"] == "test":
                 continue
+            qid = q["_id"]
             feedbacks = feedback.get_test_feedback(site_id=site_id, qid=qid)
             test_period_feedbacks[qid] = [f for f in feedbacks if (test_period["START"] <
                                                                    f["modified_time"] <
