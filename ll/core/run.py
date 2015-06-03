@@ -184,7 +184,7 @@ def get_trec(site_id):
                 if not runs:
                     continue
                 testrun = None
-                testrundate = datetime.datetime(2000, 1, 1),
+                testrundate = datetime.datetime(2000, 1, 1)
                 for run in runs:
                     if testrundate < run["creation_time"] < test_period["END"]:
                         testrundate = run["creation_time"]
