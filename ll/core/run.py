@@ -197,12 +197,13 @@ def get_trec(site_id):
                                                        qid=qid,
                                                        runid=testrun["_id"],
                                                        qtype="test")
-                if qid not in feedbacks:
+                if qid not in test_period_feedbacks:
                     test_period_feedbacks[qid] = []
-                test_period_feedbacks[qid].extend(feedbacks)
-            trec_runs.append(get_trec_run(participant_runs,
-                                          test_period["NAME"],
-                                          participant["teamname"]))
+                test_period_feedbacks[qid].extend([f for f in feedbacks])
+            if participant_runs:
+                trec_runs.append(get_trec_run(participant_runs,
+                                              test_period["NAME"],
+                                              participant["teamname"]))
         trec_qrels.append(get_trec_qrel(test_period_feedbacks,
                                         test_period["NAME"]))
     return trec_runs, trec_qrels
