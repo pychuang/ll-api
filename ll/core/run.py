@@ -144,7 +144,7 @@ def get_trec_qrel(feedbacks, periodname):
         click_stat = {}
         count = 0
         for feedback in feedbacks[qid]:
-            for d in feedback[qid]["doclist"]:
+            for d in feedback["doclist"]:
                 if not d["_id"] in click_stat:
                     click_stat[d["_id"]] = [0, 0]
                 if "clicked" in d and (d["clicked"] is True or
