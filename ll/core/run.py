@@ -145,13 +145,13 @@ def get_trec_qrel(feedbacks, periodname):
         count = 0
         for feedback in feedbacks[qid]:
             for d in feedback["doclist"]:
-                if not d["_id"] in click_stat:
-                    click_stat[d["_id"]] = [0, 0]
+                if not d["docid"] in click_stat:
+                    click_stat[d["docid"]] = [0, 0]
                 if "clicked" in d and (d["clicked"] is True or
                                 (isinstance(d["clicked"], list) and
                                 len(d["clicked"]) > 0)):
-                    click_stat[d["_id"]][0] += 1
-                click_stat[d["_id"]][1] += 1
+                    click_stat[d["docid"]][0] += 1
+                click_stat[d["docid"]][1] += 1
             count += 1
         ctrs = []
         for d in click_stat:
