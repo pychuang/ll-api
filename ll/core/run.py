@@ -195,8 +195,7 @@ def get_trec(site_id):
                 feedbacks = feedback.get_test_feedback(site_id=site_id,
                                                        userid=userid,
                                                        qid=qid,
-                                                       runid=testrun["_id"],
-                                                       qtype="test")
+                                                       runid=testrun["_id"])
                 if qid not in test_period_feedbacks:
                     test_period_feedbacks[qid] = []
                 test_period_feedbacks[qid].extend([f for f in feedbacks])
