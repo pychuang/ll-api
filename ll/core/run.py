@@ -171,7 +171,6 @@ def get_trec(site_id):
     for test_period in config["TEST_PERIODS"]:
         if datetime.datetime.now() < test_period["END"]:
             continue
-        test_period_feedbacks = {}
         for participant in participants:
             userid = participant["_id"]
             participant_runs = {}
@@ -192,17 +191,19 @@ def get_trec(site_id):
                 if not testrun:
                     continue
                 participant_runs[qid] = testrun
-                feedbacks = feedback.get_test_feedback(site_id=site_id,
-                                                       userid=userid,
-                                                       qid=qid,
-                                                       runid=testrun["_id"])
-                if qid not in test_period_feedbacks:
-                    test_period_feedbacks[qid] = []
-                test_period_feedbacks[qid].extend([f for f in feedbacks])
+
             if participant_runs:
                 trec_runs.append(get_trec_run(participant_runs,
                                               test_period["NAME"],
                                               participant["teamname"]))
+        test_period_feedbacks = {}
+        for q in queries:
+            if "type" not in q or not q["type"] == "test":
+                continue
+            feedbacks = feedback.get_test_feedback(site_id=site_id, qid=qid)
+            test_period_feedbacks[qid] = [f for f in feedbacks if (test_period["START"] <
+                                                                   f["modified_time"] <
+                                                                   test_period["END"])]
         trec_qrels.append(get_trec_qrel(test_period_feedbacks,
                                         test_period["NAME"]))
     return trec_runs, trec_qrels
