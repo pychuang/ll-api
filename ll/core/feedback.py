@@ -119,7 +119,7 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
     return readyfeedback
 
 
-def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
+def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None, runid=None):
     q = {"doclist": {"$exists": True}}
     if userid:
         q["userid"] = userid
@@ -128,6 +128,9 @@ def get_test_feedback(userid=None, site_id=None, qid=None, qtype=None):
 
     if qid and qid.lower() != "all":
         q["qid"] = qid
+
+    if runid:
+        q["runid"] = runid
 
     if "qid" in q and "site_id" in q and "userid" in q:
         feedbacks = db.feedback.find(q).hint([("qid", pymongo.ASCENDING),

@@ -73,6 +73,16 @@ def db(args, parser):
     if args.clear:
         ll.core.db.clear()
 
+
+def trec(args, parser):
+    runs, qrels = ll.core.run.get_trec(args.site_id)
+    os.makedirs(os.path.join(args.dir, args.site_id, "run"))
+    os.makedirs(os.path.join(args.dir, args.site_id, "qrel"))
+    for run in runs:
+        open(os.path.join(args.dir, args.site_id, "run", run["name"] + ".run"), 'w').write(run["trec"])
+    for qrel in qrels:
+        open(os.path.join(args.dir, args.site_id, "qrel", qrel["name"] + ".qrel"), 'w').write(qrel["trec"])
+
 if __name__ == '__main__':
     def add_mongodb(parser):
         group_mongodb = parser.add_argument_group("mongodb", section="mongodb")
@@ -140,6 +150,13 @@ if __name__ == '__main__':
                               help="")
     add_mongodb(subparser_db)
     subparser_db.set_defaults(func=db, funcarg=subparser_db)
+
+    subparser_trec = subparsers.add_parser('trec', section='trec')
+    subparser_trec.add_argument('--dir', type=str,
+                                help='Directory to dump trec runs to')
+    subparser_trec.add_argument('--site_id', type=str)
+    add_mongodb(subparser_trec)
+    subparser_trec.set_defaults(func=trec, funcarg=subparser_trec)
 
     args = parser.parse_args()
     ll.core.db.db.init_db(args.mongodb_db, user=args.mongodb_user,

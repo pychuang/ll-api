@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+from slugify import slugify
 from db import db
 from config import config
 import random
@@ -20,6 +21,9 @@ import pymongo
 import datetime
 import site
 import user
+import query
+import feedback
+
 
 
 def get_ranking(site_id, site_qid):
@@ -121,3 +125,83 @@ def get_run(key, qid):
                            "qid": qid,
                            "runid": q["runs"][key]})
     return run
+
+
+def get_trec_run(runs, periodname, teamname):
+    runname = slugify(unicode("%s %s" % (periodname, teamname)))
+    trec = []
+    for qid in sorted(runs.keys()):
+        for rank, d in enumerate(runs[qid]["doclist"]):
+            trec.append("%s Q0 %s %d 0 %s" % (qid, d["docid"], rank, runname))
+    return {"trec": "\n".join(trec),
+            "name": runname}
+
+
+def get_trec_qrel(feedbacks, periodname):
+    periodname = slugify(unicode(periodname))
+    trec = []
+
+    for qid in sorted(feedbacks.keys()):
+        click_stat = {}
+        count = 0
+        for feedback in feedbacks[qid]:
+            for d in feedback[qid]["doclist"]:
+                if not d["_id"] in click_stat:
+                    click_stat[d["_id"]] = [0, 0]
+                if "clicked" in d and (d["clicked"] is True or
+                                (isinstance(d["clicked"], list) and
+                                len(d["clicked"]) > 0)):
+                    click_stat[d["_id"]][0] += 1
+                click_stat[d["_id"]][1] += 1
+            count += 1
+        ctrs = []
+        for d in click_stat:
+            ctrs.append((float(click_stat[d][0])/count, d))
+        for ctr, d in sorted(ctrs, reverse=True):
+            trec.append("%s 0 %s %.6f" % (qid, d, ctr))
+
+    return {"trec": "\n".join(trec),
+            "name": periodname}
+
+
+def get_trec(site_id):
+    trec_runs = []
+    trec_qrels = []
+    queries = query.get_query(site_id)
+    participants = core.user.get_participants()
+    for test_period in config["TEST_PERIODS"]:
+        if datetime.datetime.now() < test_period["END"]:
+            continue
+        test_period_feedbacks = {}
+        for participant in participants:
+            userid = participant["_id"]
+            participant_runs = {}
+            for q in queries:
+                if "type" not in q or not q["type"] == "test":
+                    continue
+                qid = q["_id"]
+                runs = db.run.find({"userid": userid,
+                                    "qid": qid})
+                if not runs:
+                    continue
+                testrun = None
+                testrundate = datetime.datetime(2000, 1, 1),
+                for run in runs:
+                    if testrundate < run["creation_time"] < test_period["END"]:
+                        testrundate = run["creation_time"]
+                        testrun = run
+                participant_runs[qid] = testrun
+                feedbacks = feedback.get_test_feedback(site_id=site_id,
+                                                       userid=userid,
+                                                       qid=qid,
+                                                       runid=testrun["_id"],
+                                                       qtype="test")
+                if qid not in feedbacks:
+                    test_period_feedbacks[qid] = []
+                test_period_feedbacks[qid].extend(feedbacks)
+            trec_runs.append(get_trec_run(participant_runs,
+                                          test_period["NAME"],
+                                          participant["teamname"]))
+        trec_qrels.append(get_trec_qrel(test_period_feedbacks,
+                                        test_period["NAME"]))
+    return trec_runs, trec_qrels
