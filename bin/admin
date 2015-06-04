@@ -77,13 +77,15 @@ def db(args, parser):
 
 
 def trec(args, parser):
-    runs, qrels = ll.core.run.get_trec(args.site_id)
+    runs, qrels, qrels_raw = ll.core.run.get_trec(args.site_id)
     os.makedirs(os.path.join(args.dir, args.site_id, "run"))
     os.makedirs(os.path.join(args.dir, args.site_id, "qrel"))
     for run in runs:
         open(os.path.join(args.dir, args.site_id, "run", run["name"] + ".run"), 'w').write(run["trec"])
     for qrel in qrels:
-        open(os.path.join(args.dir, args.site_id, "qrel", qrel["name"] + ".qrel"), 'w').write(qrel["trec"])
+        open(os.path.join(args.dir, args.site_id, "qrel", qrel["name"] + ".ctr.qrel"), 'w').write(qrel["trec"])
+    for qrel in qrels_raw:
+        open(os.path.join(args.dir, args.site_id, "qrel", qrel["name"] + ".raw.qrel"), 'w').write(qrel["trec"])
 
 if __name__ == '__main__':
     def add_mongodb(parser):

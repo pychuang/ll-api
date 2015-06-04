@@ -130,13 +130,15 @@ def get_trec_run(runs, periodname, teamname):
     runname = slugify(unicode("%s %s" % (periodname, teamname)))
     trec = []
     for qid in sorted(runs.keys()):
+        ndoc = len(runs[qid]["doclist"])
         for rank, d in enumerate(runs[qid]["doclist"]):
-            trec.append("%s Q0 %s %d 0 %s" % (qid, d["docid"], rank, runname))
+            trec.append("%s Q0 %s %d %d %s" % (qid, d["docid"], rank,
+                                               ndoc-rank, runname))
     return {"trec": "\n".join(trec),
             "name": runname}
 
 
-def get_trec_qrel(feedbacks, periodname):
+def get_trec_qrel(feedbacks, periodname, rawcount=False):
     periodname = slugify(unicode(periodname))
     trec = []
 
@@ -155,9 +157,15 @@ def get_trec_qrel(feedbacks, periodname):
             count += 1
         ctrs = []
         for d in click_stat:
-            ctrs.append((float(click_stat[d][0])/count, d))
+            if rawcount:
+                ctrs.append((click_stat[d][0], d))
+            else:
+                ctrs.append((float(click_stat[d][0])/count, d))
         for ctr, d in sorted(ctrs, reverse=True):
-            trec.append("%s 0 %s %.6f" % (qid, d, ctr))
+            if rawcount:
+                trec.append("%s 0 %s %d" % (qid, d, ctr))
+            else:
+                trec.append("%s 0 %s %.6f" % (qid, d, ctr))
 
     return {"trec": "\n".join(trec),
             "name": periodname}
@@ -166,6 +174,7 @@ def get_trec_qrel(feedbacks, periodname):
 def get_trec(site_id):
     trec_runs = []
     trec_qrels = []
+    trec_qrels_raw = []
     queries = query.get_query(site_id)
     participants = user.get_participants()
     for test_period in config["TEST_PERIODS"]:
@@ -207,4 +216,7 @@ def get_trec(site_id):
                                                                    test_period["END"])]
         trec_qrels.append(get_trec_qrel(test_period_feedbacks,
                                         test_period["NAME"]))
-    return trec_runs, trec_qrels
+        trec_qrels_raw.append(get_trec_qrel(test_period_feedbacks,
+                                            test_period["NAME"],
+                                            rawcount=True))
+    return trec_runs, trec_qrels, trec_qrels_raw
