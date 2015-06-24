@@ -13,10 +13,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import time
+import rollbar
+import rollbar.contrib.flask
 from flask import Flask, g
 from flask.ext.restful import Api, abort
 from flask_limiter import Limiter
+from flask import got_request_exception
 
 from .. import core
 from apiutils import ApiResource, ContentField
@@ -24,6 +28,23 @@ from apiutils import ApiResource, ContentField
 app = Flask(__name__)
 limiter = Limiter(app, global_limits=["300/minute", "10/second"])
 api = Api(app, catch_all_404s=True)
+
+
+@app.before_first_request
+def init_rollbar():
+    """init rollbar module"""
+    rollbar.init(
+        # access token for the demo app: https://rollbar.com/demo
+        core.config.config["ROLLBAR_KEY"],
+        # environment name
+        'living-labs-api',
+        # server root directory, makes tracebacks prettier
+        root=os.path.dirname(os.path.realpath(__file__)),
+        # flask already sets up logging
+        allow_logging_basic_config=False)
+
+    # send exceptions from `app` to rollbar, using flask's signal system.
+    got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
 
 @app.before_request

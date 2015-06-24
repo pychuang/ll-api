@@ -38,5 +38,6 @@ config = {
                       "START": datetime.datetime(2015, 6, 15),
                       "END": datetime.datetime(2015, 7, 1),
                       }
-                     ]
+                     ],
+    "ROLLBAR_KEY": "719ef6f2566f46af9b849fdbc9d43680",
 }
