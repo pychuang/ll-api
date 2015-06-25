@@ -19,6 +19,8 @@ import confargparse
 import os
 import sys
 import logging
+import urllib3
+urllib3.disable_warnings()
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
@@ -57,7 +59,6 @@ if __name__ == '__main__':
     app.debug = args.debug
     db.init_db(args.mongodb_db, user=args.mongodb_user,
                password=args.mongodb_pw)
-    logging.captureWarnings(True)
     http_server = HTTPServer(WSGIContainer(app))
     http_server.listen(args.port, address=args.host)
     ioloop = IOLoop.instance()
