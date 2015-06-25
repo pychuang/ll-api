@@ -5,3 +5,8 @@ body {
 footer {
     padding-top: 60px;
 }
+
+.navbar-default {
+  background-color: #939230;
+  border-color: #222222;
+}
