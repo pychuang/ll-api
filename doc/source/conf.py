@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Living Labs API'
+project = u'Living Labs Documentation'
 copyright = u'2014, Living Labs'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -120,7 +120,7 @@ html_theme_options = {
     'navbar_site_name': 'Documentation',
     'source_link_position': 'footer',
     'navbar_links': [
-            ("CLEF Lab", "http://living-labs.net/clef-lab/", True),
+            ("Website", "http://living-labs.net/", True),
             ("Dashboard", "http://living-labs.net:5001/", True),
 #            ("About", "http://living-labs.net/about/", True),
 #            ("LL'13", "http://living-labs.net/ll13/", True),
