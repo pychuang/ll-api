@@ -40,4 +40,5 @@ config = {
                       }
                      ],
     "ROLLBAR_KEY": "719ef6f2566f46af9b849fdbc9d43680",
+    "ROLLBAR_ENV": "production",
 }

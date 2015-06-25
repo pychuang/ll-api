@@ -37,7 +37,7 @@ def init_rollbar():
         # access token for the demo app: https://rollbar.com/demo
         core.config.config["ROLLBAR_KEY"],
         # environment name
-        'production',
+        core.config.config["ROLLBAR_ENV"],
         # server root directory, makes tracebacks prettier
         root=os.path.dirname(os.path.realpath(__file__)),
         # flask already sets up logging
