@@ -22,13 +22,19 @@
   	  <thead>
       	<tr>
       		<th colspan='3'></td>
-      		<th colspan='5'>Test</td>
       		<th colspan='5'>Train</td>
+      		<th colspan='5'>Test 1</td>
+      		<th colspan='5'>Test 2</td>
       	</tr>
       	<tr>
       		<th>Teamname</td>
       		<th>Email</td>
       		<th>Joined</td>
+      		<th>Outcome</td>
+      		<th>#Wins</td>
+      		<th>#Losses</td>
+      		<th>#Ties</td>
+      		<th>#Impressions</td>
       		<th>Outcome</td>
       		<th>#Wins</td>
       		<th>#Losses</td>
@@ -47,16 +53,18 @@
 	      <td>{{ outcome.user.teamname }}</td>
 	      <td>{{ outcome.user.email|urlize }}</td>
 	      <td>{{ outcome.user.creation_time.strftime('%Y-%m-%d') }}</td>
-	      <td>{{'%0.4f' % outcome.outcome.test.outcome}}</td>
-	      <td>{{outcome.outcome.test.wins}}</td>
-	      <td>{{outcome.outcome.test.losses}}</td>
-	      <td>{{outcome.outcome.test.ties}}</td>
-	      <td>{{outcome.outcome.test.impressions}}</td>
 	      <td>{{'%0.4f' % outcome.outcome.train.outcome}}</td>
 	      <td>{{outcome.outcome.train.wins}}</td>
 	      <td>{{outcome.outcome.train.losses}}</td>
 	      <td>{{outcome.outcome.train.ties}}</td>
 	      <td>{{outcome.outcome.train.impressions}}</td>
+	      {% for o in outcome.outcome.test %}
+	      <td>{{'%0.4f' % o.outcome}}</td>
+	      <td>{{o.wins}}</td>
+	      <td>{{o.losses}}</td>
+	      <td>{{o.ties}}</td>
+	      <td>{{o.impressions}}</td>
+	      {% endfor %}
       	</tr>     	
       	{% endfor %}
       	</tbody>
