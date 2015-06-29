@@ -36,7 +36,7 @@ def init_rollbar():
     """init rollbar module"""
     rollbar.init(
         # access token for the demo app: https://rollbar.com/demo
-        core.config.config["ROLLBAR_KEY"],
+        core.config.config["ROLLBAR_API_KEY"],
         # environment name
         core.config.config["ROLLBAR_ENV"],
         # server root directory, makes tracebacks prettier

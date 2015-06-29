@@ -13,11 +13,32 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
+
+import os
+import rollbar
+import rollbar.contrib.flask
 from functools import wraps
-from flask import Flask, render_template,  g, flash, redirect, url_for, \
-                    request, session
+from flask import Flask, render_template, g, flash, redirect, url_for,\
+    request, session, got_request_exception
 from .. import core
 app = Flask(__name__)
+
+
+@app.before_first_request
+def init_rollbar():
+    """init rollbar module"""
+    rollbar.init(
+        # access token for the demo app: https://rollbar.com/demo
+        core.config.config["ROLLBAR_DASHB0ARD_KEY"],
+        # environment name
+        core.config.config["ROLLBAR_ENV"],
+        # server root directory, makes tracebacks prettier
+        root=os.path.dirname(os.path.realpath(__file__)),
+        # flask already sets up logging
+        allow_logging_basic_config=False)
+
+    # send exceptions from `app` to rollbar, using flask's signal system.
+    got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
 
 @app.errorhandler(404)
@@ -43,9 +64,11 @@ def before_request():
 @app.route('/')
 def home():
     return render_template("base.html", user=g.user,
-                       sites=core.user.get_sites(g.user["_id"]) if g.user else True,
-                       verified=g.user["is_verified"] if g.user else True,
-                       config=core.config.config)
+                           sites=core.user.get_sites(g.user["_id"])
+                           if g.user else True,
+                           verified=g.user["is_verified"]
+                           if g.user else True,
+                           config=core.config.config)
 
 
 def requires_login(f):

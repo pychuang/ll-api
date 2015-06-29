@@ -39,6 +39,7 @@ config = {
                       "END": datetime.datetime(2015, 7, 1),
                       }
                      ],
-    "ROLLBAR_KEY": "719ef6f2566f46af9b849fdbc9d43680",
+    "ROLLBAR_API_KEY": "719ef6f2566f46af9b849fdbc9d43680",
+    "ROLLBAR_DASHB0ARD_KEY": "ccf521ba5e49428ebc79bd82b14587fa",
     "ROLLBAR_ENV": "production",
 }

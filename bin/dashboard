@@ -18,6 +18,14 @@
 import confargparse
 import os
 import sys
+import urllib3
+urllib3.disable_warnings()
+
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+from tornado import autoreload
+
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__),
                                                 "../..")))
@@ -66,4 +74,9 @@ if __name__ == '__main__':
 
     db.init_db(args.mongodb_db, user=args.mongodb_user,
                password=args.mongodb_pw)
-    app.run(host=args.host, port=args.port, threaded=True)
+    
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(args.port, address=args.host)
+    ioloop = IOLoop.instance()
+    autoreload.start(ioloop)
+    ioloop.start()
