@@ -24,7 +24,7 @@
       		<th colspan='3'></td>
       		<th colspan='5'>Train</td>
 	      	{% for o in outcomes[0].outcome.test %}  		
-      		<th colspan='5'>{{o.test_period.NAME}} ({{o.test_period.START.strftime('%Y-%m-%d')}} - {{o.test_period.START.strftime('%Y-%m-%d')}})</td>
+      		<th colspan='5'>{{o.test_period.NAME}} ({{o.test_period.START.strftime('%Y-%m-%d')}} - {{o.test_period.END.strftime('%Y-%m-%d')}})</td>
 	        {% endfor %}
       	</tr>
       	<tr>
