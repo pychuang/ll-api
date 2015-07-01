@@ -215,7 +215,7 @@ Initialize
 Obtain Queries
 ~~~~~~~~~~~~~~
 
-See also :http:get:`/api/participant/quert/(key)`. 
+See also :http:get:`/api/participant/query/(key)`. 
 
 .. sourcecode:: python
 
