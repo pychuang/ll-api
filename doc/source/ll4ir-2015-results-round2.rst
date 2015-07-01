@@ -33,6 +33,7 @@ Web search
 ====================== ======= ===== ======= ===== ============
 Teamname               Outcome #Wins #Losses #Ties #Impressions 
 ====================== ======= ===== ======= ===== ============
-Exploitative Baseline  
-Uniform Baseline       
+Exploitative Baseline 0.6035   3128  2055    18055 23238
+Uniform Baseline      0.2547   435   1273    1053  2761
 ====================== ======= ===== ======= ===== ============
+
