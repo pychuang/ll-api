@@ -10,7 +10,7 @@ This round ran from May 1, 2015 till May 15, 2015.
 #Impressions is the total number of times when rankings (for any of the test queries) from the given team/system have been displayed to users.
 The number of wins, losses, and ties are calculated against the production system, where a win is defined as the experimental system having more clicks on results assigned to it by Team Draft Interleaving than clicks on results assigned to the production system.
 Outcome is defined as #wins/(#wins+#losses). Typically, an outcome value below 0.5 means that the experimental system performed worse than the production system (i.e., in overall, it has more losses than wins).
-For the Product search use case however, the expect outcomes was 0.28. Please see the Overview paper for details.
+For the Product search use case however, the expect outcomes was 0.28. Please see the `Overview paper <http://living-labs.net/wp-content/uploads/2015/06/clef2015-ll4ir.pdf>`_ for details.
 (Note that we fixed this issue with the expected outcome in the :ref:`LL4IR Round #2 Results <ll4ir-results-round2>`.) 
 
 Participants can request the outcomes, for the entire query set (both test and train) as well as for each query individually, via :http:get:`/api/participant/outcome/(key)/(qid)`. 
