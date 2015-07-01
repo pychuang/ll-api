@@ -215,6 +215,8 @@ Initialize
 Obtain Queries
 ~~~~~~~~~~~~~~
 
+See also :http:get:`/api/participant/quert/(key)`. 
+
 .. sourcecode:: python
 
 	def get_queries():
@@ -229,6 +231,8 @@ Obtain Queries
 
 Obtain Doclists
 ~~~~~~~~~~~~~~~
+
+See also :http:get:`/api/participant/doclist/(key)/(qid)`. 
 
 .. sourcecode:: python
 
@@ -247,6 +251,8 @@ Obtain Doclists
 
 Obtain Feedback and Update Runs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See also :http:get:`/api/participant/feedback/(key)/(qid)` and :http:put:`/api/participant/run/(key)/(qid)` 
 
 .. sourcecode:: python
 
