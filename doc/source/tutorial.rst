@@ -152,19 +152,11 @@ authentication. Start a MongoDB deamon as follows:
 
     $ mongod
 
-Create a local copy of the config/db.ini file. Edit the database name if you
-wish.
-
-.. sourcecode:: bash
-
-    $ cp config/livinglabs.ini config/livinglabs.local.ini
-
-
 
 Run the API
 -----------
 
-If you didn't do so yet, make a copy of the configuration and at least fill out
+If you did not do so yet, make a copy of the configuration and at least fill out
 the mongodb section:
 
 .. sourcecode:: bash
@@ -216,6 +208,15 @@ Instead, you can also provide your own details, see the help on how to do that:
 
    $ ./bin/admin user -h
 
+To show all created users, issue the following command:
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin user -c config/livinglabs.local.ini --show
+
+Do not forget to supply the configuration file as an argument, this gives the API the information to log in to the MongoDB database.
+
+
 
 Reset the Database
 ------------------
@@ -248,9 +249,11 @@ To run a site client and upload queries and documents, you can do the following:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-site --key SITEKEY -q -d
+   $ ./bin/client-site --host localhost --key SITEKEY -q -d
 
-This will take TREC queries/runs/document (see :code:`-h` for file locations and
+This assumes the API runs on :code:`localhost`, your own computer. If the :code:`--host` argument is omitted,  the default online Living Labs API (http://living-labs.net) is used.
+
+It will take TREC queries/runs/document (see :code:`-h` for file locations and
 how to change them) as a basis. Alternatively, with the :code:`--letor` switch, 
 this client will accept Learning to Rank (Letor) data.
 
@@ -258,14 +261,11 @@ Then, to simulate interactions, run the following:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-site --key SITEKEY -s
+   $ ./bin/client-site --host localhost --key SITEKEY -s
    
 Again, this will take TREC data (qrels) to simulate clicks using a simple
 cascade click model. Or, again, with the :code:`--letor` switch, a Learning to
 Rank (Letor) data set.
-
-Note that you may need to specify the host/port where the API is running (see
-:code:`-h` for details on how to do that).
 
 The simple simulator will print the NDCG value of all the rankings it receives
 from the API. 
@@ -294,11 +294,11 @@ For your convenience, you can download learning to rank (Letor) data sets here:
 Run a Participant
 ^^^^^^^^^^^^^^^^^
 
-To run a simple participant implementation, you can do this:
+To run a simple participant implementation, you can do this, again assuming the API runs on :code:`localhost`:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-participant -k PARTICIPANTKEY -s
+   $ ./bin/client-participant --host localhost -k PARTICIPANTKEY -s
    
 The API key can be obtained through a procedure explained in `Fill the Database`
 or through the :ref:`Dashboard <dashboard>`.
@@ -324,9 +324,9 @@ However, if you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
 To start the dashboard, fill out the dashboard fields in your local copy of the
-config (config/livinglabs.local.ini). In particular, you will need a recaptcha
-key (see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey
-(both are just random strings you should generate).
+configuration (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
+key (see http://www.google.com/recaptcha), that will fill the `recaptchaprivate` and `recaptchapublic` fields.
+`csrfsecrettoken` and `secretkey` are both random strings you should generate.
 
 Then run the following command:
 
