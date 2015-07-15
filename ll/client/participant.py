@@ -232,10 +232,11 @@ class Participant():
                 docid = doc['docid']
                 features = " ".join(["%d:%.4f" % tuple(fv)
                                      for fv in doc["relevance_signals"]])
-                print "%d qid:%d %s # %s" % (clicks[docid],
-                                             nqid,
-                                             features,
-                                             docid)
+                print "%d qid:%d %s # %s %s" % (clicks[docid],
+                                                nqid,
+                                                features,
+                                                qid,
+                                                docid)
 
     def get_test(self, key):
         current_q = None
@@ -254,9 +255,10 @@ class Participant():
                 docid = doc['docid']
                 features = " ".join(["%d:%.4f" % tuple(fv)
                                      for fv in doc["relevance_signals"]])
-                print "-1 qid:%d %s # %s" % (nqid,
-                                             features,
-                                             docid)
+                print "-1 qid:%d %s # %s %s" % (nqid,
+                                                features,
+                                                qid,
+                                                docid)
 
     def store_run(self, key, run_file):
         runs = {}
