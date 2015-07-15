@@ -14,6 +14,7 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from pymongo import MongoClient
+from collections import OrderedDict
 import subprocess
 import json
 import os
@@ -68,22 +69,24 @@ def import_json(path, database, username, password):
             import_metadata(path,database,collection)
 
 def import_metadata(path,database,collection):
-    
     json_metafile=os.path.join(path,database,collection) + ".metadata.json"
     f=open(json_metafile,"r")
-    structure = json.load(f)
+    structure = json.load(f, object_pairs_hook=OrderedDict)
     attr_list = structure[u"indexes"]
     for item in attr_list:
         if u"key" in item:
             index = item[u"key"]
-            #db[collection].create_index(index.items())
             if(collection==u"user"):
                 db.user.create_index(index.items())
-            if(collection==u"site"):
+            elif(collection==u"site"):
                 db.site.create_index(index.items())
-            if(collection==u"doc"):
+            elif(collection==u"doc"):
                 db.doc.create_index(index.items())
-            if(collection==u"feedback"):
+            elif(collection==u"feedback"):
                 db.feedback.create_index(index.items())
-            if(collection==u"run"):
+            elif(collection==u"run"):
                 db.run.create_index(index.items())
+            elif(collection==u"query"):
+                db.query.create_index(index.items())
+            elif(collection==u"historical"):
+                db.historical.create_index(index.items())
