@@ -74,6 +74,7 @@ you'll have to continue.
 You don't necessarily have to do that, our API is running here:
 http://living-labs.net:5000/api/
 
+.. _setup_mongodb:
 
 Setup MongoDB
 -------------
@@ -85,6 +86,13 @@ You'll need MongoDB version >=2.6.
 Then you can choose to run with or without authentication (without is easier,
 but unsecure).
 
+Either way, move to the `ll-api` directory:
+
+.. sourcecode:: bash
+
+    $ cd ll-api
+
+
 Authenticated
 ^^^^^^^^^^^^^
 
@@ -95,14 +103,12 @@ First start a MongoDB daemon as follows:
 
 .. sourcecode:: bash
 
-    $ mongod --config ll-api/config/mongodb.conf
+    $ mongod --config config/mongodb.conf
 
-Then, create two users (replace ADMINSECRET and USERSECRET with actual password
-and remember those):
+Use a :code:`mongo` shell to create a database administrator. Replace `ADMINSECRET` by a password of choice.
 
 .. sourcecode:: bash
 
-    # CREATE ADMIN
     $ mongo
     > use admin
     > db.createUser(
@@ -118,8 +124,12 @@ and remember those):
         ]
       }
     )
-    
-    # CREATE USER
+    > exit
+
+Using the `admin` user you just created, you can log in on an authenticated :code:`mongo` shell and create the `ll` database user. Again, `USERSECRET` can be replaced by a password of choice.
+
+.. sourcecode:: bash
+
     $ mongo -u admin -p --authenticationDatabase admin
     > use ll
     > db.createUser(
@@ -129,9 +139,10 @@ and remember those):
           roles: ["readWrite"],
         }
     )
+    > exit
 
 Create a local copy of the config/livinglabs.ini file and edit it to add the
-USERSECRET password to the mongodb section. Put this password in quotes. 
+user password to the `mongodb` section. Put this password in quotes. 
 Also edit the database name if you wish.
 
 .. sourcecode:: bash
@@ -152,19 +163,11 @@ authentication. Start a MongoDB deamon as follows:
 
     $ mongod
 
-Create a local copy of the config/db.ini file. Edit the database name if you
-wish.
-
-.. sourcecode:: bash
-
-    $ cp config/livinglabs.ini config/livinglabs.local.ini
-
-
 
 Run the API
 -----------
 
-If you didn't do so yet, make a copy of the configuration and at least fill out
+If you did not do so yet, make a copy of the configuration and at least fill out
 the mongodb section:
 
 .. sourcecode:: bash
@@ -188,48 +191,40 @@ debug flag:
 
 In general, use :code:`--help` or :code:`-h` for more information.
 
+.. _fill_db:
 
 Fill the Database
 -----------------
+To fill the database with a standard configuration, including clients and sites, a fixture is available in the `dump` directory. We use the :code:`admin` tool to import this fixture:
 
-If there is a :ref:`Dashboard <dashboard>` running, probably you should just create some users
-through the :ref:`Dashboard <dashboard>`. Otherwise, continue here.
+.. sourcecode:: bash
 
-To create site or admin users, you will still need the bin/admin tool.
+    $ ./bin/admin db --import-json dump/ -c config/livinglabs.local.ini 
 
-To create an example participant and a site (for development/testing purposes),
-you can run the following script: 
-
-.. sourcecode:: bash 
-
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/site.ini --password CHOOSEAPASSWORD
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
-
-The passwords are used for the `Dasboard`.
-
-In return, you will see two API keys, one for a site and one for a participant.
-Record the keys as SITEKEY and PARTICIPANTKEY, you'll need them for the clients.
-
-Instead, you can also provide your own details, see the help on how to do that:
+We want to check that the users have been created. Users are clients and sites connecting to the LivingLabs API and should not be confused with the database users created in the :ref:`Setup MongoDB<setup_mongodb>` section. To show all users (clients and sites), issue the following command:
 
 .. sourcecode:: bash 
 
-   $ ./bin/admin user -h
+    $ ./bin/admin user -c config/livinglabs.local.ini --show
+
+You will see the following:
+
+.. sourcecode:: bash
+
+    E0016261DE4C0D61-M6C4AMHHE4WV4OVY uva test@example.com SITE 
+    9EA887B684DD5822-JBB2XOCVEGYE7YAZ user1 test1@example.com PARTICIPANT ADMIN
+    77DBF9C7A1F70422-EZICBLYSCMMBJWKR user2 test2@example.com PARTICIPANT 
+
+- `uva` is a site, with :code:`sitepass` as its standard password.
+- `user1` is a verified participant, which means it has been authorized to connect with sites via the Dashboard. `user1` is also an admin user, so you can use it to change global settings on the Dashboard. Its password is :code:`partpass`.
+- `user2` is an unverified participant, it still has to be verified via the Dashboard by an administrator. The standard password for `user2` is :code:`part2pass`.
+ 
+The user e-mail adresses, combined with the mentioned passwords, can be used to log in to the :ref:`Dashboard<dashboard>`. On the dashboard, you can also change the passwords.
+
+Remember the keys as well, you will need them when creating clients in section :ref:`Running Clients<running_clients>`.
 
 
-Reset the Database
-------------------
-
-In case you need a reset, you can simply run this. But, BE CAREFUL, it can not
-be undone (or, probably it can, the MongoDB is journalled, but it will not be
-trivial).
-
-.. sourcecode:: bash 
-
-   $ ./bin/admin db --clear
-
-Don't forget to recreate users (see above).
-
+.. _running_clients:
 
 Running Clients
 ---------------
@@ -237,8 +232,8 @@ Running Clients
 Clients are pieces of code that talk to the Living Labs API. We recognize two
 types of clients: participants and sites. Sites are search engines that share
 queries, documents and clicks. Participants rank documents for queries using
-clicks. Clients need API keys. The easiest way of obtaining a key is through
-the :ref:`Dashboard <dashboard>`.
+clicks. Clients need API keys. You can use the keys obtained in the :ref:`Fill the Database<fill_db>`
+section or look them up via the :ref:`Dashboard <dashboard>`.
 
 
 Run a Site
@@ -248,9 +243,11 @@ To run a site client and upload queries and documents, you can do the following:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-site --key SITEKEY -q -d
+   $ ./bin/client-site --host localhost --key SITEKEY -q -d
 
-This will take TREC queries/runs/document (see :code:`-h` for file locations and
+This assumes the API runs on :code:`localhost`, your own computer. If the :code:`--host` argument is omitted,  the default online Living Labs API (http://living-labs.net) is used.
+
+It will take TREC queries/runs/document (see :code:`-h` for file locations and
 how to change them) as a basis. Alternatively, with the :code:`--letor` switch, 
 this client will accept Learning to Rank (Letor) data.
 
@@ -258,14 +255,11 @@ Then, to simulate interactions, run the following:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-site --key SITEKEY -s
+   $ ./bin/client-site --host localhost --key SITEKEY -s
    
 Again, this will take TREC data (qrels) to simulate clicks using a simple
 cascade click model. Or, again, with the :code:`--letor` switch, a Learning to
 Rank (Letor) data set.
-
-Note that you may need to specify the host/port where the API is running (see
-:code:`-h` for details on how to do that).
 
 The simple simulator will print the NDCG value of all the rankings it receives
 from the API. 
@@ -294,11 +288,11 @@ For your convenience, you can download learning to rank (Letor) data sets here:
 Run a Participant
 ^^^^^^^^^^^^^^^^^
 
-To run a simple participant implementation, you can do this:
+To run a simple participant implementation, you can do this, again assuming the API runs on :code:`localhost`:
 
 .. sourcecode:: bash 
 
-   $ ./bin/client-participant -k PARTICIPANTKEY -s
+   $ ./bin/client-participant --host localhost -k PARTICIPANTKEY -s
    
 The API key can be obtained through a procedure explained in `Fill the Database`
 or through the :ref:`Dashboard <dashboard>`.
@@ -313,20 +307,17 @@ start multiple instances that talk to the same API.
 .. _dashboard:
 
 Dashboard Installation
-======================
+----------------------
 
 .. note:: You may not need to install a Dashboard yourself, read the :ref:`guide`.
 
-Users with admin privileges, have a few more options in the dashboard. Use the
-bin/admin tool to create a user with those privileges.
-
-However, if you are running a local version of the API for development, it is a
+If you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
 To start the dashboard, fill out the dashboard fields in your local copy of the
-config (config/livinglabs.local.ini). In particular, you will need a recaptcha
-key (see http://www.google.com/recaptcha), a csrfsecrettoken, and a secretkey
-(both are just random strings you should generate).
+configuration (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
+key (see http://www.google.com/recaptcha), that will fill the `recaptchaprivate` and `recaptchapublic` fields.
+`csrfsecrettoken` and `secretkey` are both random strings you should generate.
 
 Then run the following command:
 
@@ -337,10 +328,66 @@ Then run the following command:
 In general, use :code:`--help` or :code:`-h` for more information. By default
 the dashboard will run on port 5001.
 
+On the Dashboard, you can log in using the users created under :ref:`Fill the Database<fill_db>`. You can also create new users using the Register button. As a participant, you can use the Dashboard to add yourself to one or more sites. If you are an admin, you can verify participants, so they are able to connect with a site.
+
+Advanced options
+============
+Congratulations! You are done setting up a LivingLabs API including database, dashboard, sites and clients. Now, we will show some more advanced options to customize your environment.
+
+Create users
+------------
+If there is a :ref:`Dashboard <dashboard>` running, you can create participants
+by choosing `Register` on the :ref:`Dashboard <dashboard>`. It is also
+possible to create users via the command line, this also enables you
+to create site and admin users.
+
+To create an example participant and a site (for development/testing purposes),
+you can run the following script: 
+
+.. sourcecode:: bash 
+
+    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/site.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
+
+The passwords are used for the `Dasboard`.
+
+In return, you will see two API keys, one for a site and one for a participant.
+Record the keys as SITEKEY and PARTICIPANTKEY, you'll need them for the clients.
+
+Instead, you can also provide your own details, or perform actions like deleting users and making users admin. See the help on how to do that:
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin user -h
+
+Do not forget to supply the configuration file as an argument, this gives the API the credentials to log in to the MongoDB database.
+
+Export the database
+-------------------
+You can export the database to create a human-readable json fixture, like the one we use to :ref:`fill the database<fill_db>`.
+To create a fixture in the `dump` directory, issue:
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin db --export-json dump -c config/livinglabs.local.ini
+
+
+Reset the Database
+------------------
+
+In case you need a reset, you can simply run this. But, BE CAREFUL, it can not
+be undone (or, probably it can, the MongoDB is journalled, but it will not be
+trivial).
+
+.. sourcecode:: bash 
+
+   $ ./bin/admin db --clear -c config/livinglabs.local.ini
+
+Don't forget to recreate users (see above).
+
 
 Building Documentation
-======================
-
+----------------------
 .. note::  you probably don't have to build the documentation. A constantly
 	updated version is available here: http://doc.living-labs.net/ .
 

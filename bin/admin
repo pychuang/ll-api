@@ -74,6 +74,16 @@ def status(args, parser):
 def db(args, parser):
     if args.clear:
         ll.core.db.clear()
+        
+    if args.import_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
+        ll.core.db.import_json(args.import_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
+    elif args.import_json:
+        print("--import-json: Supply a MongoDB database, user and password through the commandline or via a configuration file.")
+        
+    if args.export_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
+        ll.core.db.export_json(args.export_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
+    elif args.export_json:
+        print("--export-json: Supply a MongoDB database, user and password through the commandline or via a configuration file.")
 
 
 def trec(args, parser):
@@ -152,6 +162,10 @@ if __name__ == '__main__':
     subparser_db = subparsers.add_parser('db', section='status')
     subparser_db.add_argument("--clear", action="store_true", default=False,
                               help="")
+    subparser_db.add_argument("--import-json", type=str,
+                              help="Import the database from json files in the given directory")
+    subparser_db.add_argument("--export-json", type=str,
+                              help="Export the database as json to the given output directory")
     add_mongodb(subparser_db)
     subparser_db.set_defaults(func=db, funcarg=subparser_db)
 

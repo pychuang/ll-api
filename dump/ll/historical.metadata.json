@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "ll.historical" }, { "v" : 1, "key" : { "site_id" : 1, "site_qid" : 1 }, "name" : "site_id_1_site_qid_1", "ns" : "ll.historical" }, { "v" : 1, "key" : { "site_id" : 1, "qid" : 1 }, "name" : "site_id_1_qid_1", "ns" : "ll.historical" } ] }

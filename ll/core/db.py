@@ -14,7 +14,10 @@
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
 from pymongo import MongoClient
-
+from collections import OrderedDict
+import subprocess
+import json
+import os
 
 class CoreDatabase(object):
     def __init__(self):
@@ -39,3 +42,51 @@ def clear():
     db.doc.remove({})
     db.feedback.remove({})
     db.run.remove({})
+
+def export_json(path, database, username, password):
+    # Create binary BSON dump from current database
+    subprocess.call(["mongodump","-u",username,"-p", password,"-d",database, "-o",path])
+
+    # Convert BSON file to JSON files
+    path_database = os.path.join(path,database)
+    files=[]
+    for f in os.listdir(path_database):
+        if f.endswith(".bson"):
+            base = os.path.splitext(f)[0]
+            filename=os.path.join(path_database,base)
+            with open(filename+ ".json","w") as output_file:
+                subprocess.call(["bsondump", filename+".bson"], stdout=output_file)
+
+
+def import_json(path, database, username, password):
+    # Loop over all collections, they have their own json-file and json-metafile
+    for collection in ["doc","feedback","historical","query","run","site","system","user"]:
+        json_file=os.path.join(path,database,collection)+".json"
+        # Import json database file for this collection
+        subprocess.call(["mongoimport", "-u", username, "-d", database, "-c", collection,"-p", password,"--file", json_file])
+        # Import metadata (indexes) for this collection
+        if collection != "system":
+            import_metadata(path,database,collection)
+
+def import_metadata(path,database,collection):
+    json_metafile=os.path.join(path,database,collection) + ".metadata.json"
+    f=open(json_metafile,"r")
+    structure = json.load(f, object_pairs_hook=OrderedDict)
+    attr_list = structure[u"indexes"]
+    for item in attr_list:
+        if u"key" in item:
+            index = item[u"key"]
+            if(collection==u"user"):
+                db.user.create_index(index.items())
+            elif(collection==u"site"):
+                db.site.create_index(index.items())
+            elif(collection==u"doc"):
+                db.doc.create_index(index.items())
+            elif(collection==u"feedback"):
+                db.feedback.create_index(index.items())
+            elif(collection==u"run"):
+                db.run.create_index(index.items())
+            elif(collection==u"query"):
+                db.query.create_index(index.items())
+            elif(collection==u"historical"):
+                db.historical.create_index(index.items())
