@@ -19,7 +19,7 @@ config = {
     "KEY_LENGTH": 32,
     "PASSWORD_LENGHT": 8,
     "EMAIL_FROM": 'challenge@living-labs.net',
-    "SEND_EMAIL": False,
+    "SEND_EMAIL": True,
     "URL_WEB": "http://doc.living-labs.net/en/latest/guide-participant.html",
     "URL_API": "http://living-labs.net:5000/api",
     "URL_DASHBOARD": "http://living-labs.net:5001",
@@ -57,5 +57,5 @@ config = {
                      ],
     "ROLLBAR_API_KEY": "719ef6f2566f46af9b849fdbc9d43680",
     "ROLLBAR_DASHB0ARD_KEY": "ccf521ba5e49428ebc79bd82b14587fa",
-    "ROLLBAR_ENV": "develop",
+    "ROLLBAR_ENV": "production",
 }
