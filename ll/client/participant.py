@@ -58,6 +58,12 @@ class Participant():
         parser.add_argument('--get_feedback', action="store_true",
                             default=False,
                             help="Get feedback, if any")
+        parser.add_argument('--get_train', action="store_true",
+                            default=False,
+                            help="Get training data")
+        parser.add_argument('--get_test', action="store_true",
+                            default=False,
+                            help="Get test data")
         parser.add_argument('--reset_feedback', action="store_true",
                             default=False,
                             help="Get feedback, if any")
@@ -79,6 +85,12 @@ class Participant():
 
         if args.get_feedback:
             self.get_feedbacks(args.key)
+
+        if args.get_train:
+            self.get_train(args.key)
+
+        if args.get_test:
+            self.get_test(args.key)
 
         if args.reset_feedback:
             self.reset_feedback(args.key)
@@ -184,6 +196,69 @@ class Participant():
             runs = self.update_runs(key, runs, feedbacks)
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
             feedback_update = self.get_feedback(key, "all", self.runid)
+
+    def get_train(self, key):
+        feedbacks = {}
+        feedback_update = self.get_feedback(key, "all")
+        for elem in feedback_update['feedback']:
+            qid = elem["qid"]
+            if qid in feedbacks:
+                feedbacks[qid].append(elem)
+            else:
+                feedbacks[qid] = [elem]
+
+        current_q = None
+        nqid = 0
+        queries = self.get_queries(key)
+        for query in queries["queries"]:
+            if "type" in query and query["type"] == "test":
+                continue
+            qid = query["qid"]
+            if current_q is not None or current_q != qid:
+                nqid += 1
+            run = self.get_doclist(key, qid)
+            skip = True
+            clicks = dict([(doc['docid'], 0) for doc in run['doclist']])
+            for fb in feedbacks[qid]:
+                for doc in fb["doclist"]:
+                    if doc["clicked"] and doc["docid"] in clicks:
+                        clicks[doc["docid"]] += 1
+                        skip = False
+            if skip:
+                continue
+            for doc in run['doclist']:
+                if "relevance_signals" not in doc:
+                    continue
+                docid = doc['docid']
+                features = " ".join(["%d:%.4f" % tuple(fv)
+                                     for fv in doc["relevance_signals"]])
+                print "%d qid:%d %s # %s %s" % (clicks[docid],
+                                                nqid,
+                                                features,
+                                                qid,
+                                                docid)
+
+    def get_test(self, key):
+        current_q = None
+        nqid = 0
+        queries = self.get_queries(key)
+        for query in queries["queries"]:
+            if "type" not in query or query["type"] != "test":
+                continue
+            qid = query["qid"]
+            if current_q is not None or current_q != qid:
+                nqid += 1
+            run = self.get_doclist(key, qid)
+            for doc in run['doclist']:
+                if "relevance_signals" not in doc:
+                    continue
+                docid = doc['docid']
+                features = " ".join(["%d:%.4f" % tuple(fv)
+                                     for fv in doc["relevance_signals"]])
+                print "-1 qid:%d %s # %s %s" % (nqid,
+                                                features,
+                                                qid,
+                                                docid)
 
     def store_run(self, key, run_file):
         runs = {}
