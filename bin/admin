@@ -164,7 +164,7 @@ if __name__ == '__main__':
                               help="")
     subparser_db.add_argument("--import-json", type=str,
                               help="Import the database from json files in the given directory")
-    subparser_db.add_argument("--export-json",
+    subparser_db.add_argument("--export-json", type=str,
                               help="Export the database as json to the given output directory")
     add_mongodb(subparser_db)
     subparser_db.set_defaults(func=db, funcarg=subparser_db)
