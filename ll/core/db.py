@@ -26,12 +26,12 @@ class CoreDatabase(object):
     def __getattr__(self, name):
         return self.db.__getattr__(name)
 
-    def init_db(self, db_name, user=None, password=None):
+    def init_db(self, db_name, user=None, password=None, authenticationDatabase=None):
         if self.db == None:
             client = MongoClient()
             self.db = client[db_name]
             if user and password:
-                self.db.authenticate(user, password)
+                self.db.authenticate(user, password, source=authenticationDatabase)
 
 db = CoreDatabase()
 
@@ -48,14 +48,14 @@ def create_db_admin(adminname, admin_password):
     admin_db = CoreDatabase()
     admin_db.init_db("admin")
     # Create admin
-    admin_db.add_user(adminname, admin_password,roles=["userAdminAnyDatabase"],db="admin")
+    admin_db.db.add_user(adminname, admin_password,roles=[{"role": "userAdminAnyDatabase","db":"admin"}])
 
 def create_db_user(username, user_password, db_name, adminname, admin_password):
     # Log in to the main db, using the admin
     main_db = CoreDatabase()
-    main_db.init_db(db_name,adminname,admin_password)
+    main_db.init_db(db_name,adminname,admin_password,authenticationDatabase="admin")
     # Create user
-    admin_db.add_user(username, user_password,roles=["readWrite"],db=db_name)
+    main_db.db.add_user(username, user_password,roles = ["readWrite"])
 
 def setup_db_users(username, user_password, db_name, adminname, admin_password):
     create_db_admin(adminname, admin_password)

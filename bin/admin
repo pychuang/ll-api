@@ -77,18 +77,18 @@ def db(args, parser):
         ll.core.db.clear()
     
     # Create DB admin
-    if args.setup_db_user and args.mongodb_db and args.mongodb_user and args.mongodb_pw and args.mongodb_admin and args.mongodb_admin_pw:
-        ll.core.db.setup_db_user(args.mongodb_user, args.mongodb_pw, args.mongodb_db, args.mongodb_admin, args.mongodb_admin_pw)
-    elif args.setup_db_user:
-        print("--setup-db-user: Supply a MongoDB database, user, password, admin and admin password through the commandline or via a configuration file.")
+    if args.setup_db_users and args.mongodb_db and args.mongodb_user and args.mongodb_user_pw and args.mongodb_admin and args.mongodb_admin_pw:
+        ll.core.db.setup_db_users(args.mongodb_user, args.mongodb_user_pw, args.mongodb_db, args.mongodb_admin, args.mongodb_admin_pw)
+    elif args.setup_db_users:
+        print("--setup-db-users: Supply a MongoDB database, user, password, admin and admin password through the commandline or via a configuration file.")
     # Import JSON
-    if args.import_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
-        ll.core.db.import_json(args.import_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
+    if args.import_json and args.mongodb_db and args.mongodb_user and args.mongodb_user_pw:
+        ll.core.db.import_json(args.import_json, args.mongodb_db, args.mongodb_user, args.mongodb_user_pw)
     elif args.import_json:
         print("--import-json: Supply a MongoDB database, user and password through the commandline or via a configuration file.")
     # Export JSON
-    if args.export_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
-        ll.core.db.export_json(args.export_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
+    if args.export_json and args.mongodb_db and args.mongodb_user and args.mongodb_user_pw:
+        ll.core.db.export_json(args.export_json, args.mongodb_db, args.mongodb_user, args.mongodb_user_pw)
     elif args.export_json:
         print("--export-json: Supply a MongoDB database, user and password through the commandline or via a configuration file.")
 
@@ -111,12 +111,12 @@ if __name__ == '__main__':
                                    help='Mongodb database.')
         group_mongodb.add_argument('--mongodb_user', default=None, type=str,
                                    help='Mongodb user.')
+        group_mongodb.add_argument('--mongodb_user_pw', default=None, type=str,
+                                   help='Mongodb user password')
         group_mongodb.add_argument('--mongodb_admin', default=None, type=str,
                                    help='Mongodb administrator')
         group_mongodb.add_argument('--mongodb_admin_pw', default=None, type=str,
                                    help='Mongodb administrator password.')
-        group_mongodb.add_argument('--mongodb_pw', default=None, type=str,
-                                   help='Mongodb password')
 
     description = "Living Labs Challenge's Management"
     parser = confargparse.ConfArgParser(description=description,
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     subparser_trec.set_defaults(func=trec, funcarg=subparser_trec)
 
     args = parser.parse_args()
-    ll.core.db.db.init_db(args.mongodb_db, user=args.mongodb_user,
-                          password=args.mongodb_pw)
+    #ll.core.db.db.init_db(args.mongodb_db, user=args.mongodb_user,
+    #                      password=args.mongodb_user_pw)
 
     trycall(args.func, args, args.funcarg)
