@@ -193,6 +193,7 @@ communicate with the Living Labs API.
 
 Initialize
 ~~~~~~~~~~
+We start of with some imports and definitions. Replace :code:`KEY` with your own participant key.
 
 .. sourcecode:: python
 
@@ -200,6 +201,7 @@ Initialize
 	import json
 	import time
 	import random
+	import datetime # needed for timestamp
 	
 	HOST = "http://living-labs.net:5000/api"
 	KEY = "ABC-123"
@@ -214,7 +216,11 @@ Initialize
 
 Obtain Queries
 ~~~~~~~~~~~~~~
+As a participant, you request frequently-issued queries from a site, in order to create
+rankings for them. Frequently-issued queries are likely to re-occur and
+yield click results in the future.
 
+The :code:`
 See also :http:get:`/api/participant/query/(key)`. 
 
 .. sourcecode:: python
@@ -231,7 +237,7 @@ See also :http:get:`/api/participant/query/(key)`.
 
 Obtain Doclists
 ~~~~~~~~~~~~~~~
-
+A site has an unranked list of candidate documents for every query. The :code:`get_doclist` method receives the list of documents for one query from the server. The documents for all queries are then stored in the `runs` dictionary.
 See also :http:get:`/api/participant/doclist/(key)/(qid)`. 
 
 .. sourcecode:: python
@@ -251,6 +257,9 @@ See also :http:get:`/api/participant/doclist/(key)/(qid)`.
 
 Obtain Feedback and Update Runs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you combine the code above with the following code, the result is a minimal LivingLabs participant. It uploads a ranking to the server which is purely based on the number of clicks a document has received. The content of the documents, which can be received using the `doc` command (:http:get:`/api/participant/doc/(key)/(docid)` ), is not taken into account.
+
+A loop makes sweeps over all queries. For every query, it asks for feedback, updates the ranking and uploads the ranking. You can see that a modified version of the :code:`runs` object is uploaded, which has been received from the site at an earlier stage. The `doclist` is changed to the order of the new ranking. Furthermore, the object is appended with a `runid` field. The `runid` is mandatory, but purely used for your own bookkeeping. In this case, the `runid` is the timestamp of the current ranking update sweep, so it could be used later to identify the time a certain ranking was updated.
 
 See also :http:get:`/api/participant/feedback/(key)/(qid)` and :http:put:`/api/participant/run/(key)/(qid)` 
 
@@ -266,26 +275,30 @@ See also :http:get:`/api/participant/feedback/(key)/(qid)` and :http:put:`/api/p
 		return r.json()
 
 	while True:
-		for query in queries["queries"]:
-			qid = query["qid"]
-			feedbacks = get_feedback(qid)
-			clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
-			for feedback in feedbacks['feedback']:
-				for doc in feedback["doclist"]:
-					if doc["clicked"] and doc["docid"] in clicks:
-						clicks[doc["docid"]] += 1
-			runs[qid]['doclist'] = [{'docid': docid}
-						for docid, _ in
-						sorted(clicks.items(),
-							   key=lambda x: x[1],
-							   reverse=True)]
-			r = requests.put("/".join([HOST, RUNENDPOINT, KEY, qid]),
-						data=json.dumps(runs[qid]), headers=HEADERS)
-						
-			if r.status_code != requests.codes.ok:
-				print r.text
-				r.raise_for_status()
-			time.sleep(random.random())
+            # Refresh timestamp when new update of all query rankings
+            # is started
+            timestamp = datetime.datetime.now().isoformat()
+            for query in queries["queries"]:
+                    qid = query["qid"]
+                    feedbacks = get_feedback(qid)
+                    clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
+                    for feedback in feedbacks['feedback']:
+                            for doc in feedback["doclist"]:
+                                    if doc["clicked"] and doc["docid"] in clicks:
+                                            clicks[doc["docid"]] += 1
+                    runs[qid]['doclist'] = [{'docid': docid}
+                                            for docid, _ in
+                                            sorted(clicks.items(),
+                                                       key=lambda x: x[1],
+                                                       reverse=True)]
+                    runs[qid]['runid'] = timestamp
+                    r = requests.put("/".join([HOST, RUNENDPOINT, KEY, qid]),
+                                            data=json.dumps(runs[qid]), headers=HEADERS)
+
+                    if r.status_code != requests.codes.ok:
+                            print r.text
+                            r.raise_for_status()
+                    time.sleep(random.random())
 
 .. _running:
 
