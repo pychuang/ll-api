@@ -42,6 +42,24 @@ def clear():
     db.doc.remove({})
     db.feedback.remove({})
     db.run.remove({})
+    
+def create_db_admin(adminname, admin_password):
+    # Log in to the 'admin' db, without authentication
+    admin_db = CoreDatabase()
+    admin_db.init_db("admin")
+    # Create admin
+    admin_db.add_user(adminname, admin_password,roles=["userAdminAnyDatabase"],db="admin")
+
+def create_db_user(username, user_password, db_name, adminname, admin_password):
+    # Log in to the main db, using the admin
+    main_db = CoreDatabase()
+    main_db.init_db(db_name,adminname,admin_password)
+    # Create user
+    admin_db.add_user(username, user_password,roles=["readWrite"],db=db_name)
+
+def setup_db_users(username, user_password, db_name, adminname, admin_password):
+    create_db_admin(adminname, admin_password)
+    create_db_user(username, user_password, db_name, adminname, admin_password)
 
 def export_json(path, database, username, password):
     # Create binary BSON dump from current database

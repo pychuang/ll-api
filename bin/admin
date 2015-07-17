@@ -72,14 +72,21 @@ def status(args, parser):
 
 
 def db(args, parser):
+    # Clear database
     if args.clear:
         ll.core.db.clear()
-        
+    
+    # Create DB admin
+    if args.setup_db_user and args.mongodb_db and args.mongodb_user and args.mongodb_pw and args.mongodb_admin and args.mongodb_admin_pw:
+        ll.core.db.setup_db_user(args.mongodb_user, args.mongodb_pw, args.mongodb_db, args.mongodb_admin, args.mongodb_admin_pw)
+    elif args.setup_db_user:
+        print("--setup-db-user: Supply a MongoDB database, user, password, admin and admin password through the commandline or via a configuration file.")
+    # Import JSON
     if args.import_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
         ll.core.db.import_json(args.import_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
     elif args.import_json:
         print("--import-json: Supply a MongoDB database, user and password through the commandline or via a configuration file.")
-        
+    # Export JSON
     if args.export_json and args.mongodb_db and args.mongodb_user and args.mongodb_pw:
         ll.core.db.export_json(args.export_json, args.mongodb_db, args.mongodb_user, args.mongodb_pw)
     elif args.export_json:
@@ -104,6 +111,10 @@ if __name__ == '__main__':
                                    help='Mongodb database.')
         group_mongodb.add_argument('--mongodb_user', default=None, type=str,
                                    help='Mongodb user.')
+        group_mongodb.add_argument('--mongodb_admin', default=None, type=str,
+                                   help='Mongodb administrator')
+        group_mongodb.add_argument('--mongodb_admin_pw', default=None, type=str,
+                                   help='Mongodb administrator password.')
         group_mongodb.add_argument('--mongodb_pw', default=None, type=str,
                                    help='Mongodb password')
 
@@ -162,6 +173,8 @@ if __name__ == '__main__':
     subparser_db = subparsers.add_parser('db', section='status')
     subparser_db.add_argument("--clear", action="store_true", default=False,
                               help="")
+    subparser_db.add_argument("--setup-db-users", action="store_true",
+                              help="Create standard setup of MongoDB admin and user. Needs all --mongodb_ arguments.")
     subparser_db.add_argument("--import-json", type=str,
                               help="Import the database from json files in the given directory")
     subparser_db.add_argument("--export-json", type=str,
