@@ -27,10 +27,12 @@ class CoreDatabase(object):
         return self.db.__getattr__(name)
 
     def init_db(self, db_name, user=None, password=None, authenticationDatabase=None):
+        print("Initialize db ", db_name, "with user", user, "and password", password, "on authbase", authenticationDatabase)
         if self.db == None:
             client = MongoClient()
             self.db = client[db_name]
             if user and password:
+                print("Now really logging in with", user, "and", password, "on", authenticationDatabase)
                 self.db.authenticate(user, password, source=authenticationDatabase)
 
 db = CoreDatabase()
