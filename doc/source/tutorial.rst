@@ -114,7 +114,13 @@ and admin passwords and remember them.
 
 .. sourcecode:: bash
 
-    $ ./bin/admin db --setup-db-users --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET --mongodb_admin admin --mongodb_admin_pw ADMINSECRET --export-conf-file config/db.ini
+    $ ./bin/admin db --setup-db-users --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET --mongodb_admin admin --mongodb_admin_pw ADMINSECRET
+
+Now, we use the admin tool to generate a configuration file containing the database username and password, which we will need later. Again, replace the passwords!
+
+.. sourcecode:: bash
+
+    $ ./bin/admin db --export-conf-file config/db.ini --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET
 
    
 The tool will export the database username and password to the :code:`db.ini` file. Remember to never add this file to a code repository,
@@ -157,13 +163,13 @@ To fill the database with a standard configuration, including clients and sites,
 
 .. sourcecode:: bash
 
-    $ ./bin/admin db --import-json dump/ -c config/livinglabs.db
+    $ ./bin/admin db --import-json dump/ -c config/db.ini
 
 We want to check that the users have been created. Users are clients and sites connecting to the LivingLabs API and should not be confused with the database users created in the :ref:`Setup MongoDB<setup_mongodb>` section. To show all users (clients and sites), issue the following command:
 
 .. sourcecode:: bash 
 
-    $ ./bin/admin user -c config/livinglabs.local.ini --show
+    $ ./bin/admin user -c config/db.ini --show
 
 You will see the following:
 
@@ -272,8 +278,8 @@ Dashboard Installation
 If you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
-To start the dashboard, fill out the dashboard fields in your local copy of the
-configuration (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
+To start the dashboard, fill out the dashboard fields in the general LivingLabs
+configuration file (:code:`config/livinglabs.ini`). In particular, you will need a `recaptcha`
 key (see http://www.google.com/recaptcha), that will fill the `recaptchaprivate` and `recaptchapublic` fields.
 `csrfsecrettoken` and `secretkey` are both random strings you should generate.
 
@@ -281,7 +287,7 @@ Then run the following command:
 
 .. sourcecode:: bash
 
-    $ ./bin/dashboard -c config/livinglabs.local.ini
+    $ ./bin/dashboard -c config/livinglabs.ini config/db.ini
 
 In general, use :code:`--help` or :code:`-h` for more information. By default
 the dashboard will run on port 5001.
@@ -304,8 +310,8 @@ you can run the following script:
 
 .. sourcecode:: bash 
 
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/site.ini --password CHOOSEAPASSWORD
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/db.ini config/example-data/site.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/db.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
 
 The passwords are used for the `Dasboard`.
 
@@ -327,7 +333,7 @@ To create a fixture in the `dump` directory, issue:
 
 .. sourcecode:: bash 
 
-   $ ./bin/admin db --export-json dump -c config/livinglabs.local.ini
+   $ ./bin/admin db --export-json dump -c config/db.ini
 
 
 Reset the Database
@@ -339,7 +345,7 @@ trivial).
 
 .. sourcecode:: bash 
 
-   $ ./bin/admin db --clear -c config/livinglabs.local.ini
+   $ ./bin/admin db --clear -c config/db.ini
 
 Don't forget to recreate users (see above).
 
