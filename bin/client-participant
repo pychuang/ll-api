@@ -24,6 +24,7 @@ import sys
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parentdir)
+sys.path.append(os.path.join("parentdir","ll"))
 from ll.client.participant import Participant
 
 if __name__ == '__main__':
