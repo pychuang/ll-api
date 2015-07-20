@@ -58,7 +58,9 @@ def create_db_user(username, user_password, db_name, adminname, admin_password):
     main_db.db.add_user(username, user_password,roles = ["readWrite"])
 
 def setup_db_users(username, user_password, db_name, adminname, admin_password):
+    print("Creating admin")
     create_db_admin(adminname, admin_password)
+    print("Creating user")
     create_db_user(username, user_password, db_name, adminname, admin_password)
 
 def export_json(path, database, username, password):

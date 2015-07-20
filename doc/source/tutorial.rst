@@ -105,52 +105,19 @@ First start a MongoDB daemon as follows:
 
     $ mongod --config config/mongodb.conf
 
-Use a :code:`mongo` shell to create a database administrator. Replace `ADMINSECRET` by a password of choice.
+Now, use the :code:`admin` tool to create a database user and database admin,
+which you will need later to access the database. Note that these database users
+are different from the LivingLabs users you are going to create later.
+
+Replace :code:`USERSECRET` and :code:`ADMINSECRET` by your desired user
+and admin passwords and remember them.
 
 .. sourcecode:: bash
 
-    $ mongo
-    > use admin
-    > db.createUser(
-      {
-        user: "admin",
-        pwd: "ADMINSECRET",
-        roles:
-        [
-          {
-            role: "userAdminAnyDatabase",
-            db: "admin"
-          }
-        ]
-      }
-    )
-    > exit
+    $ ./bin/admin db --setup-db-users --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET --mongodb_admin admin --mongodb_admin_pw ADMINSECRET --export-conf-file config/db.ini
 
-Using the `admin` user you just created, you can log in on an authenticated :code:`mongo` shell and create the `ll` database user. Again, `USERSECRET` can be replaced by a password of choice.
-
-.. sourcecode:: bash
-
-    $ mongo -u admin -p --authenticationDatabase admin
-    > use ll
-    > db.createUser(
-        {
-          user: "ll",
-          pwd: "USERSECRET",
-          roles: ["readWrite"],
-        }
-    )
-    > exit
-
-Create a local copy of the config/livinglabs.ini file and edit it to add the
-user password to the `mongodb` section. Put this password in quotes. 
-Also edit the database name if you wish.
-
-.. sourcecode:: bash
-
-    $ cp config/livinglabs.ini config/livinglabs.local.ini
-    $ vim config/livinglabs.local.ini
-    
-Remember to never add the file containing your password to a code repository,
+   
+The tool will export the database username and password to the :code:`db.ini` file. Remember to never add this file to a code repository,
 that would be a severe security threat.
 
 Non-Authenticated
@@ -166,20 +133,11 @@ authentication. Start a MongoDB deamon as follows:
 
 Run the API
 -----------
-
-If you did not do so yet, make a copy of the configuration and at least fill out
-the mongodb section:
-
-.. sourcecode:: bash
-
-    $ cp config/livinglabs.ini config/livinglabs.local.ini
-
-
 To start the API, run the following command: 
 
 .. sourcecode:: bash
     
-    $ ./bin/api -c config/livinglabs.local.ini
+    $ ./bin/api -c config/livinglabs.ini config/db.ini
 
 If you want to automatically have the API reload when you change the code (which
 is incredibly handy when developing) then run this with :code:`--debug` the
@@ -187,7 +145,7 @@ debug flag:
 
 .. sourcecode:: bash
 
-    $ ./bin/api -c config/livinglabs.local.ini --debug
+    $ ./bin/api -c config/livinglabs.ini config/db.ini --debug
 
 In general, use :code:`--help` or :code:`-h` for more information.
 
@@ -199,7 +157,7 @@ To fill the database with a standard configuration, including clients and sites,
 
 .. sourcecode:: bash
 
-    $ ./bin/admin db --import-json dump/ -c config/livinglabs.local.ini 
+    $ ./bin/admin db --import-json dump/ -c config/livinglabs.db
 
 We want to check that the users have been created. Users are clients and sites connecting to the LivingLabs API and should not be confused with the database users created in the :ref:`Setup MongoDB<setup_mongodb>` section. To show all users (clients and sites), issue the following command:
 
