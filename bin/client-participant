@@ -23,8 +23,7 @@ import sys
 #                                                "../..")))
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print parentdir
-os.sys.path.insert(0,parentdir)
+sys.path.append(parentdir)
 from ll.client.participant import Participant
 
 if __name__ == '__main__':
