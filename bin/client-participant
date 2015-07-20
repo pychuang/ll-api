@@ -19,12 +19,9 @@ import confargparse
 import os
 import sys
 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__),
-#                                                "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.realpath(__file__),
+                                                "../..")))
 
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parentdir)
-sys.path.append(os.path.join("parentdir","ll"))
 from ll.client.participant import Participant
 
 if __name__ == '__main__':
