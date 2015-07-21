@@ -39,12 +39,12 @@ def application(environ, start_response):
                         help='')
     group_mongodb.add_argument('--mongodb_user', default=None, type=str,
                         help='')
-    group_mongodb.add_argument('--mongodb_pw', default=None, type=str,
+    group_mongodb.add_argument('--mongodb_user_pw', default=None, type=str,
                         help='')
     args = parser.parse_args(["-c", environ["conf"]])
     
     db.init_db(args.mongodb_db, user=args.mongodb_user,
-               password=args.mongodb_pw)
+               password=args.mongodb_user_pw)
     app.debug = args.debug
     
     return app(environ, start_response)

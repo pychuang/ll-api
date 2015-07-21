@@ -105,53 +105,34 @@ First start a MongoDB daemon as follows:
 
     $ mongod --config config/mongodb.conf
 
-Use a :code:`mongo` shell to create a database administrator. Replace `ADMINSECRET` by a password of choice.
+Now, use the :code:`admin` tool to create a database user and database admin,
+which you will need later to access the database. Note that these database users
+are different from the LivingLabs users you are going to create later.
+
+Replace :code:`USERSECRET` and :code:`ADMINSECRET` by your desired user
+and admin passwords and remember them.
 
 .. sourcecode:: bash
 
-    $ mongo
-    > use admin
-    > db.createUser(
-      {
-        user: "admin",
-        pwd: "ADMINSECRET",
-        roles:
-        [
-          {
-            role: "userAdminAnyDatabase",
-            db: "admin"
-          }
-        ]
-      }
-    )
-    > exit
+    $ ./bin/admin db --setup-db-users --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET --mongodb_admin admin --mongodb_admin_pw ADMINSECRET
 
-Using the `admin` user you just created, you can log in on an authenticated :code:`mongo` shell and create the `ll` database user. Again, `USERSECRET` can be replaced by a password of choice.
+Now, we use the admin tool to generate a configuration file containing the database username and password, which we will need later. Again, replace the passwords!
 
 .. sourcecode:: bash
 
-    $ mongo -u admin -p --authenticationDatabase admin
-    > use ll
-    > db.createUser(
-        {
-          user: "ll",
-          pwd: "USERSECRET",
-          roles: ["readWrite"],
-        }
-    )
-    > exit
+    $ ./bin/admin db --export-conf-file config/db.ini --mongodb_db ll --mongodb_user ll --mongodb_user_pw USERSECRET
 
-Create a local copy of the config/livinglabs.ini file and edit it to add the
-user password to the `mongodb` section. Put this password in quotes. 
-Also edit the database name if you wish.
+   
+The tool will export the database username and password to the :code:`db.ini` file. Remember to never add this file to a code repository,
+that would be a severe security threat.
+
+Besides the database configuration file :code:`db.ini`, there is a general configuration
+file. We make a local copy of this configuration file, :code:`livinglabs.local.ini`,
+for further use:
 
 .. sourcecode:: bash
 
     $ cp config/livinglabs.ini config/livinglabs.local.ini
-    $ vim config/livinglabs.local.ini
-    
-Remember to never add the file containing your password to a code repository,
-that would be a severe security threat.
 
 Non-Authenticated
 ^^^^^^^^^^^^^^^^^
@@ -166,20 +147,18 @@ authentication. Start a MongoDB deamon as follows:
 
 Run the API
 -----------
-
-If you did not do so yet, make a copy of the configuration and at least fill out
-the mongodb section:
+If you have not done so yet, make a local copy of your general configuration
+file:
 
 .. sourcecode:: bash
 
     $ cp config/livinglabs.ini config/livinglabs.local.ini
-
-
+    
 To start the API, run the following command: 
 
 .. sourcecode:: bash
     
-    $ ./bin/api -c config/livinglabs.local.ini
+    $ ./bin/api -c config/livinglabs.local.ini config/db.ini
 
 If you want to automatically have the API reload when you change the code (which
 is incredibly handy when developing) then run this with :code:`--debug` the
@@ -187,7 +166,7 @@ debug flag:
 
 .. sourcecode:: bash
 
-    $ ./bin/api -c config/livinglabs.local.ini --debug
+    $ ./bin/api -c config/livinglabs.local.ini config/db.ini --debug
 
 In general, use :code:`--help` or :code:`-h` for more information.
 
@@ -199,13 +178,13 @@ To fill the database with a standard configuration, including clients and sites,
 
 .. sourcecode:: bash
 
-    $ ./bin/admin db --import-json dump/ -c config/livinglabs.local.ini 
+    $ ./bin/admin db --import-json dump/ -c config/db.ini
 
 We want to check that the users have been created. Users are clients and sites connecting to the LivingLabs API and should not be confused with the database users created in the :ref:`Setup MongoDB<setup_mongodb>` section. To show all users (clients and sites), issue the following command:
 
 .. sourcecode:: bash 
 
-    $ ./bin/admin user -c config/livinglabs.local.ini --show
+    $ ./bin/admin user -c config/db.ini --show
 
 You will see the following:
 
@@ -314,8 +293,8 @@ Dashboard Installation
 If you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
-To start the dashboard, fill out the dashboard fields in your local copy of the
-configuration (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
+To start the dashboard, fill out the dashboard fields in the local copy of the general LivingLabs
+configuration file (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
 key (see http://www.google.com/recaptcha), that will fill the `recaptchaprivate` and `recaptchapublic` fields.
 `csrfsecrettoken` and `secretkey` are both random strings you should generate.
 
@@ -323,7 +302,7 @@ Then run the following command:
 
 .. sourcecode:: bash
 
-    $ ./bin/dashboard -c config/livinglabs.local.ini
+    $ ./bin/dashboard -c config/livinglabs.local.ini config/db.ini
 
 In general, use :code:`--help` or :code:`-h` for more information. By default
 the dashboard will run on port 5001.
@@ -346,8 +325,8 @@ you can run the following script:
 
 .. sourcecode:: bash 
 
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/site.ini --password CHOOSEAPASSWORD
-    $ ./bin/admin user -c config/livinglabs.local.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/db.ini config/example-data/site.ini --password CHOOSEAPASSWORD
+    $ ./bin/admin user -c config/db.ini config/example-data/user.1.ini --password CHOOSEAPASSWORD
 
 The passwords are used for the `Dasboard`.
 
@@ -369,7 +348,7 @@ To create a fixture in the `dump` directory, issue:
 
 .. sourcecode:: bash 
 
-   $ ./bin/admin db --export-json dump -c config/livinglabs.local.ini
+   $ ./bin/admin db --export-json dump -c config/db.ini
 
 
 Reset the Database
@@ -381,7 +360,7 @@ trivial).
 
 .. sourcecode:: bash 
 
-   $ ./bin/admin db --clear -c config/livinglabs.local.ini
+   $ ./bin/admin db --clear -c config/db.ini
 
 Don't forget to recreate users (see above).
 
