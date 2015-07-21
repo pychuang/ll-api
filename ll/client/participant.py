@@ -47,6 +47,9 @@ class Participant():
         parser.add_argument('-s', '--simulate_runs', action="store_true",
                             default=False,
                             help='Simulate runs.')
+        parser.add_argument('-i', '--iterations', type=int,
+                            default=-1,
+                            help="Number of iterations for -s") 
         parser.add_argument('--store_run', action="store_true",
                             default=False,
                             help='Store TREC run (needs --run_file).')
@@ -96,7 +99,7 @@ class Participant():
             self.reset_feedback(args.key)
 
         if args.simulate_runs:
-            self.simulate_runs(args.key, args.wait_min, args.wait_max)
+            self.simulate_runs(args.iterations, args.key, args.wait_min, args.wait_max)
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
@@ -176,7 +179,7 @@ class Participant():
         except ValueError:
             pass
 
-    def simulate_runs(self, key, wait_min, wait_max):
+    def simulate_runs(self, n_iterations, key, wait_min, wait_max):
         queries = self.get_queries(key)
         runs = {}
         for query in queries["queries"]:
@@ -186,7 +189,8 @@ class Participant():
         feedback_update = self.get_feedback(key, "all")
         for elem in feedback_update['feedback']:
             self.update_runid(elem["runid"])
-        while True:
+        i = 0
+        while (n_iterations == -1 or i < n_iterations):
             for elem in feedback_update['feedback']:
                 qid = elem["qid"]
                 if qid in feedbacks:
@@ -196,6 +200,7 @@ class Participant():
             runs = self.update_runs(key, runs, feedbacks)
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
             feedback_update = self.get_feedback(key, "all", self.runid)
+            i += 1
 
     def get_train(self, key):
         feedbacks = {}
