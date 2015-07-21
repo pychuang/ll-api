@@ -126,6 +126,14 @@ Now, we use the admin tool to generate a configuration file containing the datab
 The tool will export the database username and password to the :code:`db.ini` file. Remember to never add this file to a code repository,
 that would be a severe security threat.
 
+Besides the database configuration file :code:`db.ini`, there is a general configuration
+file. We make a local copy of this configuration file, :code:`livinglabs.local.ini`,
+for further use:
+
+.. sourcecode:: bash
+
+    $ cp config/livinglabs.ini config/livinglabs.local.ini
+
 Non-Authenticated
 ^^^^^^^^^^^^^^^^^
 
@@ -139,11 +147,18 @@ authentication. Start a MongoDB deamon as follows:
 
 Run the API
 -----------
+If you have not done so yet, make a local copy of your general configuration
+file:
+
+.. sourcecode:: bash
+
+    $ cp config/livinglabs.ini config/livinglabs.local.ini
+    
 To start the API, run the following command: 
 
 .. sourcecode:: bash
     
-    $ ./bin/api -c config/livinglabs.ini config/db.ini
+    $ ./bin/api -c config/livinglabs.local.ini config/db.ini
 
 If you want to automatically have the API reload when you change the code (which
 is incredibly handy when developing) then run this with :code:`--debug` the
@@ -151,7 +166,7 @@ debug flag:
 
 .. sourcecode:: bash
 
-    $ ./bin/api -c config/livinglabs.ini config/db.ini --debug
+    $ ./bin/api -c config/livinglabs.local.ini config/db.ini --debug
 
 In general, use :code:`--help` or :code:`-h` for more information.
 
@@ -278,8 +293,8 @@ Dashboard Installation
 If you are running a local version of the API for development, it is a
 good idea to also run a dashboard with it.
  
-To start the dashboard, fill out the dashboard fields in the general LivingLabs
-configuration file (:code:`config/livinglabs.ini`). In particular, you will need a `recaptcha`
+To start the dashboard, fill out the dashboard fields in the local copy of the general LivingLabs
+configuration file (:code:`config/livinglabs.local.ini`). In particular, you will need a `recaptcha`
 key (see http://www.google.com/recaptcha), that will fill the `recaptchaprivate` and `recaptchapublic` fields.
 `csrfsecrettoken` and `secretkey` are both random strings you should generate.
 
@@ -287,7 +302,7 @@ Then run the following command:
 
 .. sourcecode:: bash
 
-    $ ./bin/dashboard -c config/livinglabs.ini config/db.ini
+    $ ./bin/dashboard -c config/livinglabs.local.ini config/db.ini
 
 In general, use :code:`--help` or :code:`-h` for more information. By default
 the dashboard will run on port 5001.
