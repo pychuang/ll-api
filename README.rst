@@ -37,10 +37,12 @@ Contributors
 The following people have contributed to this code: 
 
 - Anne Schuth
+- Peter Dekker
 - Krisztian Balog
 - Harrie Oosterhuis
 - David Bouček
 
+If your name is missing, please let us know (or create a pull request).
 
 License
 -------
