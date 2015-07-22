@@ -80,7 +80,7 @@ class TestLL(unittest.TestCase):
         print("Test client")
         subprocess.call(["./bin/client-site", "--host", HOST, "--key", SITE_KEY,
                          "-q", "-d",
-                         "--wait_max", "1",
+                         "--wait_max", "0",
                          "--wait_min", "0"])
         print("Simulate client")
         site_output = subprocess.check_output(["./bin/client-site",

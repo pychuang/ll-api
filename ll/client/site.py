@@ -17,13 +17,12 @@
 
 import os
 import xml.etree.ElementTree as et
-import argparse
 import requests
 import json
 import random
-import time
 import codecs
 from numpy import log2, mean
+from client import Client
 
 PCLICK = {0: 0.05,
           1: 0.5,
@@ -39,69 +38,54 @@ DOCLISTENDPOINT = "site/doclist"
 RANKIGNENDPOINT = "site/ranking"
 FEEDBACKENDPOINT = "site/feedback"
 
-HEADERS = {'content-type': 'application/json'}
 
-
-class Site():
+class Site(Client):
     def __init__(self):
+        self.description = "Living Labs Challenge's Site Client"
+        Client.__init__(self)
         path = os.path.dirname(os.path.realpath(__file__))
-        description = "Living Labs Challenge's Site Client"
-        parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host',
-                            default='http://living-labs.net',
-                            help='Host to connect to.')
-        parser.add_argument('--port', dest='port', default=5000, type=int,
-                            help='Port to connect to.')
-        parser.add_argument('-k', '--key', type=str, required=True,
+
+        self.parser.add_argument('-k', '--key', type=str, required=True,
                             help='Provide a user key.')
-        parser.add_argument('-q', '--store_queries', action="store_true",
+        self.parser.add_argument('-q', '--store_queries', action="store_true",
                             default=False,
                             help='Store some queries (needs --query_file).')
-        parser.add_argument('--delete_queries', action="store_true",
+        self.parser.add_argument('--delete_queries', action="store_true",
                             default=False,
                             help='Delete all queries for this site.')
-        parser.add_argument('--query_file',
+        self.parser.add_argument('--query_file',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/queries.xml")),
                             help='Path to TREC style query file '
                             '(default: %(default)s).')
-        parser.add_argument('--letor', action="store_true",
+        self.parser.add_argument('--letor', action="store_true",
                             default=False,
                             help='Flags that files are in letor format.')
-        parser.add_argument('-d', '--store_doclist', action="store_true",
+        self.parser.add_argument('-d', '--store_doclist', action="store_true",
                             default=False,
                             help='Store a document list (needs --run_file)')
-        parser.add_argument('--run_file',
+        self.parser.add_argument('--run_file',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/run.txt")),
                             help='Path to TREC style run file '
                             '(default: %(default)s).')
-        parser.add_argument('--wait_min', type=int, default=1,
-                            help='Minimum simulation waiting time in seconds.')
-        parser.add_argument('--wait_max', type=int, default=10,
-                            help='Max simulation waiting time in seconds.')
-        parser.add_argument('-s', '--simulate_clicks', action="store_true",
+        self.parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
                             help="Simulate clicks (needs --qrel_file).")
-        parser.add_argument('-i', '--iterations', type=int,
+        self.parser.add_argument('-i', '--iterations', type=int,
                             default=-1,
                             help="Number of iterations for -s")                    
-        parser.add_argument('--qrel_file',
+        self.parser.add_argument('--qrel_file',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/qrel.txt")),
                             help='Path to TREC style qrel file '
                             '(default: %(default)s).')
-        parser.add_argument('--docs_dir',
+        self.parser.add_argument('--docs_dir',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/docs")),
                             help='Path to document directory '
                             '(default: %(default)s).')
-        args = parser.parse_args()
-        self.wait_max = args.wait_max
-        self.wait_min = args.wait_min
-        self.host = "%s:%s/api" % (args.host, args.port)
-        if not self.host.startswith("http://"):
-            self.host = "http://" + self.host
+        args, _ = self.parser.parse_known_args()
 
         if args.letor:
             if args.store_queries:
@@ -121,11 +105,6 @@ class Site():
         if args.delete_queries:
             self.delete_queries(args.key)
 
-    def sleep(self, extra=0):
-        wait_min = self.wait_min + extra
-        wait_max = self.wait_max + extra
-        time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
-
     def store_queries(self, key, query_file):
         tree = et.parse(query_file)
         topics = tree.getroot()
@@ -139,10 +118,7 @@ class Site():
                 "site_qid": qid,
             })
         url = "/".join([self.host, QUERYENDPOINT, key])
-        r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        self.put(url, json.dumps(queries))
 
     def store_letor_queries(self, key, letor_file):
         current_qid = None
@@ -155,17 +131,11 @@ class Site():
                     "site_qid": qid,
                 })
         url = "/".join([self.host, QUERYENDPOINT, key])
-        r = requests.put(url, data=json.dumps(queries), headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        self.put(url, json.dumps(queries))
 
     def delete_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
-        r = requests.delete(url, headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        self.delete(url)
 
     def store_doc(self, key, docid, site_docid, docdir):
         fh = codecs.open(os.path.join(docdir, docid), "r", "utf-8")
@@ -178,20 +148,15 @@ class Site():
             "content": {"text": content},
             }
         url = "/".join([self.host, DOCENDPOINT, key, site_docid])
-        r = requests.put(url, data=json.dumps(doc), headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        self.put(url, json.dumps(doc))
 
     def store_doclist(self, key, run_file, docdir):
         def put_doclist(doclist, current_qid):
             site_qid = current_qid
             doclist["site_qid"] = site_qid
             url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
-            r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-            if r.status_code != requests.codes.ok:
-                print r.text
-                r.raise_for_status()
+            self.put(url, json.dumps(doclist))
+
         doclist = {"doclist": []}
         current_qid = None
         for line in open(run_file, "r"):
@@ -215,25 +180,15 @@ class Site():
                 "content": {"text": docid},
                 }
             url = "/".join([self.host, DOCENDPOINT, key, site_docid])
-            r = requests.put(url, data=json.dumps(doc), headers=HEADERS)
-            if r.status_code == requests.codes.too_many_requests and tries < 15:
-                self.sleep(1 + tries)
-                tries += 1
-            elif r.status_code != requests.codes.ok:
-                print r.text
-                r.raise_for_status()
-            else:
-                break
+            self.put(url, data=json.dumps(doc))
 
     def store_letor_doclist(self, key, letor_file):
         def put_doclist(doclist, current_qid):
             site_qid = current_qid
             doclist["site_qid"] = site_qid
             url = "/".join([self.host, DOCLISTENDPOINT, key, site_qid])
-            r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-            if r.status_code != requests.codes.ok:
-                print r.text
-                r.raise_for_status()
+            self.put(url, data=json.dumps(doclist))
+
         doclist = {"doclist": []}
         current_qid = None
         for line in open(letor_file, "r"):
@@ -259,10 +214,7 @@ class Site():
     def get_ranking(self, key, qid):
         site_qid = qid
         url = "/".join([self.host, RANKIGNENDPOINT, key, site_qid])
-        r = requests.get(url, headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        r = self.get(url)
         json = r.json()
         return json["sid"], json["doclist"]
 
@@ -278,10 +230,7 @@ class Site():
                                        "clicked": click == 1})
 
         url = "/".join([self.host, FEEDBACKENDPOINT, key, sid])
-        r = requests.put(url, data=json.dumps(doclist), headers=HEADERS)
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        self.put(url, data=json.dumps(doclist))
 
     def get_labels(self, path_file, letor=False):
         labels = {}

@@ -15,12 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Living Labs Challenge. If not, see <http://www.gnu.org/licenses/>.
 
-import argparse
-import requests
 import json
-import time
-import random
 import os
+from client import Client
 
 
 QUERYENDPOINT    = "participant/query"
@@ -29,59 +26,37 @@ DOCLISTENDPOINT  = "participant/doclist"
 RUNENDPOINT      = "participant/run"
 FEEDBACKENDPOINT = "participant/feedback"
 
-HEADERS = {'content-type': 'application/json'}
 
 
-class Participant():
+class Participant(Client):
     def __init__(self):
+        self.description = "Living Labs Challenge's Participant Client"
+        Client.__init__(self)
         path = os.path.dirname(os.path.realpath(__file__))
-        description = "Living Labs Challenge's Participant Client"
-        parser = argparse.ArgumentParser(description=description)
-        parser.add_argument('--host', dest='host',
-                            default='http://living-labs.net',
-                            help='Host to listen on.')
-        parser.add_argument('--port', dest='port', default=5000, type=int,
-                            help='Port to connect to.')
-        parser.add_argument('-k', '--key', type=str, required=True,
-                            help='Provide a user key.')
-        parser.add_argument('-s', '--simulate_runs', action="store_true",
-                            default=False,
-                            help='Simulate runs.')
-        parser.add_argument('-i', '--iterations', type=int,
-                            default=-1,
-                            help="Number of iterations for -s") 
-        parser.add_argument('--store_run', action="store_true",
-                            default=False,
-                            help='Store TREC run (needs --run_file).')
-        parser.add_argument('--run_file',
-                            default=os.path.normpath(os.path.join(path,
-                                                     "../../data/run.txt")),
-                            help='Path to TREC style run file '
-                            '(default: %(default)s).')
-        parser.add_argument('--get_feedback', action="store_true",
-                            default=False,
-                            help="Get feedback, if any")
-        parser.add_argument('--get_train', action="store_true",
-                            default=False,
-                            help="Get training data")
-        parser.add_argument('--get_test', action="store_true",
-                            default=False,
-                            help="Get test data")
-        parser.add_argument('--reset_feedback', action="store_true",
-                            default=False,
-                            help="Get feedback, if any")
-        parser.add_argument('--wait_min', type=int, default=1,
-                            help='Minimum simulation waiting time in seconds.')
-        parser.add_argument('--wait_max', type=int, default=10,
-                            help='Max simulation waiting time in seconds.')
+        self.parser.add_argument('-k', '--key', type=str, required=True,
+                                 help='Provide a user key.')
+        self.parser.add_argument('-s', '--simulate_runs', action="store_true",
+                                 default=False, help='Simulate runs.')
+        self.parser.add_argument('-i', '--iterations', type=int,
+                                 default=-1, help="Number of iterations for -s")
+        self.parser.add_argument('--store_run', action="store_true",
+                                 default=False,
+                                 help='Store TREC run (needs --run_file).')
+        self.parser.add_argument('--run_file',
+                                 default=os.path.normpath(os.path.join(path,
+                                                        "../../data/run.txt")),
+                                 help='Path to TREC style run file '
+                                      '(default: %(default)s).')
+        self.parser.add_argument('--get_feedback', action="store_true",
+                                 default=False, help="Get feedback, if any")
+        self.parser.add_argument('--get_train', action="store_true",
+                                 default=False, help="Get training data")
+        self.parser.add_argument('--get_test', action="store_true",
+                                 default=False, help="Get test data")
+        self.parser.add_argument('--reset_feedback', action="store_true",
+                                 default=False, help="Get feedback, if any")
 
-        args = parser.parse_args()
-
-        self.wait_max = args.wait_max
-        self.wait_min = args.wait_min
-        self.host = "%s:%s/api" % (args.host, args.port)
-        if not self.host.startswith("http://"):
-            self.host = "http://" + self.host
+        args, _ = self.parser.parse_known_args()
 
         self.runid = 0
 
@@ -103,27 +78,14 @@ class Participant():
         if args.simulate_runs:
             self.simulate_runs(args.iterations, args.key)
 
-    def sleep(self, extra=0):
-        wait_min = self.wait_min + extra
-        wait_max = self.wait_max + extra
-        time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
-
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
-        r = requests.get(url, headers=HEADERS)
-        self.sleep()
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        r = self.get(url)
         return r.json()
 
     def get_doclist(self, key, qid):
         url = "/".join([self.host, DOCLISTENDPOINT, key, qid])
-        r = requests.get(url, headers=HEADERS)
-        self.sleep()
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        r = self.get(url)
         return r.json()
 
     # if qid == "all" returns feedback for all queries
@@ -132,11 +94,7 @@ class Participant():
         if runid:
             urlList.append(str(runid))
         url = "/".join(urlList)
-        r = requests.get(url, headers=HEADERS)
-        self.sleep()
-        if r.status_code != requests.codes.ok:
-            print r.text
-            r.raise_for_status()
+        r = self.get(url)
         return r.json()
 
     def reset_feedback(self, key):
@@ -144,22 +102,14 @@ class Participant():
         for query in queries["queries"]:
             qid = query["qid"]
             url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
-            r = requests.delete(url, headers=HEADERS)
-            self.sleep()
-            if r.status_code != requests.codes.ok:
-                print r.text
-                r.raise_for_status()
+            self.delete(url)
 
     def store_runs(self, key, runs):
         for qid in runs:
             run = runs[qid]
             run["runid"] = str(self.runid)
             url = "/".join([self.host, RUNENDPOINT, key, qid])
-            r = requests.put(url, data=json.dumps(run), headers=HEADERS)
-            self.sleep()
-            if r.status_code != requests.codes.ok:
-                print r.text
-                r.raise_for_status()
+            self.put(url, json.dumps(run))
 
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
