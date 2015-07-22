@@ -82,7 +82,10 @@ class Site():
                             help='Max simulation waiting time in seconds.')
         parser.add_argument('-s', '--simulate_clicks', action="store_true",
                             default=False,
-                            help='Simulate clicks (needs --qrel_file).')
+                            help="Simulate clicks (needs --qrel_file).")
+        parser.add_argument('-i', '--iterations', type=int,
+                            default=-1,
+                            help="Number of iterations for -s")                    
         parser.add_argument('--qrel_file',
                             default=os.path.normpath(os.path.join(path,
                                                     "../../data/qrel.txt")),
@@ -110,7 +113,8 @@ class Site():
                 self.store_doclist(args.key, args.run_file, args.docs_dir)
 
         if args.simulate_clicks:
-            self.simulate_clicks(args.key, args.qrel_file, args.wait_min,
+            self.simulate_clicks(args.iterations, args.key, args.qrel_file,
+                                    args.wait_min,
                                  args.wait_max, args.letor)
 
         if args.delete_queries:
@@ -241,7 +245,8 @@ class Site():
             site_docid = docid
             self.store_letor_doc(key, docid, site_docid)
             doclist["doclist"].append({"site_docid": site_docid,
-                                       "relevance_signals": featureDict.items()})
+                                       "relevance_signals":
+                                            featureDict.items()})
             current_qid = qid
         put_doclist(doclist, current_qid)
 
@@ -333,10 +338,12 @@ class Site():
             ndcgs.append(self.evaluate_ranking(rankings[qid], labels[qid]))
         return mean(ndcgs)
 
-    def simulate_clicks(self, key, qrel_file, wait_min, wait_max, letor=False):
+    def simulate_clicks(self, n_iterations, key, qrel_file, wait_min, wait_max,
+                        letor=False):
         labels = self.get_labels(qrel_file, letor)
         rankings = {}
-        while True:
+        i = 0
+        while (n_iterations==-1 or i < n_iterations):
             qid = random.choice(labels.keys())
             try:
                 sid, ranking = self.get_ranking(key, qid)
@@ -348,6 +355,7 @@ class Site():
             except requests.exceptions.HTTPError:
                 print "API threw an error, continuing"
             time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
+            i += 1
 
 if __name__ == '__main__':
     site = Site()
