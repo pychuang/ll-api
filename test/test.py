@@ -18,10 +18,10 @@ import subprocess
 import signal
 import os
 import shutil
+import tempfile
 
-MONGOD_TEST_CONFIG = "config/mongodb_test.conf"
-LL_CONFIG = "config/livinglabs.local.ini"
-LL_DB_CONFIG = "config/db.ini"
+MONGODB_CONFIG = "config/mongodb.conf"
+LL_CONFIG = "config/livinglabs.ini"
 USER = "ll"
 USER_PWD = "USERSECRET"
 DB_NAME = "ll"
@@ -44,19 +44,24 @@ class TestLL(unittest.TestCase):
     def setUpClass(self):
         self.mongo_pid = 0
         self.api_process = None
-        
-        # Create clean directory for database
-        if os.path.exists("testdb"):
-            shutil.rmtree("testdb")
-        os.makedirs("testdb")
+
+        # Create temporary directory for clean database and config files
+        self.tempdir = tempfile.mkdtemp()
+        db_dir = os.path.join(self.tempdir, "db")
+        os.makedirs(db_dir)
+        config_dir = os.path.join(self.tempdir, "config")
+        os.makedirs(config_dir)
+        ll_db_config = os.path.join(config_dir, "db.ini")
         # Launch mongod
         print("Launch MongoDB")
         mongo_output = subprocess.check_output(["mongod", "--fork", "--syslog",
-                                                "--config", MONGOD_TEST_CONFIG])
+                                                "--config", MONGODB_CONFIG,
+                                                "--dbpath", db_dir])  # overriding dbpath from config file
         # Real Mongo process will be forked, save for pid from output
         for word in mongo_output.split():
             if word.isdigit():
                 self.mongo_pid = int(word)
+
         # Set up MongoDB users
         print("Setup MongoDB users")
         subprocess.call(["./bin/admin", "db", "--setup-db-users",
@@ -67,14 +72,14 @@ class TestLL(unittest.TestCase):
         # Save to configuration file
         subprocess.call(["./bin/admin", "db", "--mongodb_db", DB_NAME,
                          "--mongodb_user", USER, "--mongodb_user_pw", USER_PWD,
-                         "--export-conf-file", LL_DB_CONFIG])
+                         "--export-conf-file", ll_db_config])
         # Start the API
         self.api_process = subprocess.Popen(["./bin/api",
-                                             "-c", LL_CONFIG, LL_DB_CONFIG,
+                                             "-c", LL_CONFIG, ll_db_config,
                                              "--debug"])
         # Fill database with users
         subprocess.call(["./bin/admin", "db", "--import-json", DUMP_PATH,
-                         "-c", LL_DB_CONFIG])
+                         "-c", ll_db_config])
 
     def test_site(self):
         print("Test client")
@@ -123,4 +128,4 @@ class TestLL(unittest.TestCase):
         os.kill(self.mongo_pid, signal.SIGKILL)
         
         # Remove testdb directory
-        shutil.rmtree("testdb")
+        shutil.rmtree(self.tempdir)
