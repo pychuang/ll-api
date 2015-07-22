@@ -99,7 +99,8 @@ class Participant():
             self.reset_feedback(args.key)
 
         if args.simulate_runs:
-            self.simulate_runs(args.iterations, args.key, args.wait_min, args.wait_max)
+            self.simulate_runs(args.iterations, args.key, args.wait_min,
+                                args.wait_max)
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
@@ -157,7 +158,8 @@ class Participant():
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
             if qid in feedbacks and feedbacks[qid]:
-                clicks = dict([(doc['docid'], 0) for doc in runs[qid]['doclist']])
+                clicks = dict([(doc['docid'], 0)
+                    for doc in runs[qid]['doclist']])
                 for feedback in feedbacks[qid]:
                     for doc in feedback["doclist"]:
                         if doc["clicked"] and doc["docid"] in clicks:
