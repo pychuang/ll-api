@@ -36,7 +36,7 @@ DUMP_PATH = "dump"
 SITE_KEY = "E0016261DE4C0D61-M6C4AMHHE4WV4OVY"
 PARTICIPANT_KEY = "9EA887B684DD5822-JBB2XOCVEGYE7YAZ"
 HOST = "localhost"
-N_ITERATIONS = 3  # number of iterations site or participant runs
+N_ITERATIONS = 1  # number of iterations site or participant runs
 
 
 class TestLL(unittest.TestCase):
@@ -80,7 +80,7 @@ class TestLL(unittest.TestCase):
         print("Test client")
         subprocess.call(["./bin/client-site", "--host", HOST, "--key", SITE_KEY,
                          "-q", "-d",
-                         "--wait_max", "1",
+                         "--wait_max", "0",
                          "--wait_min", "0"])
         print("Simulate client")
         site_output = subprocess.check_output(["./bin/client-site",

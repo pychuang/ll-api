@@ -26,14 +26,20 @@ from .. import core
 from apiutils import ApiResource, ContentField
 
 app = Flask(__name__)
-limiter = Limiter(app, global_limits=["300/minute", "10/second"],
-                  headers_enabled=True)
 api = Api(app, catch_all_404s=True)
 
+@app.before_first_request
+def limit_request():
+    if app.debug:
+        return
+    Limiter(app, global_limits=["300/minute", "10/second"],
+            headers_enabled=True)
 
 @app.before_first_request
 def init_rollbar():
     """init rollbar module"""
+    if app.debug:
+        return
     rollbar.init(
         # access token for the demo app: https://rollbar.com/demo
         core.config.config["ROLLBAR_API_KEY"],
