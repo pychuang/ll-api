@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # This file is part of Living Labs Challenge, see http://living-labs.net.
 #
 # Living Labs Challenge is free software: you can redistribute it and/or modify
