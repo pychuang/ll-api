@@ -3,7 +3,8 @@ Other
 
 
 .. toctree::
-   :maxdepth: 3
-   :numbered:
-   
-   tutorial
+:maxdepth: 3
+        :numbered:
+
+        tutorial
+        developers
