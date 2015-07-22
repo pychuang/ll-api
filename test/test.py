@@ -36,7 +36,7 @@ DUMP_PATH = "dump"
 SITE_KEY = "E0016261DE4C0D61-M6C4AMHHE4WV4OVY"
 PARTICIPANT_KEY = "9EA887B684DD5822-JBB2XOCVEGYE7YAZ"
 HOST = "localhost"
-N_ITERATIONS = 3  # number of iterations site or participant runs
+N_ITERATIONS = 1  # number of iterations site or participant runs
 
 
 class TestLL(unittest.TestCase):
