@@ -77,6 +77,8 @@ class Participant():
 
         args = parser.parse_args()
 
+        self.wait_max = args.wait_max
+        self.wait_min = args.wait_min
         self.host = "%s:%s/api" % (args.host, args.port)
         if not self.host.startswith("http://"):
             self.host = "http://" + self.host
@@ -99,13 +101,17 @@ class Participant():
             self.reset_feedback(args.key)
 
         if args.simulate_runs:
-            self.simulate_runs(args.iterations, args.key, args.wait_min,
-                                args.wait_max)
+            self.simulate_runs(args.iterations, args.key)
+
+    def sleep(self, extra=0):
+        wait_min = self.wait_min + extra
+        wait_max = self.wait_max + extra
+        time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
     def get_queries(self, key):
         url = "/".join([self.host, QUERYENDPOINT, key])
         r = requests.get(url, headers=HEADERS)
-        time.sleep(random.random())
+        self.sleep()
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
@@ -114,7 +120,7 @@ class Participant():
     def get_doclist(self, key, qid):
         url = "/".join([self.host, DOCLISTENDPOINT, key, qid])
         r = requests.get(url, headers=HEADERS)
-        time.sleep(random.random())
+        self.sleep()
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
@@ -127,7 +133,7 @@ class Participant():
             urlList.append(str(runid))
         url = "/".join(urlList)
         r = requests.get(url, headers=HEADERS)
-        time.sleep(random.random())
+        self.sleep()
         if r.status_code != requests.codes.ok:
             print r.text
             r.raise_for_status()
@@ -139,7 +145,7 @@ class Participant():
             qid = query["qid"]
             url = "/".join([self.host, FEEDBACKENDPOINT, key, qid])
             r = requests.delete(url, headers=HEADERS)
-            time.sleep(random.random())
+            self.sleep()
             if r.status_code != requests.codes.ok:
                 print r.text
                 r.raise_for_status()
@@ -150,7 +156,7 @@ class Participant():
             run["runid"] = str(self.runid)
             url = "/".join([self.host, RUNENDPOINT, key, qid])
             r = requests.put(url, data=json.dumps(run), headers=HEADERS)
-            time.sleep(random.random())
+            self.sleep()
             if r.status_code != requests.codes.ok:
                 print r.text
                 r.raise_for_status()
@@ -181,7 +187,7 @@ class Participant():
         except ValueError:
             pass
 
-    def simulate_runs(self, n_iterations, key, wait_min, wait_max):
+    def simulate_runs(self, n_iterations, key):
         queries = self.get_queries(key)
         runs = {}
         for query in queries["queries"]:
@@ -200,7 +206,7 @@ class Participant():
                 else:
                     feedbacks[qid] = [elem]
             runs = self.update_runs(key, runs, feedbacks)
-            time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
+            self.sleep()
             feedback_update = self.get_feedback(key, "all", self.runid)
             i += 1
 
