@@ -97,6 +97,8 @@ class Site():
                             help='Path to document directory '
                             '(default: %(default)s).')
         args = parser.parse_args()
+        self.wait_max = args.wait_max
+        self.wait_min = args.wait_min
         self.host = "%s:%s/api" % (args.host, args.port)
         if not self.host.startswith("http://"):
             self.host = "http://" + self.host
@@ -114,11 +116,15 @@ class Site():
 
         if args.simulate_clicks:
             self.simulate_clicks(args.iterations, args.key, args.qrel_file,
-                                    args.wait_min,
-                                 args.wait_max, args.letor)
+                                 args.letor)
 
         if args.delete_queries:
             self.delete_queries(args.key)
+
+    def sleep(self, extra=0):
+        wait_min = self.wait_min + extra
+        wait_max = self.wait_max + extra
+        time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
 
     def store_queries(self, key, query_file):
         tree = et.parse(query_file)
@@ -197,7 +203,7 @@ class Site():
             self.store_doc(key, docid, site_docid, docdir)
             doclist["doclist"].append({"site_docid": site_docid})
             current_qid = qid
-            time.sleep(random.random())
+            self.sleep()
         put_doclist(doclist, current_qid)
 
     def store_letor_doc(self, key, docid, site_docid):
@@ -211,7 +217,7 @@ class Site():
             url = "/".join([self.host, DOCENDPOINT, key, site_docid])
             r = requests.put(url, data=json.dumps(doc), headers=HEADERS)
             if r.status_code == requests.codes.too_many_requests and tries < 15:
-                time.sleep(1 + tries)
+                self.sleep(1 + tries)
                 tries += 1
             elif r.status_code != requests.codes.ok:
                 print r.text
@@ -338,8 +344,7 @@ class Site():
             ndcgs.append(self.evaluate_ranking(rankings[qid], labels[qid]))
         return mean(ndcgs)
 
-    def simulate_clicks(self, n_iterations, key, qrel_file, wait_min, wait_max,
-                        letor=False):
+    def simulate_clicks(self, n_iterations, key, qrel_file, letor=False):
         labels = self.get_labels(qrel_file, letor)
         rankings = {}
         i = 0
@@ -354,7 +359,7 @@ class Site():
                 self.store_feedback(key, qid, sid, ranking, clicks)
             except requests.exceptions.HTTPError:
                 print "API threw an error, continuing"
-            time.sleep(wait_min + (random.random() * (wait_max - wait_min)))
+            self.sleep()
             i += 1
 
 if __name__ == '__main__':

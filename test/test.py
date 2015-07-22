@@ -40,7 +40,8 @@ N_ITERATIONS = 3  # number of iterations site or participant runs
 
 
 class TestLL(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         self.mongo_pid = 0
         self.api_process = None
         
@@ -78,7 +79,9 @@ class TestLL(unittest.TestCase):
     def test_site(self):
         print("Test client")
         subprocess.call(["./bin/client-site", "--host", HOST, "--key", SITE_KEY,
-                         "-q", "-d"])
+                         "-q", "-d",
+                         "--wait_max", "1",
+                         "--wait_min", "0"])
         print("Simulate client")
         site_output = subprocess.check_output(["./bin/client-site",
                                                "--host", "localhost",
@@ -109,8 +112,9 @@ class TestLL(unittest.TestCase):
                 if not (first == "{" and last == "}"):
                     raise ValueError("Unexpected participant output:", line)
         return True
-    
-    def tearDown(self):
+
+    @classmethod
+    def tearDownClass(self):
         print("Teardown")
         
         # Kill api
