@@ -310,7 +310,7 @@ the dashboard will run on port 5001.
 On the Dashboard, you can log in using the users created under :ref:`Fill the Database<fill_db>`. You can also create new users using the Register button. As a participant, you can use the Dashboard to add yourself to one or more sites. If you are an admin, you can verify participants, so they are able to connect with a site.
 
 Advanced options
-============
+================
 Congratulations! You are done setting up a LivingLabs API including database, dashboard, sites and clients. Now, we will show some more advanced options to customize your environment.
 
 Create users
