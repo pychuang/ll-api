@@ -1,18 +1,31 @@
-.. _installation:
+.. _developer:
 
 Information for developers
 ==========================
-If you would like to modify the LivingLabs API, first follow the :ref:`tutorial to install the API<installation>`.
+If you would like to modify the LivingLabs API, first follow the API
+installation tutorial.
 
 Run end-to-end test
 -------------------
-After you made changes to the code, you can run an end-to-end test to check if everything works properly.
-The test will set=up a clean database, run the API and test a client and participant. Afterwards everything is cleaned
-up. To run the test, go to the main directory of the repository(`ll-api/`) and issue:
+After you made changes to the code, you can run an end-to-end test to check if
+everything works properly. The test will setup a clean database, run the API
+and test a site and participant. Afterwards everything is cleaned
+up. To run the test, go to the root directory of the repository and issue:
 
 .. sourcecode:: bash
 
     $ nosetests
+
+
+Coding Style
+------------
+Core functionality should go in ll/core, the API (in ll/api) and Dashboard
+(in ll/dashboard) the user this functionality.
+
+Clients (in ll/client) are used for testing purposes and serve as baseline.
+
+We (try to) stick to PEP8: https://www.python.org/dev/peps/pep-0008/ .
+
 
 Building Documentation
 ----------------------

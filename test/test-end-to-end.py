@@ -40,6 +40,8 @@ N_ITERATIONS = 1  # number of iterations site or participant runs
 
 
 class TestLL(unittest.TestCase):
+    _multiprocess_shared_ = True
+
     @classmethod
     def setUpClass(self):
         self.mongo_pid = 0
@@ -107,7 +109,8 @@ class TestLL(unittest.TestCase):
                                                       "--host", HOST,
                                                       "--key", PARTICIPANT_KEY,
                                                       "-s",
-                                                      "--iterations", str(N_ITERATIONS),
+                                                      "--iterations",
+                                                      str(N_ITERATIONS),
                                                       "--wait_max", "0",
                                                       "--wait_min", "0"])
         for line in participant_output.split("\n"):
