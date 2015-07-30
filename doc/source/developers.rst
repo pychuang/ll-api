@@ -81,16 +81,17 @@ To grant `admin` the :code:`clusterManager` role:
        > db.grantRolesToUser("admin",{role:"clusterManager", db:"admin"})
        > exit
 
-If you have not set up any users, logging in with the anonymous user will automatically enable you to initiate the
-replication set.
+If you have not set up any users, you do not need to set any roles. Logging in using the anonymous user from localhost
+will automatically enable you to initiate the replication set.
 
 Change database configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The configuration of both the current and the new database have to be changed, in order to be able to connect with eachother.
 This can be done by changing the configuration file and restarting :code:`mongod`, or by restarting :code:`mongod` while supplying options via the command line.
 The following options have to be set:
+
 - :code:`replSet`, with as argument the same replication set name for both databases
-- :code:`keyFile`, with as argument the path of a keyfile. This keyfile has to be the same for both databases. Generate a keyfile: http://docs.mongodb.org/manual/tutorial/generate-key-file/
+- :code:`keyFile`, with as argument the path to a keyfile. This keyfile has to be the same for both databases. Generate a keyfile: http://docs.mongodb.org/manual/tutorial/generate-key-file/
 
 The :code:`bindIp` option restricts the access to the database to a certain IP address. Although this may be a bit safer, it is best to remove the option if you experience any trouble connecting.
 
@@ -101,28 +102,29 @@ does not function properly if this has not yet been done.
 
 On the `current` database (important, because we want this one to be `primary`), instantiate the replication set:
 
-Log in to the Mongo shell (in this example with authenticaiton) and execute :code:`rs.initiate()`:
+Log in to the Mongo shell (in this example with authentication) and execute :code:`rs.initiate()`:
 
 .. sourcecode:: bash
 
    $ mongo -u admin -p --authenticationDatabase admin
        > rs.initiate()
 
-After a while, the replication set is set up. You can check its status with :code:`rs.status()` and its configuration
+After a while, the replication set has been instantiated. You can check its status with :code:`rs.status()` and its configuration
 with :code:`rs.config()`. You can also give the current member (the old database) a higher priority (for example 10), so it
-will be chosen primary in elections: http://docs.mongodb.org/manual/tutorial/force-member-to-be-primary/
+will be chosen `primary` in elections: http://docs.mongodb.org/manual/tutorial/force-member-to-be-primary/
 
 Now, again in the Mongo shell, add the new database to the replication set. Make sure MongoDB runs on the given external port of the new server:
 
 .. sourcecode:: bash
-       > rs.add("ip-address:port")
+
+   > rs.add("ip-address:port")
 
 Congratulations, the replication set has been created and the data will be replicated!
 
 
 SELinux troubleshooting
 ^^^^^^^^^^^^^^^^^^^^^^^
-If you are using a CentOS machine (or other operating system that uses SELinux), you will get into trouble when
+If you are using a CentOS machine (or another operating system that uses the SELinux security system), you will get into trouble when
 starting :code:`mongod` as a service. The SELinux security system can prohibit :code:`mongod` rights, like using certain
 ports.
 
