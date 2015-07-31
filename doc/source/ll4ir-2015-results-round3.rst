@@ -28,7 +28,7 @@ UiS-Jern     0.3702  67    114     511   692
 UiS-UiS      0.3459  55    104     521   680
 ============ ======= ===== ======= ===== ============
 
-* This team did not submit runs for all queries.
+*This team did not submit runs for all queries.
 
 Web search
 ~~~~~~~~~~
@@ -39,7 +39,7 @@ Teamname               Outcome #Wins #Losses #Ties #Impressions
 Exploitative Baseline  0.5203  2161  1992    13206 17359
 Expected               0.5
 UvA-LambdaMart         0.2405  2264  7148    7863  17275
-Uniform Baseline       0.2157  313   1138    922   2373
+Uniform Baseline       0.2157  313   1138    922   2373*
 ====================== ======= ===== ======= ===== ============
 
-* This team did not submit runs for all queries.
+*This team did not submit runs for all queries.
