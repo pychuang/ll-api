@@ -73,11 +73,14 @@ def add_run(key, qid, runid, doclist):
         if test_period["START"] < datetime.datetime.now() < test_period["END"]:
             in_test_period = True
             break
-
+    
     if in_test_period and "type" in q and q["type"] == "test" \
             and "runs" in q and key in q["runs"]:
-        raise ValueError("For test queries you can only upload a run once "
-                         "during a test period.")
+                
+        # Hack to always enable baseline participant to submit runs
+        if (key!="0EF9706FD1359FB8-A9GQJWD0XU04GO2R"):
+            raise ValueError("For test queries you can only upload a run once "
+                             "during a test period.")
     sites = user.get_sites(key)
     if q["site_id"] not in sites:
         raise LookupError("First sign up for site %s." % q["site_id"])
