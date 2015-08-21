@@ -223,3 +223,25 @@ def get_trec(site_id):
                                             test_period["NAME"],
                                             rawcount=True))
     return trec_runs, trec_qrels, trec_qrels_raw
+
+# Remove all runs submitted by a certain participant
+def remove_runs_user(key):
+
+    q = {"deleted": {"$ne": True}}
+    queries = [query for query in db.query.find(q)]
+    print "Before"
+    print queries
+    for query in queries:
+        runs = query["runs"]
+        if key in runs:
+            del runs[key]
+
+        # Update runs list
+        query["runs"] = runs
+        db.query.save(query)
+    print "After"
+    print [query for query in db.query.find(q)]
+
+    # Return resulting query list, with removed runs
+    return [query for query in db.query.find(q)]
+
