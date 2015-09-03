@@ -33,8 +33,5 @@ Teamname               Outcome #Wins #Losses #Ties #Impressions
 ====================== ======= ===== ======= ===== ============
 Expected               0.5
 Exploitative Baseline  0.4500  18    22      134   174
-Uniform Baseline       0.2353  4     13      8     25*
 UvA-LambdaMart         0.2059  21    81      89    191
 ====================== ======= ===== ======= ===== ============
-
-*This team did not submit runs for all queries.
