@@ -68,7 +68,7 @@ def setup_db_users(host, port, username, user_password, db_name, adminname, admi
 def export_json(path, host, port, database, username, password, authentication_database=None):
     # Create binary BSON dump from current database
     host_port = host + ":" + str(port)
-    if authentication_database == None:
+    if authentication_database is None:
         subprocess.call(["mongodump","-u",username,"-p", password,"-d",database, "-o",path, "--host", host_port])
     else:
         subprocess.call(["mongodump","-u",username,"-p", password,"-d",database, "-o",path, "--host", host_port, "--authenticationDatabase", authentication_database])
@@ -90,7 +90,7 @@ def import_json(path, host, port, database, username, password, authentication_d
         # Import json database file for this collection
 
         host_port = host + ":" + str(port)
-        if authentication_database == None:
+        if authentication_database is None:
             subprocess.call(["mongoimport", "-u", username, "-d", database, "-c", collection,"-p", password,"--file", json_file,"--host", host_port])
         else:
             subprocess.call(["mongoimport", "-u", username, "-d", database, "-c", collection,"-p", password,"--file", json_file,"--host", host_port, "--authenticationDatabase", authentication_database])
