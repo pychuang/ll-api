@@ -24,7 +24,7 @@ agreement. Details on that process will be shared once you sign up.
 The dashboard that you can use to obtain an API key is here:
 http://dashboard.living-labs.net/
 
-Our API is located at this location: http://api.living-labs.net/.
+Our API is located at this location: http://api.living-labs.net/api/.
 
 .. note:: We have rate limited the API to 300 calls per minute or 10 calls per 
 	second, whichever hits first. Please do let us know if this is causing you

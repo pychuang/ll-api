@@ -203,7 +203,7 @@ We start of with some imports and definitions. Replace :code:`KEY` with your own
 	import random
 	import datetime # needed for timestamp
 	
-	HOST = "http://api.living-labs.net/"
+	HOST = "http://api.living-labs.net/api"
 	KEY = "ABC-123"
 
 	QUERYENDPOINT = "participant/query"
