@@ -50,9 +50,9 @@ config = {
                       "START": datetime.datetime(2015, 9, 15),
                       "END": datetime.datetime(2015, 10, 1),
                       },
-                     {"NAME": "LL4IR Round #6",
-                      "START": datetime.datetime(2015, 10, 15),
-                      "END": datetime.datetime(2015, 10, 31),
+                     {"NAME": "LL4IR Round #8",
+                      "START": datetime.datetime(2015, 12, 15),
+                      "END": datetime.datetime(2015, 12, 31),
                       }
                      ],
     "ROLLBAR_API_KEY": "719ef6f2566f46af9b849fdbc9d43680",
