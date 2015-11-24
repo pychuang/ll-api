@@ -148,3 +148,21 @@ Now, we can turn on the enforcement of SELinux rules again:
 .. sourcecode:: bash
 
    sudo setenforce 1
+   
+   
+Install MongoDB on machine without root access
+----------------------------------------------
+
+rsync mongo backup archive on old machine, and extract the archive to get the backup files.
+Import into the running MongoDB instance.
+
+cd ll-api
+virtualenv living-labs (not ll, this is the name of an existing folder)
+
+To use it :
+cd ll-api
+source living-labs/bin/activate
+
+Now you can install Python packages without root access:
+pip install -r requirements.txt
+
