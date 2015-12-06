@@ -17,7 +17,7 @@ import os
 import time
 import rollbar
 import rollbar.contrib.flask
-from flask import Flask, g
+from flask import Flask, g, redirect
 from flask.ext.restful import Api, abort
 from flask_limiter import Limiter
 from flask import got_request_exception
@@ -67,3 +67,7 @@ def after_request(response):
     except:
         pass
     return response
+
+@app.route("/")
+def hello():
+    return redirect(core.config.config["URL_DOC"])
