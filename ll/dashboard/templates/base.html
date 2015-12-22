@@ -36,15 +36,15 @@
 	          <span class="icon-bar"></span>
 	        </button>
 	        <a class="navbar-brand" href="#">
-	          Living Labs Dashboard</a>
+	          {% print config.COMPETITION_NAME  %} Dashboard</a>
 	        <span class="navbar-text navbar-version pull-left"><b></b></span>
 	      </div>
 			<div class="collapse navbar-collapse nav-collapse">
 			  <ul class="nav navbar-nav">
 			    <li class="divider-vertical"></li>
-			        <li><a href="http://living-labs.net/">Website</a></li>
+			        <li><a href="{% print config.URL_WEB %}">Website</a></li>
 			        <li><a href="/">Dashboard</a></li>
-			        <li><a href="http://doc.living-labs.net/">Documentation</a></li>
+			        <li><a href="{% print config.URL_DOC %}">Documentation</a></li>
 			</div>
 	    </div>
 	</div>
@@ -118,7 +118,7 @@
     </div>
 	{% endif %}	
 	{% endif %}
-    <p>Welcome to the dashboard of the CLEF Living Labs. This dashboard can be used to register 
+    <p>Welcome to the dashboard of Living Labs for {% print config.COMPETITION_NAME %}. This dashboard can be used to register
     to the lab and to view live stats on your performance.</p>
     <blockquote><p>Give us your ranking, we’ll have it clicked!</p></blockquote>
     {% endblock %}
@@ -129,7 +129,7 @@
  <footer class="footer">
   <div class="container">
     <p class="text-muted">
-        &copy; Copyright 2014, Living Labs.<br/>
+        &copy; Copyright 2015, Living Labs.<br/>
     </p>
   </div>
 </footer>
