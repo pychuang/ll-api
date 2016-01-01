@@ -32,7 +32,7 @@ def send_email(user, txt, subject):
         msgtxt += txt
         msgtxt += "\n\n"
         msgtxt += "Some relevant urls:\n"
-        msgtxt += "Guide for CLEF participants: %s\n" % config["URL_WEB"]
+        msgtxt += "Website: %s\n" % config["URL_WEB"]
         msgtxt += "API: %s\n" % config["URL_API"]
         msgtxt += "Dashboard: %s\n" % config["URL_DASHBOARD"]
         msgtxt += "Documentation: %s\n" % config["URL_DOC"]
@@ -43,7 +43,7 @@ def send_email(user, txt, subject):
         msgtxt += "With regards,\n"
         msgtxt += "The organizers"
         msg = MIMEText(msgtxt)
-        msg['subject'] = "[CLEF Living Lab] %s" % subject
+        msg['subject'] = "[Living Labs for %s] %s" % (config["COMPETITION_NAME"],subject)
         email_from = config["EMAIL_FROM"]
         email_to = user['email']
         msg['From'] = email_from
@@ -85,7 +85,7 @@ def send_password_email(user, password, subject="Password Reset"):
 
 
 def send_registration_email(user, password, subject="New Account"):
-    txt = "Thank you for registering to the CLEF Living Lab.\n"
+    txt = "Thank you for registering to the %s.\n" % config["COMPETITION_NAME"]
     txt += "\n\n"
     txt += "These are your Living Labs account details:\n"
     txt += "API key: %s\n" % user["_id"]
@@ -100,10 +100,10 @@ def send_registration_email(user, password, subject="New Account"):
 
 def send_verification_email(user):
     txt = "We received and verified your signed registration form, thank you.\n"
-    txt += "You are now ready to participate in the CLEF Living Lab.\n"
+    txt += "You are now ready to participate in Living Labs for %s.\n" % config["COMPETITION_NAME"]
     txt += "Please visit the dashboard to sign up for individual sites: %s/user/sites/\n" % config["URL_DASHBOARD"]
     txt += "\n\n"
-    txt += "These are your CLEF Living Labs account details:\n"
+    txt += "These are your %s account details:\n" % config["COMPETITION_NAME"]
     txt += "API key: %s\n" % user["_id"]
     txt += "teamname: %s\n" % user["teamname"]
     txt += "email: %s\n" % user["email"]
@@ -111,7 +111,7 @@ def send_verification_email(user):
 
 
 def send_form_email(user):
-    txt = "A while ago, you registered for the CLEF Living Lab for IR Evaluation (LL4IR). "
+    txt = "A while ago, you registered for Living Labs for %s" % config["COMPETITION_NAME"]
     txt += "The lab has started and clicks are flowing in steadily. "
     txt += "Before you can start using these clicks, we need you to fill out, scan, and email the application form at "
     txt += "this location as a reply to this email: %s\n" % config["URL_REGISTRATION_FORM"]
