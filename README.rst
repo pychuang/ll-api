@@ -17,7 +17,7 @@ For more information, consult:
 - At the moment, there are two competitions which use Living labs
 
   - CLEF LL4IR page: http://living-labs.net/clef-lab/
-  - TREC OpenSearch page: http://trec-open-search.net/about/
+  - TREC OpenSearch page: http://trec-open-search.org/about/
 
 - General Documentation: http://doc.living-labs.net
 

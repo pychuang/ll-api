@@ -22,9 +22,9 @@ with this API. However, example clients are provided by the organization.
 For all operations, an API key is required. Also, we require you to sign an
 agreement. Details on that process will be shared once you sign up.
 The dashboard that you can use to obtain an API key is here:
-http://dashboard.living-labs.net/ (for CLEF) or http://dashboard.trec-open-search.net/ (for TREC OpenSearch).
+http://dashboard.living-labs.net/ (for CLEF) or http://dashboard.trec-open-search.org/ (for TREC OpenSearch).
 
-Our API is located at this location: http://api.living-labs.net/api/ (for CLEF) or http://api.trec-open-search.net/api/
+Our API is located at this location: http://api.living-labs.net/api/ (for CLEF) or http://api.trec-open-search.org/api/
 (for TREC OpenSearch).
 
 .. note:: We have rate limited the API to 300 calls per minute or 10 calls per 

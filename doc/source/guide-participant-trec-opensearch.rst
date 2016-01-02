@@ -21,7 +21,7 @@ Participating in the lab involves following these steps:
 #.	Sign up
 
 	#. 	Sign up for the `TREC OpenSearch mailinglist <http://trec-open-search.org/mailinglist/>`_
-	#.	`Register with the lab <http://dashboard.trec-open-search.net/user/register/>`_. You can do this at any moment.
+	#.	`Register with the lab <http://dashboard.trec-open-search.org/user/register/>`_. You can do this at any moment.
 	#.	Sign and send the lab the agreement form. You will receive a link to this form.
 	#.	Sign up for individual sites (use-cases) you want to obtain data for. You will receive a link by email to do so.
 
@@ -179,7 +179,7 @@ We start of with some imports and definitions. Replace :code:`KEY` with your own
 	import random
 	import datetime # needed for timestamp
 
-	HOST = "http://api.trec-open-search.net/api"
+	HOST = "http://api.trec-open-search.org/api"
 	KEY = "ABC-123"
 
 	QUERYENDPOINT = "participant/query"
