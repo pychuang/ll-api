@@ -52,7 +52,7 @@ def login():
             flash('Logged in %s' % user["teamname"], 'alert-success')
             return redirect(url_for('home'))
         flash('Wrong email or password', 'alert-warning')
-    return render_template("user/login.html", form=form, user=g.user)
+    return render_template("user/login.html", form=form, user=g.user, config=core.config.config)
 
 
 @mod.route('/logout/', methods=['GET'])
@@ -78,13 +78,13 @@ def register():
         except Exception, e:
             flash(str(e), 'alert-warning')
             return render_template("user/register.html", form=form,
-                                   user=g.user)
+                                   user=g.user, config=core.config.config)
         key = user["_id"]
         session['key'] = key
         flash('Thanks for registering. Your key is: %s' % key, 'alert-success')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('user.home'))
-    return render_template("user/register.html", form=form, user=g.user)
+    return render_template("user/register.html", form=form, user=g.user, config=core.config.config)
 
 
 @mod.route('/sites/', methods=['GET', 'POST'])
@@ -118,7 +118,7 @@ def sites():
         core.user.set_sites(g.user["_id"], sites)
         flash('Agreements to site terms have been saved.', 'alert-success')
         return redirect(url_for('site.home'))
-    return render_template("user/sites.html", form=form, user=g.user)
+    return render_template("user/sites.html", form=form, user=g.user, config=core.config.config)
 
 
 @mod.route('/forgot/', methods=['GET', 'POST'])
@@ -133,4 +133,4 @@ def forgot():
         flash('A new password has been sent to %s.' % form.email.data,
               'alert-success')
         return redirect("/")
-    return render_template("user/forgot.html", form=form, user=g.user)
+    return render_template("user/forgot.html", form=form, user=g.user, config=core.config.config)
