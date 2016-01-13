@@ -50,9 +50,9 @@ Date 			Description
 ===============	===============================================================================================================
 15 Apr, 2016		CLEF Testing period begins
 30 Apr, 2016		CLEF Testing period ends
-10 May, 2016		:ref:`CLEF Results released <ll4ir-results>` 
+10 May, 2016		CLEF Results released
 25 May, 2016		CLEF Working notes papers due
-15 May, 2016		`Additional Testing period begins <http://living-labs.net/challenge/>`_
+15 May, 2016		`Additional Testing (round #9) period begins <http://living-labs.net/challenge/>`_
 17 Jun, 2016		Notification of CLEF Working notes acceptance
 1 Jul, 2016		CLEF Camera-ready working notes papers due
 5-8 Sep, 2016		Full-day lab session at at `CLEF 2016 in Évora, Portugal <http://clef2016.clef-initiative.eu>`_
