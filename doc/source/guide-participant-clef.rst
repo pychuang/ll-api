@@ -48,16 +48,14 @@ Schedule
 ===============	===============================================================================================================
 Date 			Description
 ===============	===============================================================================================================
-1 Nov, 2014		Training queries released  (note that you can join any time after this date!)
-27-30 Apr, 2015		Uploading test runs for CLEF Testing period
-1 May, 2015		CLEF Testing period begins
-15 May, 2015		CLEF Testing period ends
-17 May, 2015		:ref:`CLEF Results released <ll4ir-results>` |new|
-7 Jun, 2015		CLEF Working notes papers due
-15 Jun, 2015		`Additional Testing period begins <http://living-labs.net/challenge/>`_ |new|
-30 Jun, 2015		Notification of CLEF Working notes acceptance
-15 Jul, 2015		CLEF Camera-ready working notes papers due
-7-11 Sep, 2015		Full-day lab session at at `CLEF 2015 in Toulouse, France <http://clef2015.clef-initiative.eu/CLEF2015/>`_
+15 Apr, 2016		CLEF Testing period begins
+30 Apr, 2016		CLEF Testing period ends
+10 May, 2016		:ref:`CLEF Results released <ll4ir-results>` |new|
+25 May, 2016		CLEF Working notes papers due
+15 May, 2016		`Additional Testing period begins <http://living-labs.net/challenge/>`_ |new|
+17 Jun, 2016		Notification of CLEF Working notes acceptance
+1 Jul, 2016		CLEF Camera-ready working notes papers due
+5-8 Sep, 2016		Full-day lab session at at `CLEF 2016 in Évora, Portugal <http://clef2016.clef-initiative.eu>`_
 ===============	===============================================================================================================
 
 
