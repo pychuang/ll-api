@@ -4,8 +4,8 @@
 
 .. _guide_participant_clef:
 
-Participant guide for CLEF Living Labs
-=======================================
+Participant guide for CLEF Living Labs |new|
+============================================
 
 .. note:: This guide is being updated as it is being used. Please tell us
 			what you think is missing. Our contact details are at the bottom
@@ -42,17 +42,17 @@ We hope that all steps but 3. and 4. are self explanatory. Below we detail
 these two steps in Sections :ref:`method` and :ref:`running` respectively.
 
 
-Schedule
---------
+Schedule |new|
+--------------
 
 ===============	===============================================================================================================
 Date 			Description
 ===============	===============================================================================================================
 15 Apr, 2016		CLEF Testing period begins
 30 Apr, 2016		CLEF Testing period ends
-10 May, 2016		:ref:`CLEF Results released <ll4ir-results>` |new|
+10 May, 2016		:ref:`CLEF Results released <ll4ir-results>` 
 25 May, 2016		CLEF Working notes papers due
-15 May, 2016		`Additional Testing period begins <http://living-labs.net/challenge/>`_ |new|
+15 May, 2016		`Additional Testing period begins <http://living-labs.net/challenge/>`_
 17 Jun, 2016		Notification of CLEF Working notes acceptance
 1 Jul, 2016		CLEF Camera-ready working notes papers due
 5-8 Sep, 2016		Full-day lab session at at `CLEF 2016 in Évora, Portugal <http://clef2016.clef-initiative.eu>`_
