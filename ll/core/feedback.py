@@ -80,6 +80,7 @@ def reset_feedback(userid=None, site_id=None, sid=None, qid=None):
 
 
 def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
+    print "get_feedback( userid=%s, site_id=%s, sid=%s, qid=%s, runid=%s" % (userid, site_id, sid, qid, runid)
     q = {"doclist": {"$exists": True}}
     if userid:
         q["userid"] = userid
@@ -93,15 +94,18 @@ def get_feedback(userid=None, site_id=None, sid=None, qid=None, runid=None):
         q["runid"] = runid
 
     if "qid" in q and "site_id" in q and "userid" in q:
+        print 'DB.FEEDBACK.FIND 3:', q
         feedbacks = db.feedback.find(q).hint([("qid", pymongo.ASCENDING),
                                               ("site_id", pymongo.ASCENDING),
                                               ("userid", pymongo.ASCENDING)
                                               ])
     elif "site_id" in q and "userid" in q:
+        print 'DB.FEEDBACK.FIND 2:', q
         feedbacks = db.feedback.find(q).hint([("site_id", pymongo.ASCENDING),
                                               ("userid", pymongo.ASCENDING)
                                               ])
     else:
+        print 'DB.FEEDBACK.FIND 0:', q
         feedbacks = db.feedback.find(q)
 
     readyfeedback = []

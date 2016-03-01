@@ -114,6 +114,7 @@ class Participant(Client):
 
     def update_runs(self, key, runs, feedbacks):
         for qid in runs:
+            print 'QID', qid
             if qid in feedbacks and feedbacks[qid]:
                 clicks = dict([(doc['docid'], 0)
                     for doc in runs[qid]['doclist']])
@@ -139,25 +140,36 @@ class Participant(Client):
             pass
 
     def simulate_runs(self, n_iterations, key):
+        print 'get queries'
         queries = self.get_queries(key)
         runs = {}
         for query in queries["queries"]:
             qid = query["qid"]
             runs[qid] = self.get_doclist(key, qid)
+            #print 'QUERY', qid, 'DOC_LIST', runs[qid]
+        print 'get feedbacks'
         feedbacks = {}
         feedback_update = self.get_feedback(key, "all")
         for elem in feedback_update['feedback']:
+            #print 'ELEM',  elem
             self.update_runid(elem["runid"])
         i = 0
         while (n_iterations == -1 or i < n_iterations):
+            print 'iteration', i
             for elem in feedback_update['feedback']:
                 qid = elem["qid"]
                 if qid in feedbacks:
                     feedbacks[qid].append(elem)
                 else:
                     feedbacks[qid] = [elem]
+            print 'update runs'
+#            print 'RUNS', runs
+#            print
+#            print 'FEEDBACKS', feedbacks
             runs = self.update_runs(key, runs, feedbacks)
+            print 'sleep'
             self.sleep()
+            print 'get feedbacks'
             feedback_update = self.get_feedback(key, "all", self.runid)
             i += 1
 
