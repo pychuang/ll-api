@@ -51,6 +51,9 @@ class Site(Client):
         self.parser.add_argument('-q', '--store_queries', action="store_true",
                             default=False,
                             help='Store some queries (needs --query_file).')
+        self.parser.add_argument('--type', type=str,
+                            default='train',
+                            help='specify type when storing queries.')
         self.parser.add_argument('--delete_queries', action="store_true",
                             default=False,
                             help='Delete all queries for this site.')
@@ -95,7 +98,7 @@ class Site(Client):
                 self.store_letor_doclist(args.key, args.run_file)
         else:
             if args.store_queries:
-                self.store_queries(args.key, args.query_file)
+                self.store_queries(args.key, args.query_file, args.type)
             if args.store_doclist:
                 self.store_doclist(args.key, args.run_file, args.docs_dir)
 
@@ -106,7 +109,7 @@ class Site(Client):
         if args.delete_queries:
             self.delete_queries(args.key)
 
-    def store_queries(self, key, query_file):
+    def store_queries(self, key, query_file, type):
         tree = et.parse(query_file)
         topics = tree.getroot()
         queries = {"queries": []}
@@ -116,6 +119,7 @@ class Site(Client):
             qstr = query.text
             queries["queries"].append({
                 "qstr": qstr,
+                "type": type,
                 "site_qid": qid,
             })
         url = "/".join([self.host, QUERYENDPOINT, key])
