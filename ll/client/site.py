@@ -141,7 +141,7 @@ class Site(Client):
     def store_doc(self, key, docid, site_docid, docdir):
         fh = codecs.open(os.path.join(docdir, docid), "r", "utf-8")
         title = fh.readline().strip()
-        content = fh.read().strip()
+        content = fh.read() + fh.read().strip()
         fh.close()
         doc = {
             "site_docid": site_docid,
